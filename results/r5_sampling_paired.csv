@@ -1,0 +1,25 @@
+task,A,B,n_paired,A_rate,B_rate,diff,diff_lo95,diff_hi95,A_only,B_only,mcnemar_exact_p,max_compatible_loss_pp,excludes_loss_gt10pp
+PickCube-v1,ddim-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.28,0.43,-0.15,-0.2755,-0.0174,12,27,0.023703,27.6,False
+PickCube-v1,ddim-10 fixed(k=8),ddpm-100 fixed(k=8),100,0.33,0.43,-0.1,-0.2292,0.0341,13,23,0.132498,22.9,False
+PickCube-v1,ddim-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.31,0.43,-0.12,-0.2478,0.0136,14,26,0.08069,24.8,False
+PickCube-v1,ddim-50 fixed(k=8),ddpm-100 fixed(k=8),100,0.34,0.43,-0.09,-0.2199,0.0443,16,25,0.211024,22.0,False
+PickCube-v1,ddpm-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.46,0.43,0.03,-0.106,0.1644,27,24,0.779768,10.6,False
+PickCube-v1,ddpm-10 fixed(k=8),ddpm-100 fixed(k=8),100,0.41,0.43,-0.02,-0.1538,0.1149,24,26,0.887725,15.4,False
+PickCube-v1,ddpm-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.45,0.43,0.02,-0.1156,0.1546,26,24,0.887725,11.6,False
+PickCube-v1,ddpm-50 fixed(k=8),ddpm-100 fixed(k=8),100,0.39,0.43,-0.04,-0.1728,0.0949,20,24,0.651588,17.3,False
+PullCubeTool-v1,ddim-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.05,0.13,-0.08,-0.1647,0.001,4,12,0.076813,16.5,False
+PullCubeTool-v1,ddim-10 fixed(k=8),ddpm-100 fixed(k=8),100,0.08,0.13,-0.05,-0.1388,0.0374,7,12,0.359283,13.9,False
+PullCubeTool-v1,ddim-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.07,0.13,-0.06,-0.1474,0.0255,6,12,0.237885,14.7,False
+PullCubeTool-v1,ddim-50 fixed(k=8),ddpm-100 fixed(k=8),100,0.09,0.13,-0.04,-0.1301,0.0493,8,12,0.503445,13.0,False
+PullCubeTool-v1,ddpm-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.15,0.13,0.02,-0.078,0.118,11,9,0.823803,7.8,True
+PullCubeTool-v1,ddpm-10 fixed(k=8),ddpm-100 fixed(k=8),100,0.18,0.13,0.05,-0.0517,0.1513,12,7,0.359283,5.2,True
+PullCubeTool-v1,ddpm-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.1,0.13,-0.03,-0.1215,0.061,7,10,0.629059,12.2,False
+PullCubeTool-v1,ddpm-50 fixed(k=8),ddpm-100 fixed(k=8),100,0.06,0.13,-0.07,-0.1561,0.0133,4,11,0.118469,15.6,False
+PushCube-v1,ddim-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.84,0.75,0.09,-0.0225,0.2002,16,7,0.09314,2.2,True
+PushCube-v1,ddim-10 fixed(k=8),ddpm-100 fixed(k=8),100,0.82,0.75,0.07,-0.0443,0.1824,14,7,0.189247,4.4,True
+PushCube-v1,ddim-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.8,0.75,0.05,-0.066,0.1644,12,7,0.359283,6.6,True
+PushCube-v1,ddim-50 fixed(k=8),ddpm-100 fixed(k=8),100,0.83,0.75,0.08,-0.0334,0.1913,16,8,0.15159,3.3,True
+PushCube-v1,ddpm-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.74,0.75,-0.01,-0.1297,0.1101,14,15,1.0,13.0,False
+PushCube-v1,ddpm-10 fixed(k=8),ddpm-100 fixed(k=8),100,0.83,0.75,0.08,-0.0334,0.1913,15,7,0.133801,3.3,True
+PushCube-v1,ddpm-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.81,0.75,0.06,-0.0552,0.1734,17,11,0.344928,5.5,True
+PushCube-v1,ddpm-50 fixed(k=8),ddpm-100 fixed(k=8),100,0.78,0.75,0.03,-0.0874,0.1464,14,11,0.690038,8.7,True

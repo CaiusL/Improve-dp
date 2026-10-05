@@ -42,7 +42,10 @@ def main(argv=None):
     ap.add_argument("--trace-every", type=int, default=10)
     ap.add_argument("--decision-log", action="store_true", help="store one row per decision")
     ap.add_argument("--diffusion-steps", type=int, default=None,
-                    help="override DDPM sampling steps via scheduler.set_timesteps(N)")
+                    help="override sampling steps via scheduler.set_timesteps(N)")
+    ap.add_argument("--sampler", choices=("ddpm", "ddim"), default="ddpm",
+                    help="sampling algorithm; ddim rebuilds a deterministic scheduler from "
+                         "the checkpoint's trained betas (epsilon prediction, clip_sample)")
     ap.add_argument("--runs-root", default=None, help="root holding the training runs")
     ap.add_argument("--teammate-code", default=None, help="root of the teammate's model code")
     args = ap.parse_args(argv)
@@ -56,9 +59,16 @@ def main(argv=None):
     if settings.get("state_normalization"):
         raise SystemExit("checkpoint expects state normalization; not implemented")
 
-    if args.diffusion_steps:
-        agent.noise_scheduler.set_timesteps(args.diffusion_steps)
-        print(f"[diffusion steps = {len(agent.noise_scheduler.timesteps)}]", flush=True)
+    if args.sampler == "ddim":
+        from diffusers import DDIMScheduler
+        betas = agent.noise_scheduler.betas.tolist()
+        agent.noise_scheduler = DDIMScheduler(num_train_timesteps=len(betas),
+                                              trained_betas=betas, clip_sample=True,
+                                              prediction_type="epsilon")
+    if args.diffusion_steps or args.sampler == "ddim":
+        agent.noise_scheduler.set_timesteps(args.diffusion_steps or 100)
+        print(f"[sampler = {args.sampler} steps = "
+              f"{len(agent.noise_scheduler.timesteps)}]", flush=True)
 
     entries = meta["entries"]
     task_id = meta["task_order"].index(task)
@@ -122,6 +132,7 @@ def main(argv=None):
             "completed_updates": meta["completed_updates"],
             "policy_seed_base": POLICY_SEED_BASE,
             "diffusion_steps": args.diffusion_steps or "checkpoint default",
+            "sampler": args.sampler,
         }, indent=2))
 
 

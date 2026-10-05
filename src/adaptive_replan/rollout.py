@@ -81,7 +81,11 @@ def run_episode(env, agent, task, task_id, horizon_policy, seed, max_steps,
 
         t_inf = time.time()
         with torch.no_grad():
-            action_seq = agent.get_action(torch.as_tensor(arr).float(),
+            obs_t = torch.as_tensor(arr).float()
+            if getattr(agent, "obs_norm", None) is not None:
+                mean_t, std_t = agent.obs_norm
+                obs_t = (obs_t - mean_t.to(obs_t.device)) / std_t.to(obs_t.device)
+            action_seq = agent.get_action(obs_t,
                                           task_id if task_id is not None else None)
         inference_time += time.time() - t_inf
         n_inf += 1

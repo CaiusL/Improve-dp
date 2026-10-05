@@ -1,0 +1,27 @@
+{
+ "name": "round5_timing",
+ "task": "PushCube-v1",
+ "seed_block": "400000-400009",
+ "episodes_per_cell": 10,
+ "schedules": [
+  "fixed:2",
+  "fixed:8"
+ ],
+ "samplers": {
+  "ddpm": [
+   100,
+   50,
+   20,
+   10,
+   5
+  ],
+  "ddim": [
+   50,
+   20,
+   10,
+   5
+  ]
+ },
+ "protocol": "idle machine, one worker, OMP_NUM_THREADS=1, sequential, no other heavy job",
+ "reported": "mean +- sd ms per policy call over 20 episodes, and inference s/episode"
+}

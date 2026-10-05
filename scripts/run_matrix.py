@@ -102,6 +102,8 @@ def main(argv=None):
             cmd += ["--decision-log"]
         if args.diffusion_steps:
             cmd += ["--diffusion-steps", str(args.diffusion_steps)]
+        if args.sampler != "ddpm":
+            cmd += ["--sampler", args.sampler]
         if args.runs_root:
             cmd += ["--runs-root", args.runs_root]
         if args.teammate_code:

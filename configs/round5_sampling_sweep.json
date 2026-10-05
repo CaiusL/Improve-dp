@@ -1,0 +1,40 @@
+{
+ "name": "round5_sampling_sweep",
+ "tasks": [
+  "PushCube-v1",
+  "PickCube-v1",
+  "PullCubeTool-v1"
+ ],
+ "seed_block": "400000-400099",
+ "primary_metric": "success_once",
+ "schedule": "fixed:8",
+ "samplers": {
+  "ddpm": [
+   100,
+   50,
+   20,
+   10,
+   5
+  ],
+  "ddim": [
+   50,
+   20,
+   10,
+   5
+  ]
+ },
+ "ddim_config": {
+  "scheduler": "diffusers.DDIMScheduler",
+  "betas": "checkpoint noise_scheduler.betas (trained betas)",
+  "prediction_type": "epsilon",
+  "eta": 0.0,
+  "clip_sample": true
+ },
+ "feasibility_gate": "DDIM-20 vs DDPM-20 on seeds 400000-400009 must not lose >10 pp (observed 9/10 vs 10/10)",
+ "preregistered": {
+  "families": "8 reduced settings per task vs DDPM-100, exact McNemar + Newcombe paired CI",
+  "bonferroni": "per task alpha = 0.05/8 = 0.00625",
+  "safe_setting_rule": "fewest steps whose 95% paired interval excludes a loss > 10 pp",
+  "cut_order": "drop DDIM family first, then DDPM-5, then DDPM-10, never below n=100"
+ }
+}

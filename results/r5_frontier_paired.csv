@@ -1,0 +1,13 @@
+task,A,B,n_paired,A_rate,B_rate,diff,diff_lo95,diff_hi95,A_only,B_only,mcnemar_exact_p,max_compatible_loss_pp,excludes_loss_gt10pp
+PickCube-v1,ddim-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.28,0.43,-0.15,-0.2755,-0.0174,12,27,0.023703,27.6,False
+PickCube-v1,ddpm-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.45,0.43,0.02,-0.1156,0.1546,26,24,0.887725,11.6,False
+PullCubeTool-v1,ddim-5 fixed(k=8),ddpm-100 fixed(k=8),100,0.05,0.13,-0.08,-0.1647,0.001,4,12,0.076813,16.5,False
+PullCubeTool-v1,ddpm-20 fixed(k=8),ddpm-100 fixed(k=8),100,0.1,0.13,-0.03,-0.1215,0.061,7,10,0.629059,12.2,False
+PushCube-v1,"ddim-5 adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)","ddpm-100 adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)",200,0.88,0.87,0.01,-0.0557,0.0758,16,14,0.855536,5.6,True
+PushCube-v1,ddim-5 fixed(k=2),ddpm-100 fixed(k=2),200,0.815,0.83,-0.015,-0.0901,0.0602,17,20,0.742829,9.0,True
+PushCube-v1,ddim-5 fixed(k=4),ddpm-100 fixed(k=4),200,0.815,0.805,0.01,-0.0671,0.087,19,17,0.867939,6.7,True
+PushCube-v1,ddim-5 fixed(k=8),ddpm-100 fixed(k=8),200,0.805,0.76,0.045,-0.036,0.1254,31,22,0.271679,3.6,True
+PushCube-v1,"ddpm-20 adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)","ddpm-100 adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)",200,0.875,0.87,0.005,-0.0612,0.0713,15,14,1.0,6.1,True
+PushCube-v1,ddpm-20 fixed(k=2),ddpm-100 fixed(k=2),200,0.83,0.83,0.0,-0.074,0.074,16,16,1.0,7.4,True
+PushCube-v1,ddpm-20 fixed(k=4),ddpm-100 fixed(k=4),200,0.795,0.805,-0.01,-0.0884,0.0685,17,19,0.867939,8.8,True
+PushCube-v1,ddpm-20 fixed(k=8),ddpm-100 fixed(k=8),200,0.815,0.76,0.055,-0.0254,0.1346,31,20,0.16078,2.5,True

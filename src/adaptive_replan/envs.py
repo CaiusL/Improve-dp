@@ -60,9 +60,14 @@ def runs_root(explicit=None):
 def load_run(run_name, ckpt_name="final.pt", device="cpu", code_root=None, ckpt_root=None):
     """Rebuild an Agent from a checkpoint's embedded config and load its EMA weights."""
     teammate_code_root(code_root)
-    ckpt_path = runs_root(ckpt_root) / run_name / "checkpoints" / ckpt_name
+    _p = Path(run_name)
+    ckpt_path = _p if _p.suffix == ".pt" else runs_root(ckpt_root) / run_name / "checkpoints" / ckpt_name
     ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False)
-    compat = ckpt["compat"]
+    compat = ckpt.get("compat") or {
+        "mode": ckpt.get("model_type", "shared"), "entries": ckpt["entries"],
+        "settings": ckpt["settings"], "args": ckpt.get("args", {}),
+        "state_normalization": False,
+    }
     mode = compat["mode"]
     if mode not in _MODEL_MODULES:
         raise ValueError(f"unknown model mode {mode!r}")
@@ -78,7 +83,12 @@ def load_run(run_name, ckpt_name="final.pt", device="cpu", code_root=None, ckpt_
         "task_order": [e["task_id"] for e in compat["entries"]],
         "state_normalization": compat["state_normalization"],
         "completed_updates": ckpt["completed_updates"], "weights": "ema_agent",
+        "obs_norm": ckpt.get("obs_norm"),
     }
+    if meta["obs_norm"]:
+        block = meta["obs_norm"]
+        agent.obs_norm = (torch.as_tensor(block["mean"], dtype=torch.float32, device=device),
+                          torch.as_tensor(block["std"], dtype=torch.float32, device=device))
     return agent, meta
 
 

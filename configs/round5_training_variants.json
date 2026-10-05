@@ -1,0 +1,55 @@
+{
+ "name": "round5_training_variants",
+ "task": "PushCube-v1",
+ "seed_block": "500000-500199",
+ "primary_metric": "success_once",
+ "schedule": "fixed:8 (auto-clamps to 7 for the pred_horizon=8 model)",
+ "training": {
+  "script": "teammate cotrain.py copy (not redistributed), model shared",
+  "config": "single-task PushCube-v1, 200 demos (subset_seed 20260929)",
+  "total_iters": 30000,
+  "batch_size": 32,
+  "lr": 0.0001,
+  "warmup_steps": 500,
+  "device": "mps",
+  "save_eval_freq": "final only",
+  "per_run_wall_clock_s_min": "370-1100 depending on CPU contention"
+ },
+ "variants": {
+  "B0": {
+   "change": "baseline: defaults (obs_horizon 2, pred_horizon 16, act_horizon 8, encoder_dim 128, no obs normalization)"
+  },
+  "V1": {
+   "change": "observation normalization: standardize obs by training-demo mean/std at dataset level and at rollout time; stats stored in the checkpoint",
+   "patch": "about 20 lines across our copies of cotrain.py + cotrain_prepare.py; no architecture or hyperparameter change"
+  },
+  "V2a": {
+   "change": "prediction horizon 8 with act_horizon 7 (= pred - obs + 1, the legal max)",
+   "model_config": {
+    "pred_horizon": 8,
+    "act_horizon": 7
+   }
+  },
+  "V2b": {
+   "change": "prediction horizon 32, act_horizon 8",
+   "model_config": {
+    "pred_horizon": 32
+   }
+  },
+  "V3": {
+   "change": "encoder width 256 (from 128)",
+   "model_config": {
+    "encoder_dim": 256
+   }
+  }
+ },
+ "seeds_primary": [
+  0,
+  1
+ ],
+ "seeds_secondary": [
+  2
+ ],
+ "decision_rule": "variant counts as better only if EVERY primary seed exceeds the better B0 seed by more than the |B0_s0 - B0_s1| spread AND exact McNemar p < 0.05 against that B0 seed on the same eval seeds; otherwise 'not distinguishable from training noise'",
+ "gate": "Task 1 training-speed benchmark: MPS 0.0191 s/update -> 30000 updates ~0.16 h <= 1 h so the full 30k-updates-per-model plan runs"
+}

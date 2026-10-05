@@ -131,3 +131,30 @@ No remote was added and nothing was pushed; there is **no `LICENSE` file** — t
 is left to the repository owner (course policy and the teammate's rights over the
 checkpoint/data should be checked; ManiSkill and Diffusion Policy are separate projects
 with their own licences).
+
+## Round 5 (1.1.0) verification
+
+- `scripts/r5_integrity.py` over the whole round-5 raw tree: **810 chunk files, 0 problems**
+  (no unparsable lines, no duplicate seeds, expected episode counts). Written after a
+  double-launch race tore 7 chunk files during the round-5 runs; those files were deleted and
+  the affected model was re-run from scratch rather than patched.
+- The release package was **ported** (not copied) for the round-5 features, because this
+  release is a refactored package while the working archive is a monolith: `envs.py`
+  `load_run` now accepts a direct `.pt` path, checkpoints without a `compat` block, and
+  passes through an `obs_norm` block; `rollout.py` applies that affine before `get_action`;
+  `run_rollout.py`/`run_matrix.py` gained `--sampler {ddpm,ddim}`.
+  Equivalence against the working implementation, same seeds and checkpoints:
+  DDPM-100 `fixed:8` seeds 400000-400002 — identical success/calls/horizon; DDIM-5 seeds
+  400000-400002 — identical; a normalised-observation checkpoint (absolute `.pt` path)
+  seeds 500000-500002 — identical. The packaged scripts reproduce the round-5 results.
+- `pack_final_results.py` reproduces the previously shipped round-4 rows **byte-identically**
+  (0 of 59 changed) while adding the round-5 rows, and `verify_results.py` recomputes the
+  whole CSV, including the nested round-5 phases: **1329 values, 0 mismatches**.
+- `tests/test_core.py`: **15/15** pass (run through a manual loader; `pytest` is not installed
+  in the analysis environment and the file is pytest-style).
+- `MANIFEST.md` now inventories every raw log under a raw root and was verified at checksum
+  level against the previous version: **0 of 1406 old checksums missing, exactly 600 new**.
+  The old file's reported total (1446) exceeded its listed rows (1406) because the 40
+  excluded `AMBIGUOUS_provenance` files were counted in the total; that is fixed.
+- No checkpoints, no demonstration data, no teammate code, and no absolute paths or handles
+  are part of the release (see the safety scan above).

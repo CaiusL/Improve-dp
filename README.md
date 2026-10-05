@@ -93,9 +93,9 @@ inference-call count and wall time.
 
 ## Reproducing the results
 
-Every table and figure is rebuilt from the per-episode logs. **The raw logs (~83 MB across
-1 446 JSONL files) are intentionally not part of this release** — they exceed the size the
-repository is meant to carry. `results/MANIFEST.md` lists every raw file with its episode count,
+Every table and figure is rebuilt from the per-episode logs. **The raw logs (~108 MB across
+2 206 JSONL files, 22 082 episodes) are intentionally not part of this release** — they
+exceed the size the repository is meant to carry. `results/MANIFEST.md` lists every raw file with its episode count,
 seed range and SHA-256 checksum, so a complete copy can be verified file by file; the summary
 CSVs in `results/` are shipped in their place. Point `--raw-root` at a directory holding the
 raw logs to reproduce everything below. The pre-registered settings for each phase are in
@@ -104,6 +104,28 @@ raw logs to reproduce everything below. The pre-registered settings for each pha
 ```bash
 # final per-setting table and manifest
 python scripts/pack_final_results.py --with-manifest
+
+# round 5: sampler x steps sweep (DDIM is rebuilt from the checkpoint's trained betas)
+python scripts/run_matrix.py --phase ddpm20 --tasks "PushCube-v1;PickCube-v1;PullCubeTool-v1" \
+    --schedules "fixed:8" --seeds 400000-400099 --chunk 10 --jobs 8 \
+    --diffusion-steps 20 --raw-root results/raw/sampling_sweep
+python scripts/run_matrix.py --phase ddim5 --tasks "PushCube-v1;PickCube-v1;PullCubeTool-v1" \
+    --schedules "fixed:8" --seeds 400000-400099 --chunk 10 --jobs 8 \
+    --sampler ddim --diffusion-steps 5 --raw-root results/raw/sampling_sweep
+python scripts/r5_sampling_analysis.py --phases ddpm100,ddpm20,ddim5 --schedule "fixed(k=8)" \
+    --out results/r5_sampling
+
+# round 5: clean inference timing (single worker, otherwise idle machine)
+python scripts/run_rollout.py --task PushCube-v1 --schedule fixed:8 --seeds 400000-400009 \
+    --sampler ddim --diffusion-steps 5 --out results/timing_r5/ddim5_fixed8.jsonl
+
+# round 5: raw-log integrity guard before analysing
+python scripts/r5_integrity.py --raw-root results/raw
+
+# round 5: training-variant evaluation analysis and figures
+python scripts/r5_training_analysis.py --raw-root results/raw
+python scripts/r5_figures.py
+```
 
 # per-task summary plus paired adaptive-vs-baseline tests
 # (--include-adaptive-pairs also pairs the adaptive/time-window rules against each other)

@@ -35,6 +35,14 @@ BLOCKS = [
     ("pushcube_window_validation", "PushCube-v1", "pushcube_win_val"),
 ]
 
+# --- Round 5 (Addendum 4): sampler sweep, execution-horizon frontier, training variants ---
+R5_TASKS = ("PushCube-v1", "PickCube-v1", "PullCubeTool-v1")
+R5_SWEEP_PHASES = ("ddpm100", "ddpm50", "ddpm20", "ddpm10", "ddpm5",
+                   "ddim50", "ddim20", "ddim10", "ddim5")
+R5_FRONT_PHASES = ("front_ddpm100", "front_ddpm20", "front_ddim5")
+BLOCKS += [(f"r5_sweep_{p}", t, f"sampling_sweep/{p}") for p in R5_SWEEP_PHASES for t in R5_TASKS]
+BLOCKS += [("r5_" + p, "PushCube-v1", f"sampling_sweep/{p}") for p in R5_FRONT_PHASES]
+
 
 def schedule_key(rec):
     p = rec.get("schedule_params") or {}
@@ -42,10 +50,22 @@ def schedule_key(rec):
     return f"{rec['schedule']}({ps})" if ps else rec["schedule"]
 
 
+def discover_blocks(raw_root):
+    raw_root = Path(raw_root)
+    blocks = list(BLOCKS)
+    tv = raw_root / "training_variants"
+    if tv.is_dir():  # round-5 training variants, discovered so partial runs still pack
+        blocks += [(d.name.replace("eval_", "r5_train_"), "PushCube-v1",
+                    f"training_variants/{d.name}")
+                   for d in sorted(tv.iterdir()) if d.is_dir() and d.name.startswith("eval_")]
+    return blocks
+
+
 def collect(raw_root):
+    raw_root = Path(raw_root)
     store = defaultdict(dict)
-    for label, task, phase in BLOCKS:
-        for f in glob.glob(str(Path(raw_root) / phase / task / "*" / "chunk_*.jsonl")):
+    for label, task, phase in discover_blocks(raw_root):
+        for f in glob.glob(str(raw_root / phase / task / "*" / "chunk_*.jsonl")):
             for line in open(f):
                 if not line.strip():
                     continue
@@ -111,26 +131,37 @@ def main(argv=None):
     print(f"[FINAL_RESULTS.csv] {len(rows)} rows")
 
     if args.with_manifest:
+        raw_root = Path(args.raw_root)
+        blocks = discover_blocks(raw_root)
         lines = ["# Raw log manifest", "",
                  "One row per raw per-episode log file. Checksums are SHA-256 (first 16 hex chars).",
                  "", "| phase | task | schedule tag | episodes | seed range | sha256 |",
                  "|---|---|---|---|---|---|"]
-        files = sorted(glob.glob(str(Path(args.raw_root) / "*" / "*" / "*" / "chunk_*.jsonl")))
+        labelled = {}
+        for label, task, phase in blocks:
+            for f in glob.glob(str(raw_root / phase / task / "*" / "chunk_*.jsonl")):
+                labelled[Path(f).resolve()] = (phase, task)
+        files = sorted(q for q in raw_root.rglob("chunk_*.jsonl")
+                       if "AMBIGUOUS_provenance" not in str(q))
         total = 0
-        for f in files:
-            p = Path(f)
+        n_lab = 0
+        for p in files:
+            key = p.resolve()
+            if key in labelled:
+                phase, task = labelled[key]
+                n_lab += 1
+            else:
+                phase = "/".join(p.parts[-5:-3]) if len(p.parts) >= 5 else p.parent.parent.parent.name
+                task = p.parent.parent.name
             tag = p.parent.name
-            task = p.parent.parent.name
-            phase = p.parent.parent.parent.name
-            if phase.endswith("AMBIGUOUS_provenance"):
-                continue
-            seeds = [json.loads(line)["seed"] for line in open(f) if line.strip()]
+            seeds = [json.loads(line)["seed"] for line in open(p) if line.strip()]
             if not seeds:
                 continue
             total += len(seeds)
             lines.append(f"| {phase} | {task} | {tag} | {len(seeds)} | "
                          f"{min(seeds)}-{max(seeds)} | `{hashlib.sha256(p.read_bytes()).hexdigest()[:16]}` |")
-        lines += ["", f"**Total files:** {len(files)}. **Total episodes:** {total}.", ""]
+        lines += ["", f"**Total files:** {len(files)} (round-5 labelled: {n_lab}). "
+                      f"**Total episodes:** {total}.", ""]
         (out / "MANIFEST.md").write_text("\n".join(lines) + "\n")
         print(f"[MANIFEST.md] {len(files)} files, {total} episodes")
     return 0

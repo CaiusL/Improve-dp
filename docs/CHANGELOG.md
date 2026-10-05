@@ -1,5 +1,43 @@
 # Changelog
 
+## 1.1.0
+
+Round 5 (report addendum 4): diffusion-sampling sweep, execution-horizon-by-sampler
+frontier, a clean inference-timing benchmark, and training-time variants of the DP
+observation encoder / prediction horizon on `PushCube-v1`.
+
+### Added
+
+- `scripts/r5_sampling_analysis.py` — sampler x steps analysis: per-cell Wilson summaries and
+  paired comparisons against the 100-step DDPM baseline, keyed by
+  (task, sampler, diffusion_steps, schedule) instead of schedule alone, with the
+  "largest compatible loss" and "excludes a loss > 10 pp" columns.
+- `scripts/r5_training_analysis.py` — training-variant evaluation analysis: per-run Wilson
+  summaries, paired McNemar/Newcombe against each baseline seed, and the pre-registered
+  decision rule applied to variant groups (trailing seed digit stripped).
+- `scripts/r5_figures.py` — the three round-5 figure families: PushCube success-versus-seconds
+  frontier, success-versus-sampling-steps for all three tasks (DDPM vs DDIM), and the
+  training-variant per-run points with means.
+- `scripts/r5_integrity.py` — pre-analysis guard for the raw logs: unparsable lines, duplicate
+  seeds and wrong episode counts per chunk file.
+- `configs/round5_sampling_sweep.json`, `configs/round5_frontier.json`,
+  `configs/round5_timing.json`, `configs/round5_training_variants.json` and the three
+  `configs/model_v*.json` variant model-configs — the pre-registered grids and settings.
+- `run_rollout.py` / `run_matrix.py`: `--sampler {ddpm,ddim}`, which rebuilds the checkpoint's
+  scheduler as a `diffusers.DDIMScheduler` from its trained betas (epsilon prediction,
+  `eta = 0`, `clip_sample = True`) before `set_timesteps`. `--raw-root` added to
+  `run_matrix.py` so round-5 phases can live under a subdirectory.
+
+### Changed
+
+- `pack_final_results.py` discovers nested round-5 phases
+  (`sampling_sweep/<phase>`, `training_variants/eval_<model>`) and lists them in
+  `FINAL_RESULTS.csv`; block discovery is shared with the manifest writer.
+- `MANIFEST.md` now inventories every raw log under the raw root (previously only
+  top-level phases) and its reported total matches the number of listed rows. The 40
+  `AMBIGUOUS_provenance` files stay excluded everywhere.
+- `docs/REPORT_ADDENDUM_4.md` added.
+
 ## 1.0.0
 
 First packaged release. It consolidates four rounds of work that had accumulated as a
