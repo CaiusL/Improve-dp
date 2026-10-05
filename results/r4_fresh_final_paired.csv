@@ -1,0 +1,23 @@
+metric,A,B,n_paired,A_rate,B_rate,diff,diff_lo95,diff_hi95,A_only,B_only,mcnemar_exact_p,method
+success_once,"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)",fixed(k=2),200,0.855,0.785,0.07,-0.0056,0.145,30,16,0.054076,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)",fixed(k=4),200,0.855,0.8,0.055,-0.0194,0.129,22,11,0.080143,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)",fixed(k=8),200,0.855,0.745,0.11,0.0316,0.1871,25,3,2.7e-05,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)","random(hi=8,lo=2,mean=2.25)",200,0.855,0.825,0.03,-0.0423,0.1022,24,18,0.440799,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)","adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)",200,0.855,0.89,-0.035,-0.1013,0.0311,8,15,0.21004,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)","adaptive_time(length=170.0,long=8,short=2,start=10.0)",200,0.855,0.855,0.0,-0.0697,0.0697,15,15,1.0,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)","adaptive_time(length=170.0,long=8,short=2,start=30.0)",200,0.855,0.87,-0.015,-0.0832,0.0532,6,9,0.607239,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)",fixed(k=2),200,0.89,0.785,0.105,0.0327,0.1768,32,11,0.001914,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)",fixed(k=4),200,0.89,0.8,0.09,0.0189,0.1608,24,6,0.001431,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)",fixed(k=8),200,0.89,0.745,0.145,0.0698,0.2191,34,5,2e-06,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)","random(hi=8,lo=2,mean=2.25)",200,0.89,0.825,0.065,-0.0039,0.1339,24,11,0.04096,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)","adaptive_time(length=170.0,long=8,short=2,start=10.0)",200,0.89,0.855,0.035,-0.0311,0.1013,17,10,0.247789,Newcombe hybrid score for paired proportions
+success_once,"adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)","adaptive_time(length=170.0,long=8,short=2,start=30.0)",200,0.89,0.87,0.02,-0.0446,0.0847,12,8,0.503445,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=10.0)",fixed(k=2),200,0.855,0.785,0.07,-0.0056,0.145,25,11,0.028817,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=10.0)",fixed(k=4),200,0.855,0.8,0.055,-0.0194,0.129,24,13,0.098872,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=10.0)",fixed(k=8),200,0.855,0.745,0.11,0.0316,0.1871,34,12,0.001641,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=10.0)","random(hi=8,lo=2,mean=2.25)",200,0.855,0.825,0.03,-0.0423,0.1022,18,12,0.361595,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=10.0)","adaptive_time(length=170.0,long=8,short=2,start=30.0)",200,0.855,0.87,-0.015,-0.0832,0.0532,13,16,0.711071,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=30.0)",fixed(k=2),200,0.87,0.785,0.085,0.0108,0.1587,30,13,0.013718,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=30.0)",fixed(k=4),200,0.87,0.8,0.07,-0.003,0.1427,24,10,0.024307,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=30.0)",fixed(k=8),200,0.87,0.745,0.125,0.0479,0.2009,30,5,2.2e-05,Newcombe hybrid score for paired proportions
+success_once,"adaptive_time(length=170.0,long=8,short=2,start=30.0)","random(hi=8,lo=2,mean=2.25)",200,0.87,0.825,0.045,-0.0259,0.1158,22,13,0.175465,Newcombe hybrid score for paired proportions

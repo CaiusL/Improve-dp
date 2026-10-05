@@ -1,0 +1,17 @@
+{
+  "name": "round4_pickcube_stillness",
+  "task": "PickCube-v1",
+  "seed_block": "100000-100099",
+  "status": "exploratory, validation seeds only, no test block",
+  "primary_metric": "success_once",
+  "secondary_metric": "success_at_end",
+  "rule": "adaptive_thresh:feat=d_obj_goal,d=B,dir=gt,short=L,long=8 (long near the goal, short elsewhere)",
+  "configurations": [
+    {"B": 0.05, "L": 2},
+    {"B": 0.10, "L": 2},
+    {"B": 0.05, "L": 4},
+    {"B": 0.10, "L": 4}
+  ],
+  "references": ["fixed:4", "fixed:8"],
+  "decision_rule": "a test block is justified only if a configuration beats fixed:8 on validation under success_once AND does not lose under success_at_end"
+}

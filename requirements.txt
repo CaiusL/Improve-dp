@@ -1,0 +1,15 @@
+# Core runtime for the rollout harness (CPU simulation).
+# ManiSkill and SAPIEN are installed separately; see the README for the exact versions used.
+torch>=2.0
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+# Required only by scripts/run_rollout.py and scripts/run_matrix.py, which drive the
+# environment through the teammate-supplied `diffusion_policy` package:
+#   mani_skill==3.0.1
+#   sapien==3.0.3
+#   gymnasium==1.3.0
+#   diffusers==0.40.0
+#   h5py>=3.9
+# Testing (optional):
+#   pytest>=7.0

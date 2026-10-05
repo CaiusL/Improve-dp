@@ -1,0 +1,20 @@
+{
+  "name": "round3_pickcube_test",
+  "task": "PickCube-v1",
+  "seed_block": "300000-300199",
+  "primary_metric": "success_once",
+  "secondary_metric": "success_at_end",
+  "schedules": [
+    "fixed:2", "fixed:4", "fixed:8",
+    "adaptive_push:d_tcp=0,d_goal=0.05,short=2,long=8",
+    "adaptive_push:d_tcp=0.03,d_goal=0,short=2,long=8",
+    "adaptive_push:d_tcp=0.03,d_goal=0.08,short=2,long=8",
+    "random:mean=3.76,lo=2,hi=8",
+    "random:mean=2.89,lo=2,hi=8"
+  ],
+  "preregistered": {
+    "P1": "primary adaptive vs best validation fixed schedule (fixed:8), exact McNemar",
+    "P2": "primary adaptive vs the random schedule matched to its own validation mean horizon",
+    "note": "success_once and success_at_end can differ on this task; both are reported."
+  }
+}

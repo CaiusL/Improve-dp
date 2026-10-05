@@ -1,0 +1,15 @@
+{
+  "name": "round4_pushcube_window_search",
+  "task": "PushCube-v1",
+  "seed_block": "100000-100099",
+  "primary_metric": "success_once",
+  "rule": "adaptive_time:start=S,length=170,short=2,long=8",
+  "candidates_S": [0, 10, 20, 30],
+  "dropped_S": {
+    "60": "matching needs W=170 and S+W > 200; best achievable mean horizon is 2.58, outside 2.25 +/- 0.15",
+    "90": "same; best achievable mean horizon is 3.02"
+  },
+  "selection_rule": "highest success_once, tie broken by fewer mean inference calls, then order 0,10,20,30",
+  "matching_target_mean_horizon": 2.25,
+  "tolerance": 0.15
+}

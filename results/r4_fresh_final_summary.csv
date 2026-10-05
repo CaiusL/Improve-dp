@@ -1,0 +1,9 @@
+schedule,n_episodes,successes,success_rate,wilson_lo95,wilson_hi95,successes_at_end,rate_at_end,mean_inference_calls,mean_env_steps,mean_horizon,frac_short_decisions,frac_long_decisions,mean_wall_time_s
+"adaptive_push(d_goal=0.0,d_tcp=0.05,long=8,short=2)",200,171,0.855,0.7995,0.8971,165,0.825,63.38,200.0,3.325,0.8044,0.1956,24.5
+"adaptive_push(d_goal=0.1,d_tcp=0.08,long=8,short=2)",200,178,0.89,0.8391,0.9262,176,0.88,88.79,200.0,2.263,0.9578,0.0422,34.3
+"adaptive_time(length=170.0,long=8,short=2,start=10.0)",200,171,0.855,0.7995,0.8971,168,0.84,87.0,200.0,2.345,0.9425,0.0575,33.7
+"adaptive_time(length=170.0,long=8,short=2,start=30.0)",200,174,0.87,0.8163,0.9097,170,0.85,88.0,200.0,2.273,0.9545,0.0455,34.1
+fixed(k=2),200,157,0.785,0.723,0.8363,152,0.76,100.0,200.0,2.0,1.0,0.0,39.1
+fixed(k=4),200,160,0.8,0.7391,0.8495,158,0.79,50.0,200.0,4.0,0.0,0.0,19.8
+fixed(k=8),200,149,0.745,0.6804,0.8004,148,0.74,25.0,200.0,8.0,0.0,1.0,11.9
+"random(hi=8,lo=2,mean=2.25)",200,165,0.825,0.7664,0.8714,162,0.81,89.25,200.0,2.252,0.9592,0.0408,33.3

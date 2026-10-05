@@ -1,0 +1,16 @@
+{
+  "name": "round2_pullcubetool_confirm",
+  "task": "PullCubeTool-v1",
+  "seed_block": "300000-300199",
+  "primary_metric": "success_once",
+  "schedules": [
+    "fixed:4", "fixed:8",
+    "adaptive_dist:d=0.30,short=2,long=8",
+    "random:mean=5.11,lo=2,hi=8"
+  ],
+  "preregistered": {
+    "P1": "adaptive vs fixed:4, exact McNemar, CONFIRMED iff adaptive > fixed:4 and p < 0.05",
+    "P2": "adaptive vs fixed:8, no-significant-loss iff p >= 0.05",
+    "overall": "CONFIRMED only if P1 confirmed and P2 shows no significant loss"
+  }
+}

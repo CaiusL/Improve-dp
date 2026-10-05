@@ -1,0 +1,26 @@
+{
+  "name": "round3_pushcube_test",
+  "task": "PushCube-v1",
+  "seed_block": "200000-200199",
+  "primary_metric": "success_once",
+  "schedules": [
+    "fixed:2", "fixed:4", "fixed:8",
+    "random:mean=2.28,lo=2,hi=8",
+    "random:mean=3.47,lo=2,hi=8",
+    "adaptive_push:d_tcp=0.08,d_goal=0.10,short=2,long=8",
+    "adaptive_push:d_tcp=0.06,d_goal=0.10,short=2,long=8",
+    "adaptive_push:d_tcp=0.05,d_goal=0,short=2,long=8"
+  ],
+  "controls_phase": {
+    "phase": "pushcube_controls",
+    "seed_block": "200000-200199",
+    "schedules": [
+      "adaptive_push_inv:d_tcp=0.001,d_goal=0.062,short=2,long=8",
+      "adaptive_time:start=0,length=170,short=2,long=8",
+      "adaptive_time:start=30,length=170,short=2,long=8",
+      "adaptive_thresh:feat=qpos0,d=0.1311,dir=lt,short=2,long=8"
+    ],
+    "matching_target_mean_horizon": 2.25,
+    "tolerance": 0.15
+  }
+}
