@@ -4,23 +4,36 @@ Brief: *parity for `PickCube-v1` and `PullCubeTool-v1`, plus the questions brief
 Scope: Panda only. Nothing in an earlier report is edited by this file; the user merges. Every
 pre-registered rule was fixed in `NOTES.md` at 2026-10-06 13:10, before the first round-7 run.
 
-Revision note (2026-10-06, post-release external review): stale interim numbers and "pending" /
-"will be appended" sentences were corrected in this file. No data, figure, table or CSV changed —
-the packaged tables and figures were already correct. Specifically: the `PullCubeTool-v1` V3 run
-values are 30.5 / 22.5 / 26.0 (mean 26.3%; flag unchanged), the `PullCubeTool-v1` frontier
-sampler paragraph now carries the final eight paired comparisons, the post-hoc best cell on that
-task is V1 `fixed:8` at DDPM-100 (27.50%), the adaptive penalty on `PickCube-v1` is -14.75 pp on
-B0 / -5.87 pp on V1, and the parity table's three variant rows are filled in. Full list in
-`NOTES.md` (`CORRECTION`, round 7 post-release).
+Revision notes.
+(1) 2026-10-06, first external review — stale interim numbers and "pending" / "will be appended"
+sentences: the `PullCubeTool-v1` V3 run values are 30.5 / 22.5 / 26.0 (mean 26.3%; flag
+unchanged), the `PullCubeTool-v1` frontier sampler paragraph carries the final eight paired
+comparisons, the post-hoc best cell on that task is V1 `fixed:8` at DDPM-100 (27.50%), and the
+parity table's three variant rows are filled in.
+(2) 2026-10-06, second external review — two pipeline defects behind the numbers themselves, both
+fixed and both regenerated from the raw logs:
+(a) `r7_runlevel.py` looked the clean per-call time up under the arm name `co`, so every
+co-trained frontier cell fell back to 145.0 ms and the DDPM-20 / DDIM-20 `derived s/ep` entries
+were ~4x too large; the table now carries the `co_tm` arm and the missing DDIM-20 entry
+(28.5 ms), and the frontier tables, `r7_runlevel_summary.csv` and the two frontier figures are
+regenerated (no success rate changed).
+(b) `pack_final_results.py` never folded the round-5 frontier's reused sweep half into its three
+`r5_front_*` `fixed:8` rows, which therefore shipped at n = 100; the packer now merges the reused
+seeds and `FINAL_RESULTS.csv` matches the round-5 analysis (n = 200, 76.0 / 81.5 / 80.5%).
+Also in this revision: the P3 cell means were re-derived from the packaged table and now follow
+the half-up convention stated in the method (sub-0.05 pp drift; e.g. the PickCube DDIM-5 default
+cell is 63.13%, not 63.10%), the PullCubeTool V1 `fixed:8` range is [20.0-34.5], and the Task F
+V1 difference is -5.88 pp. Full list in `NOTES.md` (`CORRECTION`, round 7 post-release).
 
 Method (unchanged from brief 6, restated because several round-7 designs are smaller): the
 training run is the unit of analysis; exact two-sided permutation tests enumerate all
 `C(n1+n2, n1)` assignments and the smallest attainable p is stated for every design
 (6v6 = 924 -> 0.0022; 4v6 = 210 -> 0.0095; 4v4 = 70 -> 0.0286; 3v4 = 35 -> 0.057; 3v3 = 20 ->
 0.10). Within-model comparisons on identical seeds use exact McNemar on episodes. Policy seconds
-per episode are **derived** from the round-5 clean per-call times (DDPM-100 145.0 ms,
-normalized 142.8 ms, DDPM-20 28.7 ms, DDIM-5 7.2 ms, DDIM-20 28.5 ms), except where a new
-architecture was timed once on an idle machine.
+per episode are **derived** as (policy calls) x (clean ms per call) from the round-5 measurements:
+DDPM-100 145.0 ms (142.8 ms for normalized observations), DDPM-20 28.7 ms, DDIM-20 28.5 ms,
+DDIM-5 7.2 ms. Percentages and differences are rounded half-up to the precision shown; every
+test uses unrounded values.
 
 ---
 
@@ -59,17 +72,17 @@ loss bound <= 10 pp on either task (best `PickCube-v1` 22.0 pp at 50 steps, best
 | schedule | sampler | `success_once` | `success_at_end` | calls/ep | mean horizon | derived s/ep |
 |---|---|---|---|---|---|---|
 | `fixed:2` | DDPM-100 | 17.5% | 3.5% | 100.0 | 2.00 | 14.50 |
-| `fixed:2` | DDPM-20 | 13.0% | 4.5% | 100.0 | 2.00 | 14.50 |
-| `fixed:2` | DDIM-20 | 21.0% | 5.0% | 100.0 | 2.00 | 14.50 |
+| `fixed:2` | DDPM-20 | 13.0% | 4.5% | 100.0 | 2.00 | 2.87 |
+| `fixed:2` | DDIM-20 | 21.0% | 5.0% | 100.0 | 2.00 | 2.85 |
 | `fixed:4` | DDPM-100 | 29.0% | 7.0% | 50.0 | 4.00 | 7.25 |
-| `fixed:4` | DDPM-20 | 31.0% | 9.0% | 50.0 | 4.00 | 7.25 |
-| `fixed:4` | DDIM-20 | 27.0% | 5.5% | 50.0 | 4.00 | 7.25 |
+| `fixed:4` | DDPM-20 | 31.0% | 9.0% | 50.0 | 4.00 | 1.44 |
+| `fixed:4` | DDIM-20 | 27.0% | 5.5% | 50.0 | 4.00 | 1.43 |
 | **`fixed:8`** | **DDPM-100** | **46.5%** | **19.0%** | **25.0** | 8.00 | **3.62** |
-| `fixed:8` | DDPM-20 | 50.0% | 13.5% | 25.0 | 8.00 | 3.62 |
-| `fixed:8` | DDIM-20 | 42.5% | 11.5% | 25.0 | 8.00 | 3.62 |
+| `fixed:8` | DDPM-20 | 50.0% | 13.5% | 25.0 | 8.00 | 0.72 |
+| `fixed:8` | DDIM-20 | 42.5% | 11.5% | 25.0 | 8.00 | 0.71 |
 | adaptive | DDPM-100 | 34.5% | 8.5% | 60.3 | 3.96 | 8.75 |
-| adaptive | DDPM-20 | 38.5% | 8.0% | 63.4 | 3.70 | 9.19 |
-| adaptive | DDIM-20 | 37.0% | 6.5% | 61.0 | 3.79 | 8.85 |
+| adaptive | DDPM-20 | 38.5% | 8.0% | 63.4 | 3.70 | 1.82 |
+| adaptive | DDIM-20 | 37.0% | 6.5% | 61.0 | 3.79 | 1.74 |
 
 **(a) Is the adaptive rule better than the best fixed schedule at DDPM-100?** No — it is
 **significantly worse**. Exact McNemar on identical seeds (n = 200):
@@ -83,10 +96,12 @@ loss bound <= 10 pp on either task (best `PickCube-v1` 22.0 pp at 50 steps, best
 This **replicates the earlier direction on a brand-new seed block**: on `PickCube-v1` the
 adaptive rule beats `fixed:2` clearly, is indistinguishable from `fixed:4`, and is significantly
 *worse* than `fixed:8` — the same ordering as round 3 (adaptive 25.5% vs `fixed:8` 36.0%,
-p = 0.0008) and round 7's Task F. Note the frontier is *degenerate* here: `fixed:8` has both the
-highest success **and** the lowest derived policy time (3.62 s vs the adaptive rule's 8.75 s), so
-on this task there is no success-versus-cost trade-off to exploit — the rule spends 2.4x the
-policy time to lose 12 points.
+p = 0.0008) and round 7's Task F. Note the frontier is *degenerate* here: at DDPM-100 `fixed:8` has
+both the highest success **and** the lowest derived policy time (3.62 s vs the adaptive rule's
+8.75 s), so on this task there is no success-versus-cost trade-off to exploit — the rule spends
+2.4x the policy time to lose 12 points. (The DDPM-20/DDIM-20 cells are cheaper still — 0.72 s and
+0.71 s for `fixed:8`, 1.82 s and 1.74 s for adaptive — but the same ordering holds at every
+sampler, and the pre-registered comparison is at DDPM-100.)
 
 **(b) Do the cheaper samplers lose success?** No significant change in any of the six paired
 comparisons (all p >= 0.20), with point estimates between -4.5 and +4.0 pp. The largest losses
@@ -102,17 +117,17 @@ On the secondary metric, `fixed:8` DDIM-20 is 5.5 pp below DDPM-100 at end (11.5
 | schedule | sampler | `success_once` | `success_at_end` | calls/ep | mean horizon | derived s/ep |
 |---|---|---|---|---|---|---|
 | `fixed:2` | DDPM-100 | 8.0% | 8.0% | 300.0 | 2.00 | 43.50 |
-| `fixed:2` | DDPM-20 | 9.0% | 9.0% | 300.0 | 2.00 | 43.50 |
-| `fixed:2` | DDIM-20 | 5.0% | 5.0% | 300.0 | 2.00 | 43.50 |
+| `fixed:2` | DDPM-20 | 9.0% | 9.0% | 300.0 | 2.00 | 8.61 |
+| `fixed:2` | DDIM-20 | 5.0% | 5.0% | 300.0 | 2.00 | 8.55 |
 | `fixed:4` | DDPM-100 | 9.5% | 9.5% | 150.0 | 4.00 | 21.75 |
-| `fixed:4` | DDPM-20 | 9.0% | 9.0% | 150.0 | 4.00 | 21.75 |
-| `fixed:4` | DDIM-20 | 11.5% | 11.5% | 150.0 | 4.00 | 21.75 |
+| `fixed:4` | DDPM-20 | 9.0% | 9.0% | 150.0 | 4.00 | 4.30 |
+| `fixed:4` | DDIM-20 | 11.5% | 11.5% | 150.0 | 4.00 | 4.28 |
 | `fixed:8` | DDPM-100 | 10.0% | 10.0% | 75.0 | 8.00 | 10.88 |
-| `fixed:8` | DDPM-20 | 15.0% | 15.0% | 75.0 | 8.00 | 10.88 |
-| `fixed:8` | DDIM-20 | 7.5% | 7.5% | 75.0 | 8.00 | 10.88 |
+| `fixed:8` | DDPM-20 | 15.0% | 15.0% | 75.0 | 8.00 | 2.15 |
+| `fixed:8` | DDIM-20 | 7.5% | 7.5% | 75.0 | 8.00 | 2.14 |
 | adaptive | DDPM-100 | 8.5% | 8.5% | 148.4 | 5.05 | 21.52 |
-| adaptive | DDPM-20 | 14.5% | 14.5% | 150.0 | 5.07 | 21.74 |
-| adaptive | DDIM-20 | 9.5% | 9.0% | 150.8 | 5.08 | 21.87 |
+| adaptive | DDPM-20 | 14.5% | 14.5% | 150.0 | 5.07 | 4.30 |
+| adaptive | DDIM-20 | 9.5% | 9.0% | 150.8 | 5.08 | 4.30 |
 
 **(a) Is the adaptive rule better than the best fixed schedule at DDPM-100?** No — and this
 replicates the earlier null. Exact McNemar (n = 200): adaptive vs `fixed:2` **+0.5 pp** (p = 1.0),
@@ -239,20 +254,20 @@ Run-level means (4 runs per cell; ranges in brackets):
 
 | arm | schedule | DDPM-100 | DDIM-5 |
 |---|---|---|---|
-| B0 | `fixed:8` | 60.38% [46.0-75.5] | **63.10%** [47.0-78.5] |
-| B0 | adaptive | 45.62% | 50.10% [44.0-67.0] |
-| V1 | `fixed:8` | 40.12% [29.5-49.5] | 41.35% [28.5-48.5] |
-| V1 | adaptive | 34.15% | 34.35% [21.5-43.5] |
+| B0 | `fixed:8` | 60.38% [46.0-75.5] | **63.13%** [47.0-78.5] |
+| B0 | adaptive | 45.63% | 50.13% [44.0-67.0] |
+| V1 | `fixed:8` | 40.13% [29.5-49.5] | 41.38% [28.5-48.5] |
+| V1 | adaptive | 34.25% | 34.38% [21.5-43.5] |
 
-**Headline 1 (pre-specified):** the combination (V1, adaptive, DDIM-5) = 34.35% versus default DP
+**Headline 1 (pre-specified):** the combination (V1, adaptive, DDIM-5) = 34.38% versus default DP
 (B0, `fixed:8`, DDPM-100) = 60.38%: **-26.0 pp**, exact permutation 4 vs 4 (70 assignments,
 smallest attainable two-sided p = 0.0286), **p = 0.028571** — i.e. the "improved" configuration is
 significantly *worse* than doing nothing, by the largest margin recorded anywhere in this
 project. On this task the two training-time changes each hurt (normalization -20.3 pp, the
-adaptive rule -14.75 pp on B0 / -5.87 pp on V1 at `fixed:8`) and they do not cancel.
+adaptive rule -14.75 pp on B0 / -5.88 pp on V1 at `fixed:8`) and they do not cancel.
 
 **Headline 2 (post hoc):** the best cell by run-level mean is not the pre-specified combination
-but **plain default DP with DDIM-5** (B0, `fixed:8`, 63.10%), which is **+2.8 pp** above the
+but **plain default DP with DDIM-5** (B0, `fixed:8`, 63.13%), which is **+2.8 pp** above the
 DDPM-100 default (post hoc, 4 vs 4, not significant and not pre-registered). In other words the
 only change that helps on `PickCube-v1` is the cheap sampler applied to the default schedule, and
 it helps by a couple of points while cutting derived policy time from 3.62 s to 0.18 s per
@@ -269,13 +284,13 @@ Run-level means (4 runs per cell):
 
 | arm | schedule | DDPM-100 | DDIM-5 |
 |---|---|---|---|
-| B0 | `fixed:8` | 11.62% [9.0-15.0] | 11.00% [8.0-15.0] |
-| B0 | adaptive | 11.50% | 10.20% [8.0-12.0] |
-| V1 | `fixed:8` | **27.50%** [19.5-34.5] | 20.00% [10.5-30.0] |
-| V1 | adaptive | 19.90% | 14.50% [5.5-21.5] |
+| B0 | `fixed:8` | 11.63% [9.0-15.0] | 11.00% [8.0-15.0] |
+| B0 | adaptive | 11.50% | 10.25% [8.0-12.0] |
+| V1 | `fixed:8` | **27.50%** [20.0-34.5] | 20.00% [10.5-30.0] |
+| V1 | adaptive | 19.88% | 14.50% [5.5-21.5] |
 
 **Headline 1 (pre-specified):** the combination (V1, adaptive, DDIM-5) = 14.50% versus default DP
-(B0, `fixed:8`, DDPM-100) = 11.62%: **+2.9 pp**, exact permutation 4 vs 4 (70 assignments,
+(B0, `fixed:8`, DDPM-100) = 11.63%: **+2.9 pp**, exact permutation 4 vs 4 (70 assignments,
 smallest attainable p = 0.0286), **p = 0.514** — not established. The best cell on this task is
 **V1 with the default schedule at DDPM-100 (27.50%)**, i.e. normalization alone.
 
@@ -287,8 +302,8 @@ cell to 20.00%.
 
 **DDIM-5 versus DDPM-100 per run:** unlike `PickCube-v1`, cheap sampling **costs success here for
 the normalized models**: exact McNemar shows **2 of 4 runs losing significantly** in the
-V1 `fixed:8` comparison (27.5% -> 20.0% at the cell mean) and **2 of 4** in V1 adaptive
-(19.9% -> 14.5%). For the B0 cells, 0 of 4 runs lose significantly. So the round-5 statement
+V1 `fixed:8` comparison (27.50% -> 20.00% at the cell mean) and **2 of 4** in V1 adaptive
+(19.88% -> 14.50%). For the B0 cells, 0 of 4 runs lose significantly. So the round-5 statement
 "cutting sampling steps is free" holds for the co-trained checkpoint and for `PickCube-v1` here,
 but is **not** true for observation-normalized `PullCubeTool-v1` models.
 
@@ -409,7 +424,7 @@ rules of this brief and brief 6. "Best fixed vs adaptive" refers to the co-train
 | V2a shorter prediction horizon (8) | not established (round 5) | **not established**; flag suggestive (negative), -39.9 pp, every run below the baseline's worst | **not established**; flag suggestive (negative), -6.3 pp, every run below the baseline's worst |
 | V2b longer prediction horizon (32) | not established (round 5, suggestive at 2 seeds, overlap at 3) | **within training noise** (flag not met; +13.6 pp, mean inside the baseline's range) | **not established**; flag suggestive (positive), +8.0 pp |
 | V3 wider encoder (256) | not established (round 5; widest seed spread, 12.5 pp) | **within training noise** (flag not met; +3.9 pp, seed spread 44.5-89.5) | **not established**; flag suggestive (positive), +14.7 pp |
-| adaptive on our trained models | **contradicted** (brief 6: -1.83 pp, p = 0.56) | **contradicted** (brief 6: -14.75 pp B0 / -5.87 pp V1) | **contradicted** (brief 6: -0.13 pp B0 / -7.62 pp V1) |
+| adaptive on our trained models | **contradicted** (brief 6: -1.83 pp, p = 0.56) | **contradicted** (brief 6: -14.75 pp B0 / -5.88 pp V1) | **contradicted** (brief 6: -0.13 pp B0 / -7.63 pp V1) |
 | combination incl. DDIM-5 on trained models | **supported** (brief 6: +9.75 pp vs default DP at 5.8x less policy time, driven by normalization) | **contradicted** (pre-specified combination -26.0 pp vs default DP, p = 0.0286; best cell is plain default DP + DDIM-5, +2.8 pp post hoc) | **not established** (pre-specified combination +2.9 pp, p = 0.514; best cell is V1 with the default schedule at DDPM-100; DDIM-5 costs 2 of 4 normalized runs) |
 | co-training vs single-task | **not analysed (out of report scope — cut by the user, amendment 7a)** | same | same |
 
@@ -444,9 +459,13 @@ cells; the flag only names the direction.
   `fig_r7_frontier_{pick,pull}`, `fig_r7_variants_{pick,pull,pushcube}`,
   `fig_r7_combination_{pick,pull}` and `fig_r7_parity` (PNG + PDF). `pack_final_results.py` now
   discovers the `r6_*` **and** `r7_*` raw roots, and `r5_integrity.py` covers the round-7 roots.
-- Fixed while preparing this round (both shipped): the DDIM comparison in `r6_runlevel.py`
+- Fixed while preparing this round (all shipped): the DDIM comparison in `r6_runlevel.py`
   compared cells with themselves (see `REPORT_ADDENDUM_5_FIXES.md` item 8), and `r7_tests.py`
   crashed on empty confidence bounds, which had silently left a stale results CSV.
+- Fixed after the external reviews (all shipped): `r7_runlevel.py`'s per-call-time lookup (the
+  `co_tm` arm and the DDIM-20 entry) and `pack_final_results.py`'s missing merge of the round-5
+  frontier's reused sweep half — see revision note (2) above; the affected table, figures and
+  `FINAL_RESULTS.csv` rows were regenerated from the raw logs and re-verified.
 - Safety scan: the only matches for the searched patterns are the two documents that list the
   patterns (`docs/RELEASE_CHECK.md`, `docs/REPORT_ADDENDUM_4.md`); no checkpoints, demonstration
   data or teammate-owned files are included; nothing is pushed and no licence is chosen.

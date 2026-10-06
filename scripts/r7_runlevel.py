@@ -29,9 +29,10 @@ sys.path.insert(0, str(ROOT / "src"))
 from adaptive_replan import runlevel as S  # noqa: E402
 from adaptive_replan import mcnemar_exact, wilson_interval  # noqa: E402
 
-MS_PER_CALL = {("ddpm", 100): {"B0": 145.0, "V1": 142.8, "co": 145.0},
-               ("ddpm", 20): {"B0": 28.7, "V1": 28.7, "co": 28.7},
-               ("ddim", 5): {"B0": 7.2, "V1": 7.2, "co": 7.2}}
+MS_PER_CALL = {("ddpm", 100): {"B0": 145.0, "V1": 142.8, "co": 145.0, "co_tm": 145.0},
+               ("ddpm", 20): {"B0": 28.7, "V1": 28.7, "co": 28.7, "co_tm": 28.7},
+               ("ddim", 20): {"B0": 28.5, "V1": 28.5, "co": 28.5, "co_tm": 28.5},
+               ("ddim", 5): {"B0": 7.2, "V1": 7.2, "co": 7.2, "co_tm": 7.2}}
 
 RAW_BASE = ROOT / "results" / "raw"
 ROOT_NAMES = ("training_variants", "r6_train_pushcube", "r6_adaptive_pushcube",

@@ -125,3 +125,49 @@ introduced by a refactor during round 6 (an inverted `same_sched` condition). Fi
 baseline is always the same run's DDPM-100 cell. The corrected rows reproduce the values quoted
 in `REPORT_ADDENDUM_5.md` §D (e.g. B0s2 -8.5 pp, p = 0.0137) and extend them to all 12 runs.
 The fixed script is shipped in release 1.3.0.
+
+---
+
+## 9. Section B — the last two per-run differences in each row are stale
+
+**Stale text (table, §B "RESULT").**
+```
+| B0 | +5.0, -11.0, -6.5, -5.5, +1.1, -0.5 pp | -1.83 pp | 0.5625 | ... |
+| V1 | -1.5, -5.0, -1.5, -1.0, -0.5, +1.0 pp | -0.92 pp | 0.5000 | ... |
+```
+The printed seed-4/5 values do not even reproduce the row's own mean: B0 +5.0-11.0-6.5-5.5+1.1-0.5
+gives -2.90 pp, and V1 gives -1.42 pp, against the -1.83 / -0.92 pp printed in the same row.
+Cause: the first four entries were recomputed after a data fix but the last two were left from an
+earlier pass.
+
+**Corrected text (per-run adaptive-minus-`fixed:8`, n = 200 per run, exact McNemar).**
+```
+| B0 | +5.0, -11.0, -6.5, -5.5, +3.5, +3.5 pp | -1.83 pp [-6.17, +2.42] | 0.5625 | B0s1, B0s2 | none |
+| V1 | -1.5, -5.0, -1.5, -1.0, +3.0, +0.5 pp | -0.92 pp [-4.08, +2.17] | 0.5000 | V1s1 | none |
+```
+Source: `results/r7_runlevel_summary.csv` (per-run rates, same runs and seeds 500000-500199) —
+B0 `fixed:8` seeds 0-5 = 84.0/92.5/89.5/85.0/81.0/79.5 vs adaptive 89.0/81.5/83.0/79.5/84.5/83.0;
+V1 `fixed:8` = 98.5/97.5/99.5/91.5/94.0/95.5 vs adaptive 97.0/92.5/98.0/90.5/97.0/96.0. Every
+other §B number (means, sign-flip p = 0.5625/0.5000, the two significant losses, B3 +9.92 pp
+p = 0.006494, interaction +0.92 pp p = 0.772727) is unchanged and reproduces exactly.
+
+---
+
+## 10. Section F — one mean difference is rounded down by 0.01 pp
+
+**Stale text.** `| PickCube-v1 | V1 | 4 | **-5.87 pp** | ... |`
+**Corrected text.** `-5.88 pp` (exact -5.875 pp; the other three rows are unchanged at the
+precision printed: -14.75, -0.13, -7.62/-7.63 pp). Addendum 6 states its rounding convention
+(half-up); the earlier reports are mixed, which is why two tie values differ by 0.01 pp.
+
+---
+
+## 11. Round-7 script defects found in a later review (not addendum-5 statements)
+
+Two defects in the round-7 pipeline were found after this pass and are fixed in release 1.3.2:
+`r7_runlevel.py` looked the clean per-call time up under the arm name `co` instead of `co_tm`, so
+every co-trained frontier cell used 145.0 ms and the DDPM-20/DDIM-20 `derived s/ep` values were
+~4x too large; and `pack_final_results.py` did not fold the round-5 frontier's reused sweep half
+into its three `r5_front_*` `fixed:8` rows, which shipped at n = 100 instead of 200. Details and
+the regenerated values are in `REPORT_ADDENDUM_6.md` (revision note 2) and `NOTES.md`
+(`CORRECTION`, round 7 post-release).

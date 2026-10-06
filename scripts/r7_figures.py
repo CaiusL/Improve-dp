@@ -191,7 +191,8 @@ def main(argv=None):
         fig_frontier(rows, task, f"{args.prefix}_frontier_{tag}")
         fig_variants(rows, task, f"{args.prefix}_variants_{tag}")
         fig_combination(rows, task, f"{args.prefix}_combination_{tag}")
-    fig_cotrain(rows, f"{args.prefix}_cotrain")
+    print("[fig cotrain] skipped: the co-training comparison was cut by the user "
+          "(amendment 7a)")
     fig_variants(rows, "PushCube-v1", f"{args.prefix}_variants_pushcube")
     return 0
 

@@ -42,6 +42,10 @@ R5_SWEEP_PHASES = ("ddpm100", "ddpm50", "ddpm20", "ddpm10", "ddpm5",
 R5_FRONT_PHASES = ("front_ddpm100", "front_ddpm20", "front_ddim5")
 BLOCKS += [(f"r5_sweep_{p}", t, f"sampling_sweep/{p}") for p in R5_SWEEP_PHASES for t in R5_TASKS]
 BLOCKS += [("r5_" + p, "PushCube-v1", f"sampling_sweep/{p}") for p in R5_FRONT_PHASES]
+# frontier label -> sweep phase whose fixed:8 half it reused (seeds 400000-400099)
+R5_FRONT_REUSE = {"r5_front_ddpm100": "sampling_sweep/ddpm100",
+                  "r5_front_ddpm20": "sampling_sweep/ddpm20",
+                  "r5_front_ddim5": "sampling_sweep/ddim5"}
 
 
 def schedule_key(rec):
@@ -79,6 +83,17 @@ def collect(raw_root):
                     continue
                 r = json.loads(line)
                 store[(task, label, schedule_key(r))][int(r["seed"])] = r
+    # The round-5 frontier reused the first 100 sweep episodes (seeds 400000-400099) for its
+    # fixed:8 cells at the same three samplers, so those cells are only complete once the reused
+    # half is folded in; the round-5 analysis did this and printed n=200. Fold it in here too,
+    # keyed by seed, so the packaged table matches the analysis and the report.
+    for label, phase in R5_FRONT_REUSE.items():
+        for f in glob.glob(str(raw_root / phase / "PushCube-v1" / "*" / "chunk_*.jsonl")):
+            for line in open(f):
+                if not line.strip():
+                    continue
+                r = json.loads(line)
+                store[("PushCube-v1", label, schedule_key(r))][int(r["seed"])] = r
     return store
 
 

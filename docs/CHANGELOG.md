@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.3.2
+
+Two analysis/packaging defects found by a second external review of the round-7 numbers, plus the
+resulting number corrections. Success rates are unchanged everywhere; only derived costs, one
+merge and rounding were wrong.
+
+### Fixed
+
+- `scripts/r7_runlevel.py`: the clean per-call time was looked up under the arm name `co` while
+  the co-trained frontier cells carry `co_tm`, so every DDPM-20 / DDIM-20 frontier cell fell back
+  to the DDPM-100 time (145.0 ms); the `("ddim", 20)` entry (28.5 ms) was missing as well. The
+  arm name and the missing entry are added, and `results/r7_runlevel_summary.csv` plus the two
+  frontier figures are regenerated. Example: `PickCube-v1` `fixed:8` at DDPM-20 / DDIM-20 is
+  0.72 s / 0.71 s per episode, not 3.62 s; adaptive is 1.82 s / 1.74 s, not 9.19 s / 8.85 s.
+- `scripts/pack_final_results.py`: the round-5 frontier reused the first 100 sweep episodes
+  (seeds 400000-400099) for its three `fixed:8` cells, and the round-5 analysis merged them, but
+  the packer did not — so `FINAL_RESULTS.csv` shipped those three `r5_front_*` rows at n = 100.
+  The reused half is now folded in by seed and the rows match the analysis: n = 200,
+  76.0 / 81.5 / 80.5% (DDPM-100 / DDPM-20 / DDIM-5). `verify_results.py` shares this collection
+  code, so it now checks the merged rows too.
+- `scripts/r7_figures.py`: the cotrain panel was still being generated here although amendment 7a
+  cut the co-training comparison and the shipped figure set has no cotrain figure; the call is
+  replaced by the skip notice, so re-running the script reproduces the shipped set exactly.
+
+### Changed
+
+- `docs/REPORT_ADDENDUM_6.md`: the two P1 frontier tables carry the corrected `derived s/ep`
+  values; the P3 cell means were re-derived from the packaged table and now follow a stated
+  half-up rounding convention (PickCube DDIM-5 default cell 63.13%, not 63.10%; PullCubeTool V1
+  `fixed:8` range [20.0-34.5]; Task F V1 difference -5.88 pp); revision note (2) records all of it.
+- `docs/REPORT_ADDENDUM_5_FIXES.md`: two statements this pass had missed — §B's last two per-run
+  differences per row were stale (they contradicted the row's own mean), and §F's PickCube V1
+  difference is -5.88 pp, not -5.87.
+- Re-verified after the fixes: `r5_integrity.py` 4 196 chunk files / 0 problems,
+  `verify_results.py` 3 526 values / 0 mismatches, release tests 21/21, and all 24 frontier rows
+  plus all 16 P3 cells re-checked against `r7_runlevel_summary.csv`.
+
 ## 1.3.1
 
 Documentation correction only; no code, data, table or figure changed.
