@@ -1,0 +1,53 @@
+{
+ "name": "round7_p1_frontier",
+ "checkpoint": "teammate-supplied panda3_shared_a0 (EMA), no retraining",
+ "tasks_seeds": {
+  "PickCube-v1": "800000-800199",
+  "PullCubeTool-v1": "900000-900199"
+ },
+ "n_episodes_per_cell": 200,
+ "schedules": {
+  "fixed": [
+   2,
+   4,
+   8
+  ],
+  "adaptive": {
+   "PickCube-v1": "adaptive_push:d_tcp=0,d_goal=0.05,short=2,long=8",
+   "PullCubeTool-v1": "adaptive_dist:d=0.30,short=2,long=8"
+  }
+ },
+ "samplers": [
+  "DDPM-100",
+  "DDPM-20",
+  "DDIM selected by the rule below"
+ ],
+ "ddim_selection_rule": "fewest-step DDIM setting whose paired 95% upper loss bound vs DDPM-100 is <= 10 pp; else DDIM-20",
+ "ddim_rule_inputs": {
+  "PickCube-v1": {
+   "ddim50": 22.0,
+   "ddim20": 24.8,
+   "ddim10": 22.9,
+   "ddim5": 27.6
+  },
+  "PullCubeTool-v1": {
+   "ddim50": 13.0,
+   "ddim20": 14.7,
+   "ddim10": 13.9,
+   "ddim5": 16.5
+  }
+ },
+ "ddim_choice": {
+  "PickCube-v1": "DDIM-20",
+  "PullCubeTool-v1": "DDIM-20"
+ },
+ "questions": [
+  "adaptive vs best fixed at DDPM-100 (exact McNemar, paired interval)",
+  "DDPM-20 and DDIM-20 vs DDPM-100 per schedule: paired difference and largest compatible loss",
+  "success vs derived policy seconds per episode"
+ ],
+ "cut_order": [
+  "the DDIM column",
+  "fixed:4"
+ ]
+}

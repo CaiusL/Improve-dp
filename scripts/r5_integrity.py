@@ -63,6 +63,9 @@ def main(argv=None):
         "r6_*/*/PushCube-v1/*/chunk_*.jsonl",
         "r6_*/*/PickCube-v1/*/chunk_*.jsonl",
         "r6_*/*/PullCubeTool-v1/*/chunk_*.jsonl",
+        "r7_*/*/PushCube-v1/*/chunk_*.jsonl",
+        "r7_*/*/PickCube-v1/*/chunk_*.jsonl",
+        "r7_*/*/PullCubeTool-v1/*/chunk_*.jsonl",
     ]
     ROOT = Path(args.raw_root)
     cells, problems = check(patterns, args.expect_n)

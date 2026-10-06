@@ -1,0 +1,15 @@
+{
+ "name": "round7_p7_controls",
+ "status": "lowest priority, dropped first",
+ "rules": [
+  "early and late time windows",
+  "inverted rule"
+ ],
+ "matching": "each control matched to the adaptive rule's measured mean horizon on the P1 block, tolerance +/-0.15, each attempt reported; drop a rule if no match is possible",
+ "report": [
+  "success",
+  "calls",
+  "short-decision fraction",
+  "paired differences vs adaptive and vs fixed:8"
+ ]
+}

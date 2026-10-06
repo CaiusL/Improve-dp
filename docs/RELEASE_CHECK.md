@@ -177,3 +177,24 @@ with their own licences).
   `MANIFEST.md` **3 726 files / 37 282 episodes**.
 - Every training run and rollout phase is protected by an atomic lock; no phase can be started
   twice, and stale locks are broken only when the owner process is gone.
+
+## Round 7 (1.3.0) verification
+
+- Tests: **21/21** pass (round 6: 19; round 7 adds two), including the new hand-computed cases for `runlevel.descriptive_flag`
+  (the flag used where a design cannot reach significance) and for the permutation counts
+  (924 / 210 / 70 / 35) that the report quotes as smallest attainable p values.
+- Round-7 evaluators are lock-guarded; orphaned children from a superseded launch were detected
+  (they kept running with old phase names after their parent was stopped), their partial output
+  was quarantined as `_superseded_orphan_*` and excluded from every analysis, and the live
+  queues were re-run under unique per-task phase names. This is recorded in `NOTES.md`.
+- `scripts/r5_integrity.py` covers the round-7 roots as well: **4 196 chunk files, 0 problems**
+  over the whole round-5 to round-7 tree.
+- `verify_results.py` recomputes every published value from the full raw tree:
+  **3 526 values checked, 0 mismatches, 0 problems**; `FINAL_RESULTS.csv` holds **273 rows** and
+  `MANIFEST.md` **5 392 files / 53 942 episodes**.
+- A round-6 defect was found and fixed while preparing the round-7 consistency pass: the
+  DDIM-vs-DDPM pairing compared cells with themselves (see CHANGELOG 1.3.0). The fix is covered
+  by the regenerated `results/r6_runlevel_mcnemar.csv`, whose values now reproduce the ones
+  quoted in `REPORT_ADDENDUM_5.md` §D and extend them to all 12 runs.
+- No checkpoints, demonstration data or teammate-owned files are included; nothing is pushed and
+  no licence is chosen.

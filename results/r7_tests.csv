@@ -1,0 +1,77 @@
+test,kind,task,arm_a,sched_a,arm_b,sched_b,n_a,n_b,permutations,smallest_attainable_p,statistic,difference,ci_lo95,ci_hi95,p_value,valid_test,note
+P1a_PickCube-v1_adaptive_vs_fixed:2,paired_episodes,PickCube-v1,co_tm,adaptive,co_tm,fixed:2,200,200,,,0.17,0.17,0.08437,0.25252,2e-05,True,max_compatible_loss=-8.4pp discordant=48v14
+P1a_PickCube-v1_adaptive_vs_fixed:4,paired_episodes,PickCube-v1,co_tm,adaptive,co_tm,fixed:4,200,200,,,0.055,0.055,-0.0361,0.14486,0.20003,True,max_compatible_loss=3.6pp discordant=36v25
+P1a_PickCube-v1_adaptive_vs_fixed:8,paired_episodes,PickCube-v1,co_tm,adaptive,co_tm,fixed:8,200,200,,,-0.12,-0.12,-0.21313,-0.02379,0.00027,True,max_compatible_loss=21.3pp discordant=9v33
+P1a_PickCube-v1_adaptive_vs_best_fixed=fixed:8,paired_episodes,PickCube-v1,co_tm,adaptive,co_tm,best_fixed=fixed:8,200,200,,,-0.12,-0.12,-0.21313,-0.02379,0.00027,True,max_compatible_loss=21.3pp discordant=9v33
+P1a_PullCubeTool-v1_adaptive_vs_fixed:2,paired_episodes,PullCubeTool-v1,co_tm,adaptive,co_tm,fixed:2,200,200,,,0.005,0.005,-0.0506,0.06076,1.0,True,max_compatible_loss=5.1pp discordant=14v13
+P1a_PullCubeTool-v1_adaptive_vs_fixed:4,paired_episodes,PullCubeTool-v1,co_tm,adaptive,co_tm,fixed:4,200,200,,,-0.01,-0.01,-0.06778,0.04754,0.85055,True,max_compatible_loss=6.8pp discordant=13v15
+P1a_PullCubeTool-v1_adaptive_vs_fixed:8,paired_episodes,PullCubeTool-v1,co_tm,adaptive,co_tm,fixed:8,200,200,,,-0.015,-0.015,-0.07346,0.04312,0.58105,True,max_compatible_loss=7.3pp discordant=5v8
+P1a_PullCubeTool-v1_adaptive_vs_best_fixed=fixed:8,paired_episodes,PullCubeTool-v1,co_tm,adaptive,co_tm,best_fixed=fixed:8,200,200,,,-0.015,-0.015,-0.07346,0.04312,0.58105,True,max_compatible_loss=7.3pp discordant=5v8
+P1b_PickCube-v1_fixed2_ddpm20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,fixed2_ddpm20,co_tm,fixed2_ddpm100,200,200,,,-0.045,-0.045,-0.11583,0.02594,0.19959,True,largest_compatible_loss=11.6pp discordant=15v24
+P1b_PickCube-v1_fixed2_ddim20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,fixed2_ddim20,co_tm,fixed2_ddpm100,200,200,,,0.035,0.035,-0.04253,0.11215,0.40106,True,largest_compatible_loss=4.3pp discordant=29v22
+P1b_PickCube-v1_fixed4_ddpm20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,fixed4_ddpm20,co_tm,fixed4_ddpm100,200,200,,,0.02,0.02,-0.06948,0.10905,0.73755,True,largest_compatible_loss=6.9pp discordant=42v38
+P1b_PickCube-v1_fixed4_ddim20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,fixed4_ddim20,co_tm,fixed4_ddpm100,200,200,,,-0.02,-0.02,-0.10734,0.06775,0.72755,True,largest_compatible_loss=10.7pp discordant=35v39
+P1b_PickCube-v1_fixed8_ddpm20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,fixed8_ddpm20,co_tm,fixed8_ddpm100,200,200,,,0.035,0.035,-0.06242,0.13149,0.5296,True,largest_compatible_loss=6.2pp discordant=49v42
+P1b_PickCube-v1_fixed8_ddim20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,fixed8_ddim20,co_tm,fixed8_ddpm100,200,200,,,-0.04,-0.04,-0.1359,0.05695,0.43971,True,largest_compatible_loss=13.6pp discordant=37v45
+P1b_PickCube-v1_adaptive_ddpm20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,adaptive_ddpm20,co_tm,adaptive_ddpm100,200,200,,,0.04,0.04,-0.05402,0.13303,0.42219,True,largest_compatible_loss=5.4pp discordant=42v34
+P1b_PickCube-v1_adaptive_ddim20_vs_ddpm100,paired_episodes,PickCube-v1,co_tm,adaptive_ddim20,co_tm,adaptive_ddpm100,200,200,,,0.025,0.025,-0.06847,0.11786,0.66088,True,largest_compatible_loss=6.8pp discordant=44v39
+P1b_PullCubeTool-v1_fixed2_ddpm20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,fixed2_ddpm20,co_tm,fixed2_ddpm100,200,200,,,0.01,0.01,-0.04621,0.06649,0.83882,True,largest_compatible_loss=4.6pp discordant=13v11
+P1b_PullCubeTool-v1_fixed2_ddim20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,fixed2_ddim20,co_tm,fixed2_ddpm100,200,200,,,-0.03,-0.03,-0.08125,0.01976,0.26318,True,largest_compatible_loss=8.1pp discordant=7v13
+P1b_PullCubeTool-v1_fixed4_ddpm20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,fixed4_ddpm20,co_tm,fixed4_ddpm100,200,200,,,-0.005,-0.005,-0.06336,0.05325,1.0,True,largest_compatible_loss=6.3pp discordant=13v14
+P1b_PullCubeTool-v1_fixed4_ddim20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,fixed4_ddim20,co_tm,fixed4_ddpm100,200,200,,,0.02,0.02,-0.04117,0.08147,0.61772,True,largest_compatible_loss=4.1pp discordant=20v16
+P1b_PullCubeTool-v1_fixed8_ddpm20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,fixed8_ddpm20,co_tm,fixed8_ddpm100,200,200,,,0.05,0.05,-0.01541,0.11573,0.14331,True,largest_compatible_loss=1.5pp discordant=24v14
+P1b_PullCubeTool-v1_fixed8_ddim20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,fixed8_ddim20,co_tm,fixed8_ddpm100,200,200,,,-0.025,-0.025,-0.0823,0.03163,0.47313,True,largest_compatible_loss=8.2pp discordant=13v18
+P1b_PullCubeTool-v1_adaptive_ddpm20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,adaptive_ddpm20,co_tm,adaptive_ddpm100,200,200,,,0.06,0.06,-0.00303,0.12368,0.06525,True,largest_compatible_loss=0.3pp discordant=24v12
+P1b_PullCubeTool-v1_adaptive_ddim20_vs_ddpm100,paired_episodes,PullCubeTool-v1,co_tm,adaptive_ddim20,co_tm,adaptive_ddpm100,200,200,,,0.01,0.01,-0.04754,0.06778,0.86417,True,largest_compatible_loss=4.8pp discordant=18v16
+P2_PickCube-v1_V1_vs_B0,run_level_descriptive,PickCube-v1,V1,fixed:8,B0,fixed:8,4,4,70,0.02857,-0.2025,-0.2025,-0.32875,-0.07875,,False,flag=suggestive baseline_min=0.460 baseline_max=0.755 n_perm=70 smallest_p=0.0286
+P2_PickCube-v1_V2a_vs_B0,run_level_descriptive,PickCube-v1,V2a,fixed:8,B0,fixed:8,3,4,35,0.05714,-0.39875,-0.39875,-0.50625,-0.29417,,False,flag=suggestive baseline_min=0.460 baseline_max=0.755 n_perm=35 smallest_p=0.0571
+P2_PickCube-v1_V2b_vs_B0,run_level_descriptive,PickCube-v1,V2b,fixed:8,B0,fixed:8,3,4,35,0.05714,0.13625,0.13625,-0.02125,0.29,,False,flag=within training noise baseline_min=0.460 baseline_max=0.755 n_perm=35 smallest_p=0.0571
+P2_PickCube-v1_V3_vs_B0,run_level_descriptive,PickCube-v1,V3,fixed:8,B0,fixed:8,3,4,35,0.05714,0.03958,0.03958,-0.18417,0.28,,False,flag=within training noise baseline_min=0.460 baseline_max=0.755 n_perm=35 smallest_p=0.0571
+P2_PullCubeTool-v1_V1_vs_B0,run_level_descriptive,PullCubeTool-v1,V1,fixed:8,B0,fixed:8,4,4,70,0.02857,0.15875,0.15875,0.09625,0.22125,,False,flag=suggestive baseline_min=0.090 baseline_max=0.150 n_perm=70 smallest_p=0.0286
+P2_PullCubeTool-v1_V2a_vs_B0,run_level_descriptive,PullCubeTool-v1,V2a,fixed:8,B0,fixed:8,3,4,35,0.05714,-0.06292,-0.06292,-0.09333,-0.03167,,False,flag=suggestive baseline_min=0.090 baseline_max=0.150 n_perm=35 smallest_p=0.0571
+P2_PullCubeTool-v1_V2b_vs_B0,run_level_descriptive,PullCubeTool-v1,V2b,fixed:8,B0,fixed:8,3,4,35,0.05714,0.08042,0.08042,0.045,0.11333,,False,flag=suggestive baseline_min=0.090 baseline_max=0.150 n_perm=35 smallest_p=0.0571
+P2_PullCubeTool-v1_V3_vs_B0,run_level_descriptive,PullCubeTool-v1,V3,fixed:8,B0,fixed:8,3,4,35,0.05714,0.14708,0.14708,0.10208,0.18875,,False,flag=suggestive baseline_min=0.090 baseline_max=0.150 n_perm=35 smallest_p=0.0571
+P3_PickCube-v1_prespecified_V1adaptive_ddim5_vs_default,run_level,PickCube-v1,V1,adaptive|ddim-5,B0,fixed:8|ddpm-100,4,4,70,0.02857,-0.26,-0.26,-0.3925,-0.13125,0.02857,True,n_perm=70
+P3_PickCube-v1_posthoc_best_vs_default,run_level,PickCube-v1,B0,fixed:8,B0,fixed:8|ddpm-100,4,4,70,0.02857,0.0275,0.0275,-0.12625,0.18,,False,POST HOC n_perm=70
+P3_PickCube-v1_B0_fixed:8_run0_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,0.03,0.03,,,0.53858,True,run_loses_significantly=False
+P3_PickCube-v1_B0_fixed:8_run1_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,0.035,0.035,,,0.52501,True,run_loses_significantly=False
+P3_PickCube-v1_B0_fixed:8_run2_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,0.035,0.035,,,0.50524,True,run_loses_significantly=False
+P3_PickCube-v1_B0_fixed:8_run3_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,0.01,0.01,,,0.91704,True,run_loses_significantly=False
+P3_PickCube-v1_B0_fixed:8_ddim5_loss_count,summary,PickCube-v1,B0,fixed:8,B0,fixed:8,4,4,,,0.0,0.0,0.0,0.0,0.0,True,0 of 4 runs lose success significantly at DDIM-5
+P3_PickCube-v1_B0_adaptive_run0_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,0.01,0.01,,,0.90756,True,run_loses_significantly=False
+P3_PickCube-v1_B0_adaptive_run1_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,0.06,0.06,,,0.27601,True,run_loses_significantly=False
+P3_PickCube-v1_B0_adaptive_run2_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,0.045,0.045,,,0.36203,True,run_loses_significantly=False
+P3_PickCube-v1_B0_adaptive_run3_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,0.065,0.065,,,0.20817,True,run_loses_significantly=False
+P3_PickCube-v1_B0_adaptive_ddim5_loss_count,summary,PickCube-v1,B0,adaptive,B0,adaptive,4,4,,,0.0,0.0,0.0,0.0,0.0,True,0 of 4 runs lose success significantly at DDIM-5
+P3_PickCube-v1_V1_fixed:8_run0_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,-0.015,-0.015,,,0.8264,True,run_loses_significantly=False
+P3_PickCube-v1_V1_fixed:8_run1_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,-0.015,-0.015,,,0.83756,True,run_loses_significantly=False
+P3_PickCube-v1_V1_fixed:8_run2_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,-0.01,-0.01,,,0.90216,True,run_loses_significantly=False
+P3_PickCube-v1_V1_fixed:8_run3_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,0.09,0.09,,,0.06935,True,run_loses_significantly=False
+P3_PickCube-v1_V1_fixed:8_ddim5_loss_count,summary,PickCube-v1,V1,fixed:8,V1,fixed:8,4,4,,,0.0,0.0,0.0,0.0,0.0,True,0 of 4 runs lose success significantly at DDIM-5
+P3_PickCube-v1_V1_adaptive_run0_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,0.0,0.0,,,1.0,True,run_loses_significantly=False
+P3_PickCube-v1_V1_adaptive_run1_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,-0.07,-0.07,,,0.15566,True,run_loses_significantly=False
+P3_PickCube-v1_V1_adaptive_run2_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,-0.03,-0.03,,,0.51896,True,run_loses_significantly=False
+P3_PickCube-v1_V1_adaptive_run3_ddim5_vs_ddpm100,paired_episodes,PickCube-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,0.105,0.105,,,0.03342,True,run_loses_significantly=False
+P3_PickCube-v1_V1_adaptive_ddim5_loss_count,summary,PickCube-v1,V1,adaptive,V1,adaptive,4,4,,,0.0,0.0,0.0,0.0,0.0,True,0 of 4 runs lose success significantly at DDIM-5
+P3_PullCubeTool-v1_prespecified_V1adaptive_ddim5_vs_default,run_level,PullCubeTool-v1,V1,adaptive|ddim-5,B0,fixed:8|ddpm-100,4,4,70,0.02857,0.02875,0.02875,-0.0375,0.09,0.51429,True,n_perm=70
+P3_PullCubeTool-v1_posthoc_best_vs_default,run_level,PullCubeTool-v1,V1,fixed:8,B0,fixed:8|ddpm-100,4,4,70,0.02857,0.15875,0.15875,0.09625,0.22125,,False,POST HOC n_perm=70
+P3_PullCubeTool-v1_B0_fixed:8_run0_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,0.015,0.015,,,0.77977,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_fixed:8_run1_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,-0.025,-0.025,,,0.5224,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_fixed:8_run2_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,-0.01,-0.01,,,0.83882,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_fixed:8_run3_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,fixed:8|ddim-5,B0,fixed:8|ddpm-100,200,200,,,-0.005,-0.005,,,1.0,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_fixed:8_ddim5_loss_count,summary,PullCubeTool-v1,B0,fixed:8,B0,fixed:8,4,4,,,0.0,0.0,0.0,0.0,0.0,True,0 of 4 runs lose success significantly at DDIM-5
+P3_PullCubeTool-v1_B0_adaptive_run0_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,0.015,0.015,,,0.7201,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_adaptive_run1_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,-0.05,-0.05,,,0.17417,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_adaptive_run2_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,0.0,0.0,,,1.0,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_adaptive_run3_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,B0,adaptive|ddim-5,B0,adaptive|ddpm-100,200,200,,,-0.015,-0.015,,,0.72833,True,run_loses_significantly=False
+P3_PullCubeTool-v1_B0_adaptive_ddim5_loss_count,summary,PullCubeTool-v1,B0,adaptive,B0,adaptive,4,4,,,0.0,0.0,0.0,0.0,0.0,True,0 of 4 runs lose success significantly at DDIM-5
+P3_PullCubeTool-v1_V1_fixed:8_run0_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,-0.095,-0.095,,,0.0094,True,run_loses_significantly=True
+P3_PullCubeTool-v1_V1_fixed:8_run1_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,-0.085,-0.085,,,0.05681,True,run_loses_significantly=False
+P3_PullCubeTool-v1_V1_fixed:8_run2_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,-0.1,-0.1,,,0.00907,True,run_loses_significantly=True
+P3_PullCubeTool-v1_V1_fixed:8_run3_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,fixed:8|ddim-5,V1,fixed:8|ddpm-100,200,200,,,-0.02,-0.02,,,0.72755,True,run_loses_significantly=False
+P3_PullCubeTool-v1_V1_fixed:8_ddim5_loss_count,summary,PullCubeTool-v1,V1,fixed:8,V1,fixed:8,4,4,,,0.5,0.0,0.0,0.0,0.0,True,2 of 4 runs lose success significantly at DDIM-5
+P3_PullCubeTool-v1_V1_adaptive_run0_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,-0.095,-0.095,,,0.00088,True,run_loses_significantly=True
+P3_PullCubeTool-v1_V1_adaptive_run1_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,-0.05,-0.05,,,0.21161,True,run_loses_significantly=False
+P3_PullCubeTool-v1_V1_adaptive_run2_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,-0.08,-0.08,,,0.02263,True,run_loses_significantly=True
+P3_PullCubeTool-v1_V1_adaptive_run3_ddim5_vs_ddpm100,paired_episodes,PullCubeTool-v1,V1,adaptive|ddim-5,V1,adaptive|ddpm-100,200,200,,,0.01,0.01,,,0.88988,True,run_loses_significantly=False
+P3_PullCubeTool-v1_V1_adaptive_ddim5_loss_count,summary,PullCubeTool-v1,V1,adaptive,V1,adaptive,4,4,,,0.5,0.0,0.0,0.0,0.0,True,2 of 4 runs lose success significantly at DDIM-5

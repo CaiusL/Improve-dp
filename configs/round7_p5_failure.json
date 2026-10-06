@@ -1,0 +1,25 @@
+{
+ "name": "round7_p5_failure",
+ "runs": "the median-success run per arm and task (B0, V1, plus V1b if run) and the co-trained checkpoint for comparison",
+ "max_failed_episodes_per_run": 32,
+ "pickcube_categories": [
+  "never reached the cube",
+  "reached but never grasped",
+  "grasped but never lifted",
+  "lifted but never brought to the goal",
+  "cube at goal, success not registered"
+ ],
+ "pullcubetool_categories": [
+  "never grasped the tool",
+  "grasped but never pulled to the cube",
+  "reached the cube but failed"
+ ],
+ "thresholds_unchanged_from_round3": {
+  "REACH": 0.05,
+  "LIFT": 0.05,
+  "GOAL_THRESH": 0.025,
+  "GRASP_EPS": 0.06,
+  "NEAR_D": 0.3
+ },
+ "also": "share of episodes with success_once but not success_at_end per arm"
+}

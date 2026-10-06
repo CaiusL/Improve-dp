@@ -1,0 +1,43 @@
+{
+ "name": "round7_p2_variants",
+ "tasks": [
+  "PickCube-v1",
+  "PullCubeTool-v1"
+ ],
+ "baselines": "B0 and V1 from round 6, reused, not retrained",
+ "variants": {
+  "V2a": {
+   "pred_horizon": 8,
+   "act_horizon": 7,
+   "note": "execution horizon clamped to pred - obs + 1"
+  },
+  "V2b": {
+   "pred_horizon": 32
+  },
+  "V3": {
+   "encoder_dim": 256
+  }
+ },
+ "training_seeds": [
+  0,
+  1,
+  2
+ ],
+ "total_iters": 30000,
+ "evaluation": {
+  "schedule": "fixed:8",
+  "sampler": "DDPM-100",
+  "n_per_run": 200,
+  "seed_blocks": {
+   "PickCube-v1": "600000-600199",
+   "PullCubeTool-v1": "700000-700199"
+  }
+ },
+ "descriptive_flag": "suggestive iff the variant's mean run-level rate is outside the baseline's min-max range AND all its runs are on the same side of the baseline mean; else within training noise. No hypothesis tests: 3 vs 4 runs gives 35 permutations, smallest attainable p = 0.057",
+ "cut_order": [
+  "V3 seed 2",
+  "V3 on PullCubeTool-v1",
+  "V2a on PullCubeTool-v1",
+  "V3 on PickCube-v1"
+ ]
+}

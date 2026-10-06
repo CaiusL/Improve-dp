@@ -1,0 +1,22 @@
+{
+ "name": "round7_p0_diagnostic_trigger",
+ "purpose": "explain why observation normalization hurts PickCube-v1",
+ "inputs": [
+  "per-dimension mean/sd of the 200 training demonstrations per task",
+  "V1 floor rule as implemented: sd < 1e-6 is replaced by 1.0",
+  "z-scores over 10 episodes of one V1 checkpoint per task"
+ ],
+ "trigger": {
+  "part_1": "any PickCube-v1 dimension with sd < 1% of the median sd across dims",
+  "part_2": "> 5% of decisions with any |z| > 10 AND that fraction higher on PickCube-v1 than on the other two tasks",
+  "combination": "either part triggers"
+ },
+ "consequence": "if triggered, train V1b (sd floored at 0.1 x the task's median sd) on PickCube-v1, 4 runs, seeds 0-3, evaluated like V1; explanatory only",
+ "observed": {
+  "triggered": false,
+  "pickcube_dims_below_1pct_of_median": 0,
+  "pickcube_frac_decisions_any_z_gt10": 0.136,
+  "pushcube_frac": 0.168,
+  "pullcubetool_frac": 0.44
+ }
+}

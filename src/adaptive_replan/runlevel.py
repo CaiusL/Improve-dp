@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run-level statistics: the training run is the unit of analysis.
+"""Run-level statistics for round 6: the training run is the unit of analysis.
 
 Three tools, all exact where an exact test is possible:
 
@@ -95,3 +95,17 @@ def summarize_arm(rates):
         "max": float(r.max()),
         "range": float(r.max() - r.min()),
     }
+
+def descriptive_flag(rates, baseline_rates):
+    """Descriptive flag used when a design cannot reach significance by construction.
+
+    "suggestive" iff the arm's mean run-level rate lies outside the baseline's min-max range
+    *and* every one of the arm's runs falls on the same side of the baseline mean; otherwise
+    "within training noise".
+    """
+    r = _as_float(rates)
+    b = _as_float(baseline_rates)
+    outside = bool(r.mean() > b.max() or r.mean() < b.min())
+    same_side = bool(np.all(r > b.mean()) or np.all(r < b.mean()))
+    return "suggestive" if (outside and same_side) else "within training noise"
+

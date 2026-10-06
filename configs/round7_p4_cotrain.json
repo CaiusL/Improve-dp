@@ -1,0 +1,26 @@
+{
+ "name": "round7_p4_cotrain",
+ "runs": "our own three-task models, teammate's cotrain.py default mode, same three-task config, 30 000 updates, MPS, seeds 0-3 (4-5 by time only)",
+ "data": "identical 200-trajectory subsets per task, verified against the checkpoint's entries",
+ "evaluation": {
+  "schedule": "fixed:8",
+  "sampler": "DDPM-100",
+  "seed_blocks": {
+   "PushCube-v1": "500000-500199",
+   "PickCube-v1": "600000-600199",
+   "PullCubeTool-v1": "700000-700199"
+  }
+ },
+ "comparison": "per task, our co-trained runs vs the single-task B0 runs (6 on PushCube-v1, 4 on the others), exact permutation with the counts and smallest attainable p stated; difference with a bootstrap interval; sign consistency across tasks; also the teammate's CUDA checkpoint as one descriptive number",
+ "optional_tail": "P4b single-task batch 96 (matches the co-trained 96 samples per update), PushCube-v1 and PickCube-v1, 3 seeds each",
+ "status": "CUT BY THE USER (amendment 7a, 2026-10-06 17:25) - out of scope for the final report, not analysed",
+ "ran_before_the_cut": {
+  "three_task_runs_trained": [
+   "seed 0 (fully trained and evaluated on all three tasks)",
+   "seed 1 (trained only; left unevaluated)"
+  ],
+  "planned": 4,
+  "p4b_batch96": "never started"
+ },
+ "note": "No run-level co-training test is computed; the parity table labels this row not analysed (out of report scope). This was a user decision, not a result-driven cut."
+}

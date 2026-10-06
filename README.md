@@ -93,8 +93,8 @@ inference-call count and wall time.
 
 ## Reproducing the results
 
-Every table and figure is rebuilt from the per-episode logs. **The raw logs (~158 MB across
-3 726 JSONL files, 37 282 episodes) are intentionally not part of this release** — they
+Every table and figure is rebuilt from the per-episode logs. **The raw logs (~248 MB across
+5 392 JSONL files, 53 942 episodes) are intentionally not part of this release** — they
 exceed the size the repository is meant to carry. `results/MANIFEST.md` lists every raw file with its episode count,
 seed range and SHA-256 checksum, so a complete copy can be verified file by file; the summary
 CSVs in `results/` are shipped in their place. Point `--raw-root` at a directory holding the
@@ -125,6 +125,18 @@ python scripts/r5_integrity.py --raw-root results/raw
 # round 5: training-variant evaluation analysis and figures
 python scripts/r5_training_analysis.py --raw-root results/raw
 python scripts/r5_figures.py
+
+# round 7: parity across the three tasks (frontiers on the co-trained checkpoint, variants on
+# the other two tasks, the completed combination, our own co-trained models, failure analysis)
+python scripts/r7_runlevel.py --raw-root results/raw
+python scripts/r7_tests.py --raw-root results/raw
+python scripts/r7_parity_figure.py
+
+# round 7 diagnostic: per-dimension statistics of the training observations V1 normalizes
+python scripts/r7_p0_dimstats.py --manifest PickCube-v1=<data manifest>.json
+
+# round 7 failure classification over episodes logged with --decision-log
+python scripts/r7_failure_classify.py --spec <list of {root, task, label}>.json
 
 # round 6: run-level tests of observation normalization, adaptive replanning and the
 # normalization x adaptive x 5-step-DDIM combination (the training run is the unit of analysis)

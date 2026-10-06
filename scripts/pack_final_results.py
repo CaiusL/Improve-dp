@@ -58,9 +58,9 @@ def discover_blocks(raw_root):
         blocks += [(d.name.replace("eval_", "r5_train_"), "PushCube-v1",
                     f"training_variants/{d.name}")
                    for d in sorted(tv.iterdir()) if d.is_dir() and d.name.startswith("eval_")]
-    if raw_root.is_dir():  # round-6 roots: r6_<task>/<phase>/<task>/<schedule-tag>/
+    if raw_root.is_dir():  # round-6/7 roots: rN_<name>/<phase>/<task>/<schedule-tag>/
         for root in sorted(d for d in raw_root.iterdir()
-                          if d.is_dir() and d.name.startswith("r6_")):
+                          if d.is_dir() and d.name.startswith(("r6_", "r7_"))):
             for phase in sorted(d for d in root.iterdir()
                                 if d.is_dir() and not d.name.startswith("_")):
                 for task_dir in sorted(d for d in phase.iterdir() if d.is_dir()):

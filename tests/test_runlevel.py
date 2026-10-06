@@ -98,3 +98,21 @@ def test_pushcube_rule_uses_raw_observations_only():
     feats_norm = extract_features("PushCube-v1", normalised)
     assert abs(feats_norm["d_tcp_obj"] - feats["d_tcp_obj"]) > 1e-6
     assert policy(feats_norm, 0) != policy(feats, 0)
+
+def test_descriptive_flag_hand_computed_cases():
+    base = [0.50, 0.55, 0.60]
+    assert runlevel.descriptive_flag([0.90, 0.92], base) == "suggestive"
+    assert runlevel.descriptive_flag([0.10, 0.12], base) == "suggestive"
+    assert runlevel.descriptive_flag([0.50, 0.52], base) == "within training noise"
+    assert runlevel.descriptive_flag([0.90, 0.40], base) == "within training noise"
+    assert runlevel.descriptive_flag([0.65, 0.70], base) == "suggestive"
+    assert runlevel.descriptive_flag([0.58, 0.59], base) == "within training noise"
+
+
+def test_smallest_attainable_p_matches_permutation_counts():
+    from math import comb
+    assert comb(12, 6) == 924
+    assert comb(10, 4) == 210
+    assert comb(8, 4) == 70
+    assert comb(7, 3) == 35
+    assert abs(2 / comb(4, 2) - 0.333333) < 1e-6

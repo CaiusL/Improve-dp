@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.3.0
+
+Round 7 (report addendum 6): parity for `PickCube-v1` and `PullCubeTool-v1` — sampler x horizon
+frontiers on the co-trained checkpoint with fresh seed blocks, the prediction-horizon/encoder
+variants on the other two tasks, the completed four-way combination, our own co-trained models
+compared with single-task runs, failure analysis of the trained models, and a consistency pass
+over round 6's report.
+
+### Added
+
+- `scripts/r7_runlevel.py` — round-7 run-level summary/arm tables (one row per training run and
+  schedule) covering the round-5/6/7 raw roots.
+- `scripts/r7_tests.py` — every round-7 pre-registered comparison into one table with, per row,
+  the arm sizes, permutation count, smallest attainable p, statistic, difference, bootstrap
+  interval, the p-value where the design is valid, and the descriptive flag where it is not.
+- `scripts/r7_p0_dimstats.py` — the normalization diagnostic: per-dimension mean/sd of the
+  training demonstrations, the V1 floor rule as implemented, and the dimensions most amplified.
+- `scripts/r7_failure_classify.py` — failure-phase classification (thresholds unchanged from
+  round 3) over episodes logged with `--decision-log`.
+- `scripts/r7_parity_figure.py` — the parity matrix figure (supported / not established /
+  contradicted per task).
+- `configs/round7_*.json` — the round-7 pre-registered grids, triggers and decision rules.
+- `runlevel.descriptive_flag()` — the flag used when a design cannot reach significance by
+  construction ("suggestive" iff the arm mean is outside the baseline's min-max range and every
+  run is on the same side of the baseline mean), with hand-computed tests.
+
+### Changed
+
+- `runlevel.py` gained `descriptive_flag`; `run_rollout`/`run_matrix` gained a
+  `--feature-check` passthrough in the evaluation helper (raw observation logging used by the
+  round-7 diagnostic).
+- Fixed a round-6 defect in the DDIM comparison pairing: the DDPM-100 baseline was matched by
+  sampler and step count, so DDIM cells were compared with themselves (all differences 0.0 pp).
+  The baseline is now always the same run's DDPM-100 cell; the corrected rows reproduce the
+  values quoted in `REPORT_ADDENDUM_5.md` and extend them to all 12 runs.
+
+### Notes
+
+- No new timing benchmark is taken except for architectures not timed before (timed once,
+  sequentially, on an idle machine); policy seconds per episode remain derived else.
+- P6 (does the adaptive gain depend on policy quality?) is reported as *not testable without
+  retraining*: all six B0 `PushCube-v1` runs saved only final checkpoints (verified by weight
+  hashes).
+
 ## 1.2.0
 
 Round 6 (report addendum 5): run-level statistics for training-time comparisons, the adaptive

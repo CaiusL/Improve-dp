@@ -1,0 +1,218 @@
+{
+ "v1_floor_rule": "sd < 1e-6 replaced by 1.0 (from the training copy)",
+ "tasks": {
+  "PushCube-v1": {
+   "task": "PushCube-v1",
+   "obs_dim": 35,
+   "n_transitions": 14170,
+   "median_sd": 0.047148015989666114,
+   "n_dims_below_1pct_of_median": 4,
+   "dims_below_1pct_of_median": [
+    "extra.tcp_pose[4]",
+    "extra.goal_pos[2]",
+    "extra.obj_pose[2]",
+    "extra.obj_pose[3]"
+   ],
+   "smallest_10_sd": [
+    {
+     "dim": "extra.goal_pos[2]",
+     "sd": 0.0,
+     "grade_scale_factor": 1.0
+    },
+    {
+     "dim": "extra.obj_pose[2]",
+     "sd": 6.363006026695436e-05,
+     "grade_scale_factor": 15715.842414805004
+    },
+    {
+     "dim": "extra.obj_pose[3]",
+     "sd": 0.00015577938323319245,
+     "grade_scale_factor": 6419.334697859598
+    },
+    {
+     "dim": "extra.tcp_pose[4]",
+     "sd": 0.00030173753226043923,
+     "grade_scale_factor": 3314.1385909422374
+    },
+    {
+     "dim": "extra.obj_pose[4]",
+     "sd": 0.0005690134301454457,
+     "grade_scale_factor": 1757.4277636019763
+    },
+    {
+     "dim": "extra.obj_pose[5]",
+     "sd": 0.0016911527119849118,
+     "grade_scale_factor": 591.3126549206172
+    },
+    {
+     "dim": "agent.qpos[7]",
+     "sd": 0.0053637055433218474,
+     "grade_scale_factor": 186.43827330250505
+    },
+    {
+     "dim": "agent.qpos[8]",
+     "sd": 0.005363981326279041,
+     "grade_scale_factor": 186.42868779218765
+    },
+    {
+     "dim": "extra.tcp_pose[3]",
+     "sd": 0.008096246315402655,
+     "grade_scale_factor": 123.5140287292836
+    },
+    {
+     "dim": "agent.qvel[4]",
+     "sd": 0.010289745779930942,
+     "grade_scale_factor": 97.18413082181233
+    }
+   ],
+   "largest_scale_factor": 15715.842414805004,
+   "largest_scale_dim": "extra.obj_pose[2]",
+   "n_dims_sd_lt_1e6": 1,
+   "dims_sd_lt_1e6": [
+    "extra.goal_pos[2]"
+   ],
+   "mean_range": [
+    -1.9403081829478896,
+    2.547150119140103
+   ]
+  },
+  "PickCube-v1": {
+   "task": "PickCube-v1",
+   "obs_dim": 42,
+   "n_transitions": 15726,
+   "median_sd": 0.060782115640933165,
+   "n_dims_below_1pct_of_median": 0,
+   "dims_below_1pct_of_median": [],
+   "smallest_10_sd": [
+    {
+     "dim": "extra.obj_pose[5]",
+     "sd": 0.0010409738758144539,
+     "grade_scale_factor": 960.6389009691563
+    },
+    {
+     "dim": "extra.obj_pose[4]",
+     "sd": 0.001151674663657908,
+     "grade_scale_factor": 868.3007723933387
+    },
+    {
+     "dim": "extra.tcp_pose[3]",
+     "sd": 0.00350853191594732,
+     "grade_scale_factor": 285.01949646081397
+    },
+    {
+     "dim": "extra.tcp_pose[6]",
+     "sd": 0.007165374659001837,
+     "grade_scale_factor": 139.56004362503268
+    },
+    {
+     "dim": "agent.qpos[7]",
+     "sd": 0.010757984668131779,
+     "grade_scale_factor": 92.95421315874202
+    },
+    {
+     "dim": "agent.qpos[8]",
+     "sd": 0.010774263318817277,
+     "grade_scale_factor": 92.81377022348225
+    },
+    {
+     "dim": "extra.tcp_pose[4]",
+     "sd": 0.019874331354720793,
+     "grade_scale_factor": 50.31615817165431
+    },
+    {
+     "dim": "extra.tcp_to_obj_pos[0]",
+     "sd": 0.025014352877100788,
+     "grade_scale_factor": 39.97704857339895
+    },
+    {
+     "dim": "extra.tcp_to_obj_pos[1]",
+     "sd": 0.025066535614967647,
+     "grade_scale_factor": 39.89382559123501
+    },
+    {
+     "dim": "agent.qvel[4]",
+     "sd": 0.030248801059829255,
+     "grade_scale_factor": 33.05916151923162
+    }
+   ],
+   "largest_scale_factor": 960.6389009691563,
+   "largest_scale_dim": "extra.obj_pose[5]",
+   "n_dims_sd_lt_1e6": 0,
+   "dims_sd_lt_1e6": [],
+   "mean_range": [
+    -1.9503507411511787,
+    2.494646241976289
+   ]
+  },
+  "PullCubeTool-v1": {
+   "task": "PullCubeTool-v1",
+   "obs_dim": 39,
+   "n_transitions": 50868,
+   "median_sd": 0.0778885039505632,
+   "n_dims_below_1pct_of_median": 1,
+   "dims_below_1pct_of_median": [
+    "extra.cube_pose[2]"
+   ],
+   "smallest_10_sd": [
+    {
+     "dim": "extra.cube_pose[2]",
+     "sd": 0.0003562482271203066,
+     "grade_scale_factor": 2807.031513064332
+    },
+    {
+     "dim": "extra.tool_pose[4]",
+     "sd": 0.002107977914225718,
+     "grade_scale_factor": 474.38827193182914
+    },
+    {
+     "dim": "extra.tool_pose[6]",
+     "sd": 0.002568268617072682,
+     "grade_scale_factor": 389.3673712136086
+    },
+    {
+     "dim": "extra.tcp_pose[3]",
+     "sd": 0.0030273079374502176,
+     "grade_scale_factor": 330.326488306393
+    },
+    {
+     "dim": "extra.tool_pose[3]",
+     "sd": 0.003077641029897165,
+     "grade_scale_factor": 324.9241839076384
+    },
+    {
+     "dim": "extra.tcp_pose[5]",
+     "sd": 0.004995966614442845,
+     "grade_scale_factor": 200.16146567294885
+    },
+    {
+     "dim": "extra.tcp_pose[6]",
+     "sd": 0.0060987471595038,
+     "grade_scale_factor": 163.96810260311906
+    },
+    {
+     "dim": "agent.qpos[7]",
+     "sd": 0.007184095331020662,
+     "grade_scale_factor": 139.19637113973647
+    },
+    {
+     "dim": "agent.qpos[8]",
+     "sd": 0.007201377175234099,
+     "grade_scale_factor": 138.8623280890009
+    },
+    {
+     "dim": "agent.qvel[7]",
+     "sd": 0.013017308345457078,
+     "grade_scale_factor": 76.82079685459635
+    }
+   ],
+   "largest_scale_factor": 2807.031513064332,
+   "largest_scale_dim": "extra.cube_pose[2]",
+   "n_dims_sd_lt_1e6": 0,
+   "dims_sd_lt_1e6": [],
+   "mean_range": [
+    -2.0852380031733717,
+    2.4472902296750325
+   ]
+  }
+ }
+}

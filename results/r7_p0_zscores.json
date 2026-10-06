@@ -1,0 +1,92 @@
+{
+ "PushCube-v1": {
+  "decisions": 250,
+  "max_abs_z": 6558.447860227942,
+  "max_abs_z_dim": "extra.tcp_pose[4]",
+  "dims_max_abs_z_top5": [
+   {
+    "dim": "extra.tcp_pose[4]",
+    "max_abs_z": 6558.447860227942
+   },
+   {
+    "dim": "extra.obj_pose[3]",
+    "max_abs_z": 1319.4426525430267
+   },
+   {
+    "dim": "agent.qvel[2]",
+    "max_abs_z": 238.3852759958236
+   },
+   {
+    "dim": "agent.qpos[2]",
+    "max_abs_z": 157.0781770847695
+   },
+   {
+    "dim": "extra.obj_pose[4]",
+    "max_abs_z": 107.0989761882062
+   }
+  ],
+  "frac_dec_any_z_gt5": 0.268,
+  "frac_dec_any_z_gt10": 0.168,
+  "frac_dec_any_z_gt20": 0.156
+ },
+ "PickCube-v1": {
+  "decisions": 250,
+  "max_abs_z": 57.72792113982276,
+  "max_abs_z_dim": "extra.obj_pose[4]",
+  "dims_max_abs_z_top5": [
+   {
+    "dim": "extra.obj_pose[4]",
+    "max_abs_z": 57.72792113982276
+   },
+   {
+    "dim": "extra.obj_pose[5]",
+    "max_abs_z": 16.65262442045302
+   },
+   {
+    "dim": "agent.qvel[7]",
+    "max_abs_z": 12.487953049784355
+   },
+   {
+    "dim": "agent.qvel[8]",
+    "max_abs_z": 10.561780230275422
+   },
+   {
+    "dim": "extra.tcp_pose[6]",
+    "max_abs_z": 7.6946078316688356
+   }
+  ],
+  "frac_dec_any_z_gt5": 0.372,
+  "frac_dec_any_z_gt10": 0.136,
+  "frac_dec_any_z_gt20": 0.088
+ },
+ "PullCubeTool-v1": {
+  "decisions": 750,
+  "max_abs_z": 301.2472712111164,
+  "max_abs_z_dim": "extra.tool_pose[4]",
+  "dims_max_abs_z_top5": [
+   {
+    "dim": "extra.tool_pose[4]",
+    "max_abs_z": 301.2472712111164
+   },
+   {
+    "dim": "extra.tool_pose[6]",
+    "max_abs_z": 229.42825541242885
+   },
+   {
+    "dim": "extra.tool_pose[3]",
+    "max_abs_z": 206.26833932903062
+   },
+   {
+    "dim": "agent.qvel[8]",
+    "max_abs_z": 182.39118268993522
+   },
+   {
+    "dim": "agent.qvel[7]",
+    "max_abs_z": 161.91553017522503
+   }
+  ],
+  "frac_dec_any_z_gt5": 0.6386666666666667,
+  "frac_dec_any_z_gt10": 0.44,
+  "frac_dec_any_z_gt20": 0.33066666666666666
+ }
+}

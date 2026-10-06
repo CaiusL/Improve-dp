@@ -1,0 +1,16 @@
+task,arm,n_episodes,success_once,success_at_end,once_not_at_end,share_of_success_once_not_at_end,n_failed_classified,phase,count
+PickCube-v1,pick_B0med_s2,200,114,89,25,0.2193,32,lifted but never brought to the goal,30
+PickCube-v1,pick_B0med_s2,200,114,89,25,0.2193,32,grasped but never lifted,2
+PickCube-v1,pick_V1med_s3,200,79,34,45,0.5696,32,lifted but never brought to the goal,25
+PickCube-v1,pick_V1med_s3,200,79,34,45,0.5696,32,grasped but never lifted,7
+PickCube-v1,pick_cotm,200,85,23,62,0.7294,32,lifted but never brought to the goal,24
+PickCube-v1,pick_cotm,200,85,23,62,0.7294,32,grasped but never lifted,6
+PickCube-v1,pick_cotm,200,85,23,62,0.7294,32,"cube at goal, success not registered",2
+PullCubeTool-v1,pull_B0med_s2,200,18,18,0,0.0,32,reached the cube but failed,20
+PullCubeTool-v1,pull_B0med_s2,200,18,18,0,0.0,32,grasped but never pulled to the cube,7
+PullCubeTool-v1,pull_B0med_s2,200,18,18,0,0.0,32,never grasped the tool,5
+PullCubeTool-v1,pull_V1med_s2,200,47,46,1,0.0213,32,reached the cube but failed,17
+PullCubeTool-v1,pull_V1med_s2,200,47,46,1,0.0213,32,grasped but never pulled to the cube,15
+PullCubeTool-v1,pull_cotm,200,15,15,0,0.0,32,reached the cube but failed,18
+PullCubeTool-v1,pull_cotm,200,15,15,0,0.0,32,grasped but never pulled to the cube,9
+PullCubeTool-v1,pull_cotm,200,15,15,0,0.0,32,never grasped the tool,5

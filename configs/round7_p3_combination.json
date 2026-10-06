@@ -1,0 +1,14 @@
+{
+ "name": "round7_p3_combination",
+ "tasks": [
+  "PickCube-v1",
+  "PullCubeTool-v1"
+ ],
+ "reuses": "brief-6 DDPM-100 cells (fixed:8 and adaptive) for the 16 runs",
+ "adds": "DDIM-5 (trained betas, epsilon prediction, eta=0, clip_sample) x {fixed:8, adaptive}",
+ "cells_per_task": 8,
+ "headline_pre_specified": "V1 + adaptive + DDIM-5 vs default DP (B0, fixed:8, DDPM-100)",
+ "headline_post_hoc": "best cell by run-level mean vs default DP",
+ "per_run_mcnemar": "DDIM-5 vs DDPM-100 within each arm and schedule; count runs that lose significantly",
+ "note": "run-level tests are descriptive at 4 vs 4 (smallest p = 0.0286); no Bonferroni correction is attainable"
+}
