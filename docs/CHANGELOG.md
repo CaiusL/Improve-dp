@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.3.1
+
+Documentation correction only; no code, data, table or figure changed.
+
+- `docs/REPORT_ADDENDUM_6.md`: an external review found stale interim numbers and unfinished
+  wording left in the round-7 report. Corrected: the `PullCubeTool-v1` V3 run values
+  (30.5 / 22.5 / 26.0, mean 26.3% — the flag and the +14.7 pp difference are unchanged and match
+  the shipped CSVs); the `PullCubeTool-v1` sampler paragraph (final eight paired comparisons and
+  the 0.3-8.2 pp compatible-loss range, replacing an interim "4.6-7.6 pp on the cells computed so
+  far"); the P3 post-hoc best cell on that task (V1 `fixed:8` at DDPM-100, 27.50%, not the DDIM-5
+  cell); the adaptive penalty on `PickCube-v1` (-14.75 pp on B0 / -5.87 pp on V1); the parity
+  table's three variant rows, which still said "pending"; the V2b `PickCube-v1` remark ("every run
+  at or above the baseline mean" — one of the three is 0.9 pp below it); the round-7 raw-tree
+  episode counts (12 analysed frontier cells / 2 400 episodes, with the quarantined superseded
+  run of 30 episodes listed separately). A revision note was added at the top of the addendum and
+  the full correction list is in `NOTES.md` (round 7 post-release).
+- Re-verified after the edit: `r5_integrity.py` 4 196 chunk files / 0 problems,
+  `verify_results.py` 3 526 values / 0 mismatches, release tests 21/21.
+
 ## 1.3.0
 
 Round 7 (report addendum 6): parity for `PickCube-v1` and `PullCubeTool-v1` — sampler x horizon

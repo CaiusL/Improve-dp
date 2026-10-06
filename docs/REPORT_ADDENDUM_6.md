@@ -4,6 +4,15 @@ Brief: *parity for `PickCube-v1` and `PullCubeTool-v1`, plus the questions brief
 Scope: Panda only. Nothing in an earlier report is edited by this file; the user merges. Every
 pre-registered rule was fixed in `NOTES.md` at 2026-10-06 13:10, before the first round-7 run.
 
+Revision note (2026-10-06, post-release external review): stale interim numbers and "pending" /
+"will be appended" sentences were corrected in this file. No data, figure, table or CSV changed —
+the packaged tables and figures were already correct. Specifically: the `PullCubeTool-v1` V3 run
+values are 30.5 / 22.5 / 26.0 (mean 26.3%; flag unchanged), the `PullCubeTool-v1` frontier
+sampler paragraph now carries the final eight paired comparisons, the post-hoc best cell on that
+task is V1 `fixed:8` at DDPM-100 (27.50%), the adaptive penalty on `PickCube-v1` is -14.75 pp on
+B0 / -5.87 pp on V1, and the parity table's three variant rows are filled in. Full list in
+`NOTES.md` (`CORRECTION`, round 7 post-release).
+
 Method (unchanged from brief 6, restated because several round-7 designs are smaller): the
 training run is the unit of analysis; exact two-sided permutation tests enumerate all
 `C(n1+n2, n1)` assignments and the smallest attainable p is stated for every design
@@ -112,15 +121,17 @@ vs `fixed:4` **-1.0 pp** (p = 0.851), vs `fixed:8` (the best fixed, 10.0%) **-1.
 statement is "no advantage, with the interval compatible with losses up to ~7 pp" — the adaptive
 rule spends 2x the policy time (21.5 s vs 10.9 s) for no measurable gain.
 
-**(b) Do the cheaper samplers lose success?** No significant change: `fixed:2` DDPM-20 +1.0 pp
-(p = 0.839), `fixed:2` DDIM-20 -1.3 pp (p = 0.804, on 150 paired seeds), and the remaining cells
-are reported in `results/r7_tests.csv`. The largest compatible losses are 4.6-7.6 pp on the cells
-computed so far; `fixed:8` DDPM-20 is nominally the best cell (15.0%). Equivalence is not
-established for any cell.
+**(b) Do the cheaper samplers lose success?** No significant change in any of the eight paired
+comparisons (n = 200 per cell, all p >= 0.065): `fixed:2` DDPM-20 +1.0 pp (p = 0.839), `fixed:2`
+DDIM-20 -3.0 pp (p = 0.263), `fixed:4` DDPM-20 -0.5 pp (p = 1.0), `fixed:4` DDIM-20 +2.0 pp
+(p = 0.618), `fixed:8` DDPM-20 +5.0 pp (p = 0.143), `fixed:8` DDIM-20 -2.5 pp (p = 0.473),
+adaptive DDPM-20 +6.0 pp (p = 0.065), adaptive DDIM-20 +1.0 pp (p = 0.864); every row is in
+`results/r7_tests.csv`. The largest losses compatible with the data are 0.3-8.2 pp;
+`fixed:8` DDPM-20 is nominally the best cell (15.0%). Equivalence is not established for any cell.
 
 **(c) Success versus cost:** figure `results/fig_r7_frontier_pull.png/.pdf`. Note `success_once`
-and `success_at_end` coincide for this task (the cube is either pulled or not), unlike
-`PickCube-v1` where the two metrics diverge sharply.
+and `success_at_end` nearly coincide for this task (gaps of at most 0.5 pp; the cube is either
+pulled or not), unlike `PickCube-v1` where the two metrics diverge sharply.
 
 ## P2 — variants V2a/V2b/V3 on the other two tasks (3 seeds each)
 
@@ -150,8 +161,9 @@ attainable two-sided p is 2/35 = **0.057** and no variant can reach alpha = 0.05
 - **`PickCube-v1`: within training noise.** V2b's mean (74.0%) is 13.6 pp above the baseline's
   (60.4%) and *below* the baseline's best single run (75.5%), so the mean does not lie outside the
   baseline's range; the flag is not met. Worth noting as an observation (not a claim): V2b is the
-  only variant on `PickCube-v1` whose runs are all at or above the baseline mean, whereas V1 is
-  clearly harmful there.
+  only variant on `PickCube-v1` whose every run clears the baseline's worst run (46.0), and two of
+  its three runs (79.0, 83.5) are above the baseline mean, with the third (59.5) just below it,
+  whereas V1 is clearly harmful there.
 
 ### V2a — prediction horizon 8 (execution clamped to 7) — COMPLETE (3 runs per task)
 
@@ -177,7 +189,7 @@ Taken together with V2b (horizon 32: 74.0% on `PickCube-v1`, "within training no
 way: **the 16-step horizon of the baseline is not the limiting factor, but shortening it is
 clearly harmful**, while lengthening it is neutral-to-mildly-helpful.
 
-### V3 — encoder width 256 — `PickCube-v1` COMPLETE, `PullCubeTool-v1` pending
+### V3 — encoder width 256 — COMPLETE (3 runs per task)
 
 | task | arm | runs | mean | flag |
 |---|---|---|---|---|
@@ -192,9 +204,9 @@ training seeds**, the widest seen in this project on any task (round 5's `PushCu
 while another was below every baseline run. One seed is not evidence, and this is exactly why the
 pre-registered unit is the run and why the flag is descriptive.
 
-**`PullCubeTool-v1`: suggestive.** V3's runs are 12.5, 16.5, 15.0 (mean **14.7%**), above the
-baseline's maximum (15.0%) at the mean and all above the baseline mean (11.6%) — the flag is met,
-+14.7 pp. As with V2b on this task, the flag is descriptive: 3 vs 4 runs cannot reach α = 0.05 by
+**`PullCubeTool-v1`: suggestive.** V3's runs are 30.5, 22.5, 26.0 (mean **26.3%**), above the
+baseline's maximum (15.0%) and all above the baseline mean (11.6%) — the flag is met, +14.7 pp.
+As with V2b on this task, the flag is descriptive: 3 vs 4 runs cannot reach α = 0.05 by
 construction (smallest attainable p = 0.057).
 
 ### Variant summary (all four variants, both tasks)
@@ -204,22 +216,20 @@ construction (smallest attainable p = 0.057).
 | V1 normalization (reference) | 40.1% | suggestive (negative) | 27.5% | suggestive (positive) |
 | V2a horizon 8 | 20.5% | **suggestive (negative)** | 5.3% | **suggestive (negative)** |
 | V2b horizon 32 | 74.0% | within training noise | 19.7% | **suggestive (positive)** |
-| V3 encoder 256 | 64.3% (spread 44.5-89.5) | within training noise | 14.7% | **suggestive (positive)** |
+| V3 encoder 256 | 64.3% (spread 44.5-89.5) | within training noise | 26.3% | **suggestive (positive)** |
 
 The two tasks answer differently, and the split tracks the baseline's competence: on
 `PullCubeTool-v1` — where the baseline is weak (11.6%) — **three of the four variants are
 suggestive-positive** (normalization +15.9 pp, the wider encoder +14.7 pp, the longer horizon
 +8.0 pp) while the shorter horizon is clearly negative; on `PickCube-v1` — where the baseline is
-strong (60.4%) — the only variant that is not harmful is the longer horizon, and the shorter
-horizon is catastrophic. All four rows are flags, not tests: with three runs against four the
-smallest attainable two-sided p is 0.057, and six comparisons per task make a corrected threshold
-unattainable by construction.
+strong (60.4%) — the longer horizon and the wider encoder both avoid harm (within training noise)
+while normalization and the shorter horizon are negative, the latter catastrophically. All four
+rows are flags, not tests: with three runs against four the smallest attainable two-sided p is
+0.057, and six comparisons per task make a corrected threshold unattainable by construction.
 
-Training is in the round-7 queue; results are appended when its three runs per task and their
-evaluations complete.
-
-Training for both is in the round-7 queue (V2a first, then V3, with the pre-registered cut order);
-their evaluations run as the checkpoints appear. Results are appended here.
+All variant training and evaluation is complete: V2a, V2b and V3 all have three runs per task,
+each evaluated at `fixed:8`, DDPM-100, n = 200 per run, on the brief-6 seed blocks. The flags
+above are final; no variant result is pending.
 
 ## P3 — combination on the other two tasks (reuses brief 6 for the DDPM-100 cells)
 
@@ -239,7 +249,7 @@ Run-level means (4 runs per cell; ranges in brackets):
 smallest attainable two-sided p = 0.0286), **p = 0.028571** — i.e. the "improved" configuration is
 significantly *worse* than doing nothing, by the largest margin recorded anywhere in this
 project. On this task the two training-time changes each hurt (normalization -20.3 pp, the
-adaptive rule -5.5 pp at `fixed:8`) and they do not cancel.
+adaptive rule -14.75 pp on B0 / -5.87 pp on V1 at `fixed:8`) and they do not cancel.
 
 **Headline 2 (post hoc):** the best cell by run-level mean is not the pre-specified combination
 but **plain default DP with DDIM-5** (B0, `fixed:8`, 63.10%), which is **+2.8 pp** above the
@@ -269,8 +279,11 @@ Run-level means (4 runs per cell):
 smallest attainable p = 0.0286), **p = 0.514** — not established. The best cell on this task is
 **V1 with the default schedule at DDPM-100 (27.50%)**, i.e. normalization alone.
 
-**Headline 2 (post hoc):** the best cell by run-level mean among the eight is V1 `fixed:8` DDIM-5
-(20.00%), **+15.9 pp** above default DP; post hoc and not significant.
+**Headline 2 (post hoc):** the best cell by run-level mean among the eight is **V1 `fixed:8` at
+DDPM-100 (27.50%)**, **+15.88 pp** above default DP — the same cell headline 1 identifies (the
+pre-registered normalization comparison), recorded in `results/r7_tests.csv` as the post-hoc row
+(4 vs 4, smallest attainable p = 0.0286, no p-value claimed). Note that DDIM-5 *lowers* this best
+cell to 20.00%.
 
 **DDIM-5 versus DDPM-100 per run:** unlike `PickCube-v1`, cheap sampling **costs success here for
 the normalized models**: exact McNemar shows **2 of 4 runs losing significantly** in the
@@ -393,12 +406,16 @@ rules of this brief and brief 6. "Best fixed vs adaptive" refers to the co-train
 | best fixed vs adaptive (co-trained checkpoint) | **supported** (round 4: +11.0 pp vs `fixed:8`, p = 0.00068) | **contradicted** (fresh block: -12.0 pp vs `fixed:8`, p = 0.00027) | **not established** (fresh block: -1.5 pp, p = 0.581) |
 | sampler x horizon frontier | supported (round 5/6) | **complete**: `fixed:8` dominates on both success and cost; DDPM-20/DDIM-20 within +-4.5 pp, largest compatible losses 4.3-13.6 pp | **complete**: no sampler loss except DDIM-5 for normalized models later; `fixed:8` best |
 | observation normalization (V1 vs B0) | **supported** (+10.83 pp, p = 0.0043, 6v6) | **contradicted** (-20.25 pp, p = 0.057, and the "combination" is -26.0 pp at p = 0.0286) | **supported** (+15.88 pp, p = 0.0286; misses the two-task 0.025 threshold) |
-| V2a shorter prediction horizon (8) | not established (round 5) | pending | pending |
-| V2b longer prediction horizon (32) | not established (round 5, suggestive at 2 seeds, overlap at 3) | pending | pending |
-| V3 wider encoder (256) | not established (round 5; widest seed spread, 12.5 pp) | pending | pending |
+| V2a shorter prediction horizon (8) | not established (round 5) | **not established**; flag suggestive (negative), -39.9 pp, every run below the baseline's worst | **not established**; flag suggestive (negative), -6.3 pp, every run below the baseline's worst |
+| V2b longer prediction horizon (32) | not established (round 5, suggestive at 2 seeds, overlap at 3) | **within training noise** (flag not met; +13.6 pp, mean inside the baseline's range) | **not established**; flag suggestive (positive), +8.0 pp |
+| V3 wider encoder (256) | not established (round 5; widest seed spread, 12.5 pp) | **within training noise** (flag not met; +3.9 pp, seed spread 44.5-89.5) | **not established**; flag suggestive (positive), +14.7 pp |
 | adaptive on our trained models | **contradicted** (brief 6: -1.83 pp, p = 0.56) | **contradicted** (brief 6: -14.75 pp B0 / -5.87 pp V1) | **contradicted** (brief 6: -0.13 pp B0 / -7.62 pp V1) |
 | combination incl. DDIM-5 on trained models | **supported** (brief 6: +9.75 pp vs default DP at 5.8x less policy time, driven by normalization) | **contradicted** (pre-specified combination -26.0 pp vs default DP, p = 0.0286; best cell is plain default DP + DDIM-5, +2.8 pp post hoc) | **not established** (pre-specified combination +2.9 pp, p = 0.514; best cell is V1 with the default schedule at DDPM-100; DDIM-5 costs 2 of 4 normalized runs) |
 | co-training vs single-task | **not analysed (out of report scope — cut by the user, amendment 7a)** | same | same |
+
+The three variant rows are 3-vs-4-run descriptive flags: the smallest attainable two-sided p is
+0.057, so none can be a test at α = 0.05. "Not established" is the verdict for all six variant
+cells; the flag only names the direction.
 
 ### Packaged artefacts and release verification (final)
 
@@ -407,10 +424,13 @@ rules of this brief and brief 6. "Best fixed vs adaptive" refers to the co-train
   `r7_cotrain_runs` rows are present for provenance even though P4 was cut by the user.
 - `results/MANIFEST.md`: **5 392 raw log files / 53 942 episodes** (was 3 726 / 37 282), each with
   episode count, seed range and SHA-256.
-- Round-7 raw tree: `r7_frontier_{pick,pull}` 12 cells / 2 430 episodes each,
-  `r7_combo_{pick,pull}` 16 cells / 3 200 episodes each, `r7_variants_{pick,pull}` 9 cells /
-  1 800 episodes each, `r7_failure` 6 cells / 1 200 episodes, `r7_cotrain_runs` 3 cells /
-  600 episodes (P4, cut by the user) — 16 660 round-7 episodes in total.
+- Round-7 raw tree: `r7_frontier_{pick,pull}` 12 analysed cells / 2 400 episodes each (each root
+  also keeps a quarantined `_superseded_orphan_fixed2_*` run of 30 episodes that no analysis
+  reads), `r7_combo_{pick,pull}` 16 cells / 3 200 episodes each, `r7_variants_{pick,pull}` 9 cells
+  / 1 800 episodes each, `r7_failure` 6 cells / 1 200 episodes, `r7_cotrain_runs` 3 cells /
+  600 episodes (P4, cut by the user; kept for provenance only) — 16 000 analysed round-7
+  episodes plus the 600 co-training ones, and the 60 quarantined ones (16 660 raw per-episode
+  files, all counted by the manifest).
 - `scripts/r5_integrity.py` over the whole raw tree (round-5 to round-7 roots): **4 196 chunk
   files, 0 problems** (unparsable lines, duplicate seeds, wrong episode counts).
 - `scripts/verify_results.py --raw-root <full raw tree>`: **3 526 values checked, 0 mismatches,
