@@ -1,0 +1,45 @@
+{
+ "name": "round6_pushcube_runs",
+ "task": "PushCube-v1",
+ "training_seeds": {
+  "B0": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "V1": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "note": "seeds 0-2 (B0) and 0-3 (V1) come from round 5; seeds 3-5 (B0) and 4-5 (V1) are round 6, identical settings"
+ },
+ "eval_seed_block": "500000-500199",
+ "primary_metric": "success_once",
+ "schedule": "fixed:8",
+ "sampler": "ddpm",
+ "steps": 100,
+ "n_episodes_per_run": 200,
+ "training": {
+  "total_iters": 30000,
+  "batch_size": 32,
+  "lr": 0.0001,
+  "warmup_steps": 500,
+  "device": "mps",
+  "single_task": true,
+  "demos": 200
+ },
+ "preregistered": {
+  "unit_of_analysis": "training run; episodes are never pooled across runs for significance",
+  "primary": "V1 vs B0 on 6 vs 6 run-level success rates, exact two-sided permutation test (924 permutations), alpha = 0.05",
+  "interval": "difference in means with a 95% percentile bootstrap interval, 20000 resamples, seed 20261006",
+  "decision": "supported as an improvement iff p < 0.05 and mean difference > 0; otherwise not established",
+  "also": "seed-to-seed sd per arm and whether V1 reduces it"
+ }
+}

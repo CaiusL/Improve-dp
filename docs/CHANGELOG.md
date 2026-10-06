@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.2.0
+
+Round 6 (report addendum 5): run-level statistics for training-time comparisons, the adaptive
+rule evaluated on the trained single-task models, the normalization x adaptive x sampling
+combination, and a descriptive co-training comparison.
+
+### Added
+
+- `src/adaptive_replan/runlevel.py` — the run-level statistics used for every round-6 claim:
+  exact two-sided permutation test on two groups of run-level rates (enumerating all
+  `C(n1+n2, n1)` assignments), exact sign-flip test on paired run differences, percentile
+  bootstrap interval for the difference in means, and a per-arm summary helper.
+- `tests/test_runlevel.py` — hand-computed cases for both permutation tests (including the
+  smallest attainable two-sided p for a 4-vs-4 comparison, 2/70) and a synthetic-observation
+  test that the adaptive rule's geometric features are computed from the raw observation and
+  change under normalization (the raw-feature requirement of round 6).
+- `scripts/r6_runlevel.py` — builds `results/r6_runlevel_summary.csv` (one row per training run
+  and schedule) and `results/r6_runlevel_tests.csv` (every pre-registered run-level test with
+  arm sizes, statistic, p-value, difference and bootstrap interval).
+- `scripts/r6_figures.py` — the four round-6 figure families (per-run strip plots; the
+  eight-cell success-versus-derived-seconds combination chart; V1 vs B0 per task; co-trained
+  checkpoint versus single-task runs).
+- `scripts/r6_verify_rawfeat.py` — offline verification that the rule used the raw observation:
+  recomputes `d_tcp`/`d_goal` from the raw rows logged during real episodes and compares them
+  with the values the rule used.
+- `configs/round6_*.json` — the pre-registered round-6 grids and decision rules.
+
+### Changed
+
+- `scripts/pack_final_results.py` discovers the round-6 raw roots (`r6_*`) as additional
+  seed blocks, so `FINAL_RESULTS.csv` and `MANIFEST.md` cover them without hand-maintained
+  lists; `verify_results.py` inherits the same discovery.
+
+### Notes
+
+- Round 6 takes no new timing benchmark: policy time per episode is derived from the round-5
+  clean per-call measurements and is labelled "derived" wherever it appears.
+- No run is discarded for a bad result; crashed runs are retried once from scratch with the
+  same seed and every run is reported.
+
 ## 1.1.0
 
 Round 5 (report addendum 4): diffusion-sampling sweep, execution-horizon-by-sampler

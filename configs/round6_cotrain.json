@@ -1,0 +1,26 @@
+{
+ "name": "round6_cotrain",
+ "tasks": [
+  "PushCube-v1",
+  "PickCube-v1",
+  "PullCubeTool-v1"
+ ],
+ "checkpoint": "the teammate's co-trained panda3_shared_a0 (EMA, task ids 0,1,2)",
+ "schedule": "fixed:8",
+ "sampler": "ddpm",
+ "steps": 100,
+ "seed_blocks": {
+  "PushCube-v1": "500000-500199",
+  "PickCube-v1": "600000-600199",
+  "PullCubeTool-v1": "700000-700199"
+ },
+ "comparison": "single-task B0 run-level rates per task",
+ "status": "DESCRIPTIVE only: one co-trained checkpoint vs several single-task runs, so no significance claim is possible for the co-trained side",
+ "known_confounds": [
+  "trainer script (cotrain.py vs train.py)",
+  "batch composition (32 per task x 3 tasks vs 32)",
+  "number of runs",
+  "demo subset and seeds",
+  "any other difference in the checkpoint's embedded config"
+ ]
+}

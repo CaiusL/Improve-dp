@@ -1,0 +1,24 @@
+{
+ "fixed_schedule_episode": {
+  "file": "/tmp/r6_featcheck.jsonl",
+  "task": "PushCube-v1",
+  "decisions": 100,
+  "with_payload": 100,
+  "obs_norm_present": true,
+  "feature_mismatches": 0,
+  "rule_mismatches": 0,
+  "decisions_where_normalized_differs": 100,
+  "first_mismatches": []
+ },
+ "adaptive_schedule_episode": {
+  "file": "/tmp/r6_featcheck_adaptive.jsonl",
+  "task": "PushCube-v1",
+  "decisions": 91,
+  "with_payload": 91,
+  "obs_norm_present": true,
+  "feature_mismatches": 0,
+  "rule_mismatches": 0,
+  "decisions_where_normalized_differs": 91,
+  "first_mismatches": []
+ }
+}

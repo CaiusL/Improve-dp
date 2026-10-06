@@ -93,8 +93,8 @@ inference-call count and wall time.
 
 ## Reproducing the results
 
-Every table and figure is rebuilt from the per-episode logs. **The raw logs (~108 MB across
-2 206 JSONL files, 22 082 episodes) are intentionally not part of this release** — they
+Every table and figure is rebuilt from the per-episode logs. **The raw logs (~158 MB across
+3 726 JSONL files, 37 282 episodes) are intentionally not part of this release** — they
 exceed the size the repository is meant to carry. `results/MANIFEST.md` lists every raw file with its episode count,
 seed range and SHA-256 checksum, so a complete copy can be verified file by file; the summary
 CSVs in `results/` are shipped in their place. Point `--raw-root` at a directory holding the
@@ -125,6 +125,16 @@ python scripts/r5_integrity.py --raw-root results/raw
 # round 5: training-variant evaluation analysis and figures
 python scripts/r5_training_analysis.py --raw-root results/raw
 python scripts/r5_figures.py
+
+# round 6: run-level tests of observation normalization, adaptive replanning and the
+# normalization x adaptive x 5-step-DDIM combination (the training run is the unit of analysis)
+python scripts/r6_runlevel.py --raw-root results/raw
+python scripts/r6_figures.py
+
+# round 6: verify that the adaptive rule read the raw observation (needs one logged episode
+# per schedule with --feature-check, see scripts/run_rollout.py --feature-check)
+python scripts/r6_verify_rawfeat.py --fixed-jsonl <fixed_episode.jsonl> \
+    --adaptive-jsonl <adaptive_episode.jsonl>
 ```
 
 # per-task summary plus paired adaptive-vs-baseline tests
@@ -150,6 +160,24 @@ python scripts/run_matrix.py --phase pushcube_steps_fresh_20 --tasks PushCube-v1
 ```
 
 `python <script> --help` lists all arguments for each script.
+
+
+### Run-level statistics (round 6)
+
+Training-time comparisons never pool episodes across training runs. Each run contributes one
+success rate over 200 episodes, and comparisons use exact run-level tests:
+
+- `runlevel.permutation_test(a, b)` — exact two-sided permutation test over all
+  `C(n1+n2, n1)` label assignments (6 vs 6 runs = 924; 4 vs 4 = 70, smallest attainable
+  two-sided p = 2/70 = 0.0286);
+- `runlevel.signflip_test(d)` — exact sign-flip test over all `2**n` sign patterns for paired
+  per-run differences;
+- `runlevel.bootstrap_diff_ci(a, b)` — percentile bootstrap interval for the difference in
+  means (20 000 resamples, fixed seed).
+
+Policy time per episode in round 6 is **derived** as mean policy calls x the round-5 clean
+ms/call (DDPM-100 145.0 ms, DDPM-100 with observation normalization 142.8 ms, DDIM-5 7.2 ms);
+no new timing benchmark was taken.
 
 ## Repository layout
 

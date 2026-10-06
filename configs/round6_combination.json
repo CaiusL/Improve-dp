@@ -1,0 +1,25 @@
+{
+ "name": "round6_combination",
+ "task": "PushCube-v1",
+ "sampler": "ddim",
+ "steps": 5,
+ "ddim_config": {
+  "scheduler": "diffusers.DDIMScheduler",
+  "betas": "checkpoint noise_scheduler.betas",
+  "prediction_type": "epsilon",
+  "eta": 0.0,
+  "clip_sample": true
+ },
+ "cells": "{B0,V1} x {fixed:8, adaptive} x {DDPM-100, DDIM-5} = 8 cells on the same 12 runs",
+ "eval_seed_block": "500000-500199",
+ "preregistered": {
+  "headline": "default DP (B0, fixed:8, DDPM-100) vs best combination (V1, adaptive, DDIM-5): run-level success difference by exact permutation (924) and the derived policy-time ratio",
+  "also": "whether DDIM-5 costs success on these single-task models (per-run paired McNemar against the same arm/schedule at DDPM-100)",
+  "derived_seconds": {
+   "ddpm100_b0": 145.0,
+   "ddpm100_v1": 142.8,
+   "ddim5": 7.2,
+   "ddpm20": 28.7
+  }
+ }
+}

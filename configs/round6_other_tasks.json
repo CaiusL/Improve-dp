@@ -1,0 +1,42 @@
+{
+ "name": "round6_other_tasks",
+ "tasks": [
+  "PickCube-v1",
+  "PullCubeTool-v1"
+ ],
+ "seed_blocks": {
+  "PickCube-v1": "600000-600199",
+  "PullCubeTool-v1": "700000-700199"
+ },
+ "runs_per_arm": 4,
+ "training_seeds": [
+  0,
+  1,
+  2,
+  3
+ ],
+ "primary_metric": "success_once",
+ "success_at_end_required_for": "PickCube-v1 (success requires the arm to be still)",
+ "schedule": "fixed:8",
+ "sampler": "ddpm",
+ "steps": 100,
+ "configs": "derived from the teammate's three-task config with the same per-task 200-trajectory subsets (subset_rng_seed preserved) and repointed demo paths",
+ "verified_before_training": {
+  "obs_dim": {
+   "PickCube-v1": 42,
+   "PullCubeTool-v1": 39
+  },
+  "action_dim": 7,
+  "control_mode": "pd_ee_delta_pose",
+  "max_episode_steps": {
+   "PickCube-v1": 200,
+   "PullCubeTool-v1": 600
+  }
+ },
+ "preregistered": {
+  "primary": "per task, V1 vs B0 run-level success, 4 vs 4, exact permutation (70 permutations; smallest attainable two-sided p = 2/70 = 0.029)",
+  "decision": "supported iff p < 0.05 and mean difference > 0; effect size reported either way",
+  "multiplicity": "two tasks tested, so whether each survives alpha = 0.025 is also stated",
+  "cut_order": "PullCubeTool to 3+3 (descriptive only), then drop PullCubeTool; PickCube stays at 4+4 if at all possible"
+ }
+}

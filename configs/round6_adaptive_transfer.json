@@ -1,0 +1,17 @@
+{
+ "name": "round6_adaptive_transfer",
+ "task": "PushCube-v1",
+ "rule": "adaptive_push:d_tcp=0.08,d_goal=0.10,short=2,long=8 (round-4 primary, no retuning)",
+ "status": "TRANSFER test: the thresholds were tuned on the teammate's co-trained checkpoint",
+ "runs": "all 12 PushCube runs (6 B0 + 6 V1)",
+ "eval_seed_block": "500000-500199",
+ "schedule_under_test": "adaptive",
+ "baseline": "the same run's round-5/round-6 fixed:8 logs",
+ "raw_feature_requirement": "rule features must come from the raw observation; verified on real episodes plus a unit test",
+ "preregistered": {
+  "B1": "within B0: adaptive vs fixed:8 per-run paired differences, sign-flip exact permutation (2^6 = 64); per-run McNemar also reported",
+  "B2": "the same within V1",
+  "B3": "stacking: V1-adaptive vs B0-fixed:8 run-level rates (exact permutation, 924), the 2x2 table of run means, and whether the gain differs between arms (permutation on the two per-run difference sets, 6 vs 6)",
+  "cut_order": "adaptive on 4+4 runs with 16 sign patterns (reduced power) before any further reduction"
+ }
+}

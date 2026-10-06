@@ -158,3 +158,22 @@ with their own licences).
   excluded `AMBIGUOUS_provenance` files were counted in the total; that is fixed.
 - No checkpoints, no demonstration data, no teammate code, and no absolute paths or handles
   are part of the release (see the safety scan above).
+
+## Round 6 (1.2.0) verification
+
+- `tests/test_runlevel.py` and the existing `tests/test_core.py`: **19/19** tests pass, including
+  hand-computed permutation and sign-flip cases and the raw-feature rule test.
+- Raw-feature requirement (the rule must read the raw observation, not the normalized one):
+  verified on two real episodes of a normalized-observation checkpoint (191 decisions) by
+  recomputing `d_tcp`/`d_goal` from the logged raw observation rows with this package's own
+  feature implementation — **0 feature mismatches, 0 rule mismatches**, and the normalized
+  values differed in every decision (the check is not vacuous). Record in
+  `results/r6_rawfeat_check.json`.
+- `r5_integrity.py` over the whole raw tree (round-5 and round-6 roots, patterns extended for
+  the r6 layout): **2 530 chunk files, 0 problems**.
+- `pack_final_results.py` now discovers the `r6_*` raw roots automatically, and
+  `verify_results.py` recomputes every published value from the raw logs:
+  **2 447 values checked, 0 mismatches, 0 problems**; `FINAL_RESULTS.csv` holds **190 rows** and
+  `MANIFEST.md` **3 726 files / 37 282 episodes**.
+- Every training run and rollout phase is protected by an atomic lock; no phase can be started
+  twice, and stale locks are broken only when the owner process is gone.
