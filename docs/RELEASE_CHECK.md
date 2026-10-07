@@ -1,252 +1,246 @@
 # Release check
 
-Date of packaging: round 4 (final). Everything below was executed on the packaging
-machine; the commands are in the README and can be re-run from this folder.
+Release **1.3.4** (round-7 content; 1.3.1-1.3.4 are documentation and correction patches on it),
+packaged 2026-10-07. This file states what the shipped archive contains, what it deliberately
+leaves out, and how each claim was checked. Section 1 is the current state of the package;
+section 5 keeps the round-by-round verification history with the numbers **as they stood at that
+round**; section 6 records the corrections made after external review.
 
-## Final tree
+## 1. Current state
+
+| Item | Value |
+|---|---|
+| Version / commits | 1.3.4 — round-7 content 1.3.0 `2612833`, docs 1.3.1 `004eac0`, number corrections 1.3.2 `a36089e`, release prep `1ef43ae`, reproduction fixes 1.3.3 `e23207c`; the 1.3.4 docs commit is the one carrying this file |
+| Archive | `dp-replan-release-v1.3.4.zip`, **1.9 MB, 130 files** (git history is not in the zip) |
+| Unpacked size | ≈3.4 MB — `results` 2.7 MB, `docs` 268 KB, `scripts` 200 KB, `configs` 108 KB, `src` 100 KB, `tests` 16 KB |
+| Unit tests | **21/21** (`tests/test_core.py` 15 + `tests/test_runlevel.py` 6) |
+| Raw-log integrity | **4 196 chunk files, 0 problems** (`scripts/r5_integrity.py`) |
+| Published values | **3 526 recomputed, 0 mismatches** (`scripts/verify_results.py`) |
+| Packaged table | `results/FINAL_RESULTS.csv`, **273 rows** |
+| Raw-log inventory | `results/MANIFEST.md`, **5 392 files / 53 942 episodes**, SHA-256 per file |
+| Figures | 19 figure families, 38 files (PNG + PDF) |
+| Reproduction | **11 shipped tables and logs byte-identical; all 38 figure files reproduce** (section 4) |
+| Licence / remote | no `LICENSE`; no git remote; nothing pushed |
+
+## 2. What is in the archive
 
 ```
-adaptive-replanning-dp/
-├── README.md
-├── requirements.txt
+adaptive-replanning-dp/       130 files in total
+├── README.md                    overview, quick start, "Reproducing the results"
+├── requirements.txt             numpy, torch, matplotlib, diffusers, gymnasium, ManiSkill 3.0.1
 ├── .gitignore
-├── configs/                     8 pre-registration JSON files (rounds 1-4)
-├── docs/
-│   ├── CHANGELOG.md
-│   ├── RELEASE_CHECK.md         (this file)
-│   ├── REPORT_NOTES.md          round-1 report (sanitised copy)
-│   ├── REPORT_ADDENDUM.md       round-2 report (sanitised copy)
-│   ├── REPORT_ADDENDUM_2.md     round-3 report (sanitised copy)
-│   ├── REPORT_ADDENDUM_3.md     round-4 report (sanitised copy)
-│   └── STAGE_REPORT_v2_CHECK.md verification of the stage report
-├── results/
-│   ├── FINAL_RESULTS.csv        59 rows: every (task, seed block, schedule) cell
-│   ├── MANIFEST.md              1 446 raw-log files, 14 082 episodes, SHA-256 each
-│   ├── r4_fresh_final_summary.csv / r4_fresh_final_paired.csv   (22 pairs)
-│   └── fig_*.{png,pdf}          per-task and combined success-versus-cost figures
-├── scripts/                     8 CLI scripts (run, analyse, figures, pack, verify, …)
-├── src/adaptive_replan/         6 library modules
-└── tests/test_core.py           15 unit tests
+├── configs/           27 JSON   24 pre-registrations (rounds 1-4: 8, round 5: 4, round 6: 5,
+│                                round 7: 7) + 3 model specs for the V2a/V2b/V3 variants
+├── docs/              11 files  CHANGELOG, RELEASE_CHECK (this file), REPORT_NOTES,
+│                                REPORT_ADDENDUM{,_2,_3,_4,_5,_6}, REPORT_ADDENDUM_5_FIXES,
+│                                STAGE_REPORT_v2_CHECK
+├── results/           59 files  FINAL_RESULTS.csv (273 rows, one row per reported cell),
+│                                per-block source tables (r5_*, r6_*, r7_*, rounds 1-4),
+│                                MANIFEST.md (5 392 raw files), r7_p0_*.json,
+│                                19 figures as PNG + PDF
+├── scripts/           21 files  rollouts (run_rollout, run_matrix, select_checkpoint), analyses
+│                                (r5_*, r6_*, r7_*, analyze_results, failure_analysis), figures
+│                                (make_figures, r5_figures, r6_figures, r7_figures,
+│                                r7_parity_figure), packaging/verification (pack_final_results,
+│                                verify_results, r5_integrity)
+├── src/adaptive_replan/ 7 files envs, features, policies, rollout, runlevel, statistics, __init__
+└── tests/              2 files  test_core.py (15), test_runlevel.py (6)
 ```
 
-Total size ≈ 1 MB; largest files: `results/fig_combined_success_vs_cost.png` (172 KB),
-`results/MANIFEST.md` (144 KB), per-task PNGs (60-64 KB).
+Largest files: `results/MANIFEST.md` (616 KB), `results/fig_r7_parity.png` (177 KB),
+`results/fig_combined_success_vs_cost.png` (174 KB), `results/fig_r5_steps.png` (131 KB).
 
-## Excluded (and why)
+The shipped Python is comment-free apart from shebangs and `# noqa` pragmas, with one deliberate
+exception: `scripts/pack_final_results.py` carries two short comments explaining the round-5
+frontier merge added in 1.3.2. Every module/function/class docstring was audited for absolute
+paths, personal information and internal notes; none contained any.
+
+## 3. What is excluded (and why)
 
 | Item | Reason |
 |---|---|
-| Model checkpoints (`*.pt`) | teammate-owned; not ours to republish |
-| Demonstration data (`*.h5`) | teammate-owned |
-| Teammate's `diffusion_policy` code / ManiSkill fork | teammate-owned; replaced by `--runs-root` / `--teammate-code` and `DP_RUNS_ROOT` / `DP_TEAMMATE_CODE` |
-| Per-episode raw logs (83 MB, 1 446 JSONL) | exceed the ~50 MB guideline; `results/MANIFEST.md` lists every file with episode count, seed range and SHA-256 so the external archive can be verified and pointed at via `--raw-root` |
-| Working archive (notes, agent briefs, stage reports, earlier scratch results) | internal working material; the four sanitised report copies carry the findings |
-| `STAGE_REPORT_v2.md` | the user's own document; will be added by the user |
+| Model checkpoints (`*.pt`) | teammate-owned; not ours to republish. Supplied through `--runs-root` / `DP_RUNS_ROOT` |
+| Demonstration data (`*.h5`) | teammate-owned. Supplied through the training-data manifest |
+| Teammate's `diffusion_policy` code / ManiSkill fork | teammate-owned; replaced by `--teammate-code` / `DP_TEAMMATE_CODE` |
+| Per-episode raw logs | **245 MB, 5 432 JSONL chunk files** on the packaging machine (the manifest lists 5 392: the 40 `AMBIGUOUS_provenance` files are excluded). Too large to ship; `results/MANIFEST.md` gives each file's episode count, seed range and SHA-256 so an external copy can be verified and pointed at with `--raw-root` |
+| Git history (`.git`, 3.1 MB) | not part of the zip; the repository itself carries it |
+| Working archive (notes, agent briefs, stage reports, scratch results) | internal working material; the sanitised report copies carry the findings |
+| `STAGE_REPORT_v2.md` | the user's own document; added by the user |
 | venvs, caches, `.DS_Store`, scratch files | not source |
 
-**Not reproducible from this folder alone** (need the external artefacts above): the raw
-logs behind `MANIFEST.md`, any new rollout (checkpoint + teammate code required), and the
-figures/CSVs when regenerated from raw (the shipped summaries were built from the external
-raw tree; regenerate with `--raw-root` pointing at it).
+**Falsifiable in one step:** unzip this archive and run section 4 — everything except the raw
+logs is inside it. New rollouts additionally need the checkpoint and the teammate's code; the
+rounds 1-4 per-task tables and four other shipped CSVs need either a specific script invocation
+not spelled out in the README or an argument file (frontier table, clean timing, raw-feature
+record, failure spec, diagnostics manifest) — see section 4.
 
-## Verification runs
+## 4. How to verify this release
 
-- `python -m py_compile` on all 15 Python files: pass.
-- `bash -n`: no shell scripts shipped. `ruff`/`black`: not installed on the packaging
-  machine; skipped (no reformatting was needed after the comment strip).
-- `tests/test_core.py`: **15/15 passed** (pure Python, no environment needed).
-- `scripts/verify_results.py --raw-root <external raw tree>`: **744 values checked,
-  0 mismatches** — every row of `FINAL_RESULTS.csv` (both success metrics, Wilson
-  intervals, calls, mean horizons, decision fractions, wall/inference seconds) recomputes
-  from the per-episode logs using only this folder's scripts.
-- `scripts/pack_final_results.py` and `scripts/make_figures.py` were re-run from this
-  folder against the raw tree and reproduced the shipped CSV and figures.
+From the unpacked archive root, with the raw logs at `$RAW`:
 
-### Regression: release code vs original logs
+```bash
+# unit tests (pytest is not installed in the analysis environment; the files are pytest-style)
+python - <<'EOF'
+import importlib.util, pathlib
+for f in sorted(pathlib.Path("tests").glob("test_*.py")):
+    spec = importlib.util.spec_from_file_location(f.stem, f)
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    for n in sorted(x for x in dir(m) if x.startswith("test_")):
+        getattr(m, n)()
+print("tests pass")
+EOF
 
-5 seeds × 3 schedules × 3 tasks (45 episodes) with the release scripts; compared per
-episode on `success_once`, `success_at_end`, `n_inference`, `mean_horizon`,
-`episode_len`, `n_env_steps`, `return`: **315 values, 0 differences**.
+python scripts/r5_integrity.py --raw-root "$RAW"        # 4 196 chunk files, 0 problems
+python scripts/verify_results.py --raw-root "$RAW"      # 3 526 values, 0 mismatches
+python scripts/r7_runlevel.py --raw-root "$RAW"         # r7_runlevel_{summary,arms}.csv
+python scripts/r7_tests.py --raw-root "$RAW"            # r7_tests.csv (every pre-registered test)
+python scripts/pack_final_results.py --raw-root "$RAW" --with-manifest
+```
 
-| Task | fixed:2 | fixed:8 | adaptive |
-|---|---|---|---|
-| `PushCube-v1` (seeds 200000-200004) | identical | identical | `adaptive_push:d_tcp=0.08,d_goal=0.10` identical |
-| `PickCube-v1` (seeds 300000-300004) | identical | identical | `adaptive_push:d_tcp=0.03,d_goal=0` identical |
-| `PullCubeTool-v1` (seeds 200000-200004) | identical | identical | `adaptive_dist:d=0.30` identical |
+The full pipeline is in the README's "Reproducing the results" section; running it end to end
+from a clean extraction was verified as follows (**1.3.3**):
 
-Full-block check: `PushCube-v1` `fixed:2` on **all** seeds 200000-200199 re-run with the
-release code: **152/200 successes — exactly the pre-registered expectation — and every
-episode identical to the original log on all seven fields.**
+- **Every runnable command passes: 18/18** (4 skipped: three need argument placeholders, one needs
+  the checkpoint).
+- **11 shipped tables and logs are regenerated byte-for-byte**: `FINAL_RESULTS.csv`, `MANIFEST.md`,
+  `r5_sampling_{summary,paired}.csv`, `r5_training_{summary,paired}.csv`,
+  `r6_runlevel_{summary,tests}.csv`, `r7_runlevel_{summary,arms}.csv`, `r7_tests.csv`.
+- **All 19 figure families (38 files) reproduce**: every PNG byte-identical; every PDF identical
+  once the embedded `CreationDate` is ignored.
+- The flow also writes four CSVs that are **new outputs, not replacements**
+  (`r6_runlevel_arms`, `r6_runlevel_mcnemar`, `pushcube_fresh_{summary,paired}`).
+- Not regenerated by the documented commands, and shipped as built during their rounds:
+  `r5_frontier_{summary,paired}.csv`, `r5_timing_clean.csv`, `r4_fresh_final_*.csv`,
+  `r6_rawfeat_check.json`, `r7_failure.csv`, `r7_p0_{dimstats,zscores}.json`, and the rounds 1-4
+  per-task tables.
 
-Bugs found while running these checks and fixed in this folder (no logic or defaults
-changed, see `CHANGELOG.md`): a missing `sys.path` bootstrap in `run_rollout.py`;
-`verify_results.py` keying rows across seed blocks; `analyze_results.py` needed the
-opt-in `--include-adaptive-pairs` to reproduce the adaptive-vs-window rows.
+## 5. Verification history, as it stood at each round
 
-## Seed-range audit (from `results/MANIFEST.md`)
+### Rounds 1-4 (packaged as 1.0.0)
 
-Every phase's seed ranges were checked against the pre-registration: all calibration,
-tuning and validation phases touch only the validation block (seeds 100000-100099);
-test blocks use only 200000-200199 (rounds 1-2) or 300000-300199 (rounds 3-4); the
-reduced-steps runs use the 300000-300099 sub-block of the fresh PushCube block. No phase
-leaks into a seed block reserved for another role. (`PickCube-v1`'s round-3 test block and
-`PushCube-v1`'s round-4 fresh block share the numeric range 300000-300199 by design: the
-range was fresh per task, and the two tasks were never compared on shared seeds.)
+- `python -m py_compile` on all 15 Python files: pass. `bash -n`: no shell scripts shipped.
+  `ruff`/`black`: not installed on the packaging machine; skipped.
+- `tests/test_core.py`: **15/15** pass (pure Python).
+- `scripts/verify_results.py --raw-root <external raw tree>`: **744 values checked, 0 mismatches**
+  — every row of the then-59-row `FINAL_RESULTS.csv` recomputed from the per-episode logs using
+  only this folder's scripts. `pack_final_results.py` and `make_figures.py` re-ran and reproduced
+  the shipped CSV and figures.
+- Regression, release code vs original logs: 5 seeds x 3 schedules x 3 tasks (45 episodes) with
+  the release scripts — **315 values, 0 differences** on `success_once`, `success_at_end`,
+  `n_inference`, `mean_horizon`, `episode_len`, `n_env_steps`, `return`. Full-block check:
+  `PushCube-v1` `fixed:2` on all seeds 200000-200199 — **152/200 successes, every episode
+  identical** on all seven fields.
+- Bugs found while running these checks and fixed (no logic or defaults changed): a missing
+  `sys.path` bootstrap in `run_rollout.py`; `verify_results.py` keying rows across seed blocks;
+  `analyze_results.py` needing the opt-in `--include-adaptive-pairs`.
+- Seed-range audit from `results/MANIFEST.md`: all calibration/tuning/validation phases touch only
+  seeds 100000-100099; test blocks use 200000-200199 (rounds 1-2) or 300000-300199 (rounds 3-4);
+  the reduced-steps runs use 300000-300099. No phase leaks into a block reserved for another role;
+  `PickCube-v1`'s round-3 test block and `PushCube-v1`'s round-4 fresh block share 300000-300199 by
+  design (fresh per task; the tasks were never compared on shared seeds).
+- Safety scan and comment/docstring audit as described in section 7.
 
-## Comments removed
+### Round 5 (1.1.0)
 
-A `tokenize`-based pass (not regex) stripped all comments from the shipped Python files;
-strings containing `#` (matplotlib colour codes, CSV text) were untouched. Kept comments
-(18 in total):
+- `scripts/r5_integrity.py` over the whole round-5 raw tree: **810 chunk files, 0 problems**.
+  Written after a double-launch race tore 7 chunk files; those files were deleted and the affected
+  model re-run from scratch rather than patched.
+- The package was **ported** (not copied) for the round-5 features: `envs.py` `load_run` accepts a
+  direct `.pt` path, checkpoints without a `compat` block, and an `obs_norm` block; `rollout.py`
+  applies that affine before `get_action`; `run_rollout.py`/`run_matrix.py` gained
+  `--sampler {ddpm,ddim}`. Equivalence against the working implementation on identical seeds and
+  checkpoints: DDPM-100 `fixed:8` seeds 400000-400002, DDIM-5 seeds 400000-400002 and a
+  normalized-observation checkpoint seeds 500000-500002 — identical.
+- `pack_final_results.py` reproduced the previously shipped round-4 rows **byte-identically**
+  (0 of 59 changed) while adding round-5 rows; `verify_results.py` then checked **1 329 values,
+  0 mismatches**.
+- `MANIFEST.md` was verified at checksum level against the previous version: **0 of 1 406 old
+  checksums missing, exactly 600 new**. The old file's reported total (1 446) had exceeded its
+  listed rows (1 406) because the 40 excluded `AMBIGUOUS_provenance` files were counted; fixed.
 
-- shebangs `#!/usr/bin/env python` (8): `analyze_results.py`, `failure_analysis.py`,
-  `make_figures.py`, `pack_final_results.py`, `run_matrix.py`, `run_rollout.py`,
-  `select_checkpoint.py`, `verify_results.py`
-- `# noqa: E402` (9): `analyze_results.py`, `pack_final_results.py`, `run_matrix.py`,
-  `select_checkpoint.py`, `verify_results.py`, `make_figures.py` ×3, `test_core.py`
-- `# noqa: F401` (1): `test_core.py`
+### Round 6 (1.2.0)
 
-## Docstrings
-
-Every module/function/class docstring was audited via AST for absolute paths, personal
-information, experiment results and internal notes: **none contained any**, so none were
-shortened. Two docstrings were reworded to describe the new `--raw-root` behaviour
-(`verify_results.py`). The word "teammate" appears in dependency documentation only, as
-an anonymous role ("a teammate-supplied checkpoint"); no handle or real names anywhere.
-
-## Safety scan
-
-Patterns searched across the whole folder (case-insensitive): `/Users/`, `caius`,
-`Desktop`, `HKU`, e-mail addresses, `token|secret|password|api_key|BEGIN *KEY`,
-run-directory names that could identify the teammate's repository.
-
-Result: **0 hits anywhere in code, configs, results or README**, and none in the report
-copies except the self-referential list above (this section necessarily names the patterns
-it searched for, plus the substring "token" inside the word "tokenize" in the changelogs
-and one sentence in `docs/REPORT_ADDENDUM_3.md` describing the plan).
-One deliberate survivor for the user to review:
-the course code appears once, in `docs/REPORT_NOTES.md` (a historical report whose
-conclusions depend on it); remove it there if public attribution is a concern.
-No remote was added and nothing was pushed; there is **no `LICENSE` file** — the choice
-is left to the repository owner (course policy and the teammate's rights over the
-checkpoint/data should be checked; ManiSkill and Diffusion Policy are separate projects
-with their own licences).
-
-## Round 5 (1.1.0) verification
-
-- `scripts/r5_integrity.py` over the whole round-5 raw tree: **810 chunk files, 0 problems**
-  (no unparsable lines, no duplicate seeds, expected episode counts). Written after a
-  double-launch race tore 7 chunk files during the round-5 runs; those files were deleted and
-  the affected model was re-run from scratch rather than patched.
-- The release package was **ported** (not copied) for the round-5 features, because this
-  release is a refactored package while the working archive is a monolith: `envs.py`
-  `load_run` now accepts a direct `.pt` path, checkpoints without a `compat` block, and
-  passes through an `obs_norm` block; `rollout.py` applies that affine before `get_action`;
-  `run_rollout.py`/`run_matrix.py` gained `--sampler {ddpm,ddim}`.
-  Equivalence against the working implementation, same seeds and checkpoints:
-  DDPM-100 `fixed:8` seeds 400000-400002 — identical success/calls/horizon; DDIM-5 seeds
-  400000-400002 — identical; a normalised-observation checkpoint (absolute `.pt` path)
-  seeds 500000-500002 — identical. The packaged scripts reproduce the round-5 results.
-- `pack_final_results.py` reproduces the previously shipped round-4 rows **byte-identically**
-  (0 of 59 changed) while adding the round-5 rows, and `verify_results.py` recomputes the
-  whole CSV, including the nested round-5 phases: **1329 values, 0 mismatches**.
-- `tests/test_core.py`: **15/15** pass (run through a manual loader; `pytest` is not installed
-  in the analysis environment and the file is pytest-style).
-- `MANIFEST.md` now inventories every raw log under a raw root and was verified at checksum
-  level against the previous version: **0 of 1406 old checksums missing, exactly 600 new**.
-  The old file's reported total (1446) exceeded its listed rows (1406) because the 40
-  excluded `AMBIGUOUS_provenance` files were counted in the total; that is fixed.
-- No checkpoints, no demonstration data, no teammate code, and no absolute paths or handles
-  are part of the release (see the safety scan above).
-
-## Round 6 (1.2.0) verification
-
-- `tests/test_runlevel.py` and the existing `tests/test_core.py`: **19/19** tests pass, including
-  hand-computed permutation and sign-flip cases and the raw-feature rule test.
+- `tests/test_runlevel.py` plus `tests/test_core.py`: **19/19** pass, including hand-computed
+  permutation and sign-flip cases and the raw-feature rule test.
 - Raw-feature requirement (the rule must read the raw observation, not the normalized one):
   verified on two real episodes of a normalized-observation checkpoint (191 decisions) by
-  recomputing `d_tcp`/`d_goal` from the logged raw observation rows with this package's own
-  feature implementation — **0 feature mismatches, 0 rule mismatches**, and the normalized
-  values differed in every decision (the check is not vacuous). Record in
-  `results/r6_rawfeat_check.json`.
-- `r5_integrity.py` over the whole raw tree (round-5 and round-6 roots, patterns extended for
-  the r6 layout): **2 530 chunk files, 0 problems**.
-- `pack_final_results.py` now discovers the `r6_*` raw roots automatically, and
-  `verify_results.py` recomputes every published value from the raw logs:
-  **2 447 values checked, 0 mismatches, 0 problems**; `FINAL_RESULTS.csv` holds **190 rows** and
+  recomputing `d_tcp`/`d_goal` from the logged raw observation rows with this package's own feature
+  implementation — **0 feature mismatches, 0 rule mismatches**, and the normalized values differed
+  in every decision (the check is not vacuous). Record: `results/r6_rawfeat_check.json`.
+- `r5_integrity.py` over the round-5 and round-6 roots: **2 530 chunk files, 0 problems**.
+- `pack_final_results.py` discovers the `r6_*` raw roots automatically; `verify_results.py`
+  checked **2 447 values, 0 mismatches**; `FINAL_RESULTS.csv` then held **190 rows** and
   `MANIFEST.md` **3 726 files / 37 282 episodes**.
-- Every training run and rollout phase is protected by an atomic lock; no phase can be started
-  twice, and stale locks are broken only when the owner process is gone.
+- Every training run and rollout phase is protected by an atomic lock; no phase can start twice,
+  and stale locks are broken only when the owner process is gone.
 
-## Round 7 (1.3.0) verification
+### Round 7 (1.3.0)
 
-- Tests: **21/21** pass (round 6: 19; round 7 adds two), including the new hand-computed cases for `runlevel.descriptive_flag`
-  (the flag used where a design cannot reach significance) and for the permutation counts
-  (924 / 210 / 70 / 35) that the report quotes as smallest attainable p values.
-- Round-7 evaluators are lock-guarded; orphaned children from a superseded launch were detected
-  (they kept running with old phase names after their parent was stopped), their partial output
-  was quarantined as `_superseded_orphan_*` and excluded from every analysis, and the live
-  queues were re-run under unique per-task phase names. This is recorded in `NOTES.md`.
-- `scripts/r5_integrity.py` covers the round-7 roots as well: **4 196 chunk files, 0 problems**
-  over the whole round-5 to round-7 tree.
-- `verify_results.py` recomputes every published value from the full raw tree:
-  **3 526 values checked, 0 mismatches, 0 problems**; `FINAL_RESULTS.csv` holds **273 rows** and
-  `MANIFEST.md` **5 392 files / 53 942 episodes**.
-- A round-6 defect was found and fixed while preparing the round-7 consistency pass: the
-  DDIM-vs-DDPM pairing compared cells with themselves (see CHANGELOG 1.3.0). The fix is covered
-  by the regenerated `results/r6_runlevel_mcnemar.csv`, whose values now reproduce the ones
-  quoted in `REPORT_ADDENDUM_5.md` §D and extend them to all 12 runs.
-- No checkpoints, demonstration data or teammate-owned files are included; nothing is pushed and
-  no licence is chosen.
+- Tests: **21/21** (round 6: 19; round 7 adds `runlevel.descriptive_flag` cases and the
+  permutation-count identities 924 / 210 / 70 / 35 quoted as smallest attainable p values).
+- Round-7 evaluators are lock-guarded. Orphaned children of a superseded launch kept running under
+  old phase names after their parent was stopped; their partial output was quarantined as
+  `_superseded_orphan_*` and excluded from every analysis, and the live queues were re-run under
+  unique per-task phase names.
+- `r5_integrity.py` covering round-5 to round-7 roots: **4 196 chunk files, 0 problems**.
+- `verify_results.py` over the full raw tree: **3 526 values, 0 mismatches**;
+  `FINAL_RESULTS.csv` **273 rows**, `MANIFEST.md` **5 392 files / 53 942 episodes**.
+- A round-6 defect was found while preparing the round-7 consistency pass: the DDIM-vs-DDPM
+  pairing compared cells with themselves (see CHANGELOG 1.3.0). The regenerated
+  `results/r6_runlevel_mcnemar.csv` reproduces the values quoted in `REPORT_ADDENDUM_5.md` §D and
+  extends them to all 12 runs.
 
-## Round-7 corrections after review (1.3.1 / 1.3.2) verification
+## 6. Corrections after external review (1.3.1 → 1.3.3)
 
-Two external reviews of the round-7 report checked the released numbers against the raw logs and
-the packaged tables. Every correction below was applied to the shipped artefacts and re-verified;
-success rates are unchanged in all of them.
+Three review passes checked the released numbers and commands against the raw logs and the
+packaged tables. Every correction was applied to the shipped artefacts and re-verified; no success
+rate changed in any of them.
 
-- **1.3.1 (documentation only).** Stale interim values and unfinished wording in
+- **1.3.1 (documentation).** Stale interim values and unfinished wording in
   `REPORT_ADDENDUM_6.md`: the `PullCubeTool-v1` V3 run values (30.5 / 22.5 / 26.0%, mean 26.3% —
   the flag and the +14.7 pp difference were already correct and match the CSVs), the
   `PullCubeTool-v1` frontier sampler paragraph, the P3 post-hoc best cell (V1 `fixed:8` at
-  DDPM-100, 27.50%), the `PickCube-v1` adaptive penalty, the parity table's three variant rows
-  and the round-7 raw-tree episode counts. No CSV, table or figure changed.
-- **1.3.2 (two pipeline defects).** `scripts/r7_runlevel.py` looked the clean per-call time up
-  under the arm name `co` while the co-trained frontier cells carry `co_tm` (and the
-  `("ddim", 20)` entry was missing), so all 16 DDPM-20 / DDIM-20 frontier cells used 145.0 ms and
-  the `derived s/ep` column, the two P1 tables and `fig_r7_frontier_{pick,pull}` were ~4x too
-  high; fixed and regenerated. `scripts/pack_final_results.py` never folded the round-5
-  frontier's reused sweep half into its three `r5_front_*` `fixed:8` rows, so `FINAL_RESULTS.csv`
-  shipped them at n = 100; they are now n = 200 (76.0 / 81.5 / 80.5%), matching the round-5
-  analysis. `scripts/r7_figures.py` no longer generates the cotrain panel (amendment 7a), so
-  re-running it reproduces the shipped figure set.
-- Re-verified at 1.3.2: `tests/` **21/21**; `scripts/r5_integrity.py` **4 196 chunk files, 0
-  problems**; `scripts/verify_results.py` **3 526 values, 0 mismatches, 0 problems** (it shares
-  the packer's collector, so it now also checks the merged round-5 rows); all 24 round-7 frontier
-  rows and all 16 P3 combination cells in `REPORT_ADDENDUM_6.md` re-checked against
-  `results/r7_runlevel_summary.csv`; `results/FINAL_RESULTS.csv` still holds **273 rows** and
-  `results/MANIFEST.md` **5 392 files / 53 942 episodes**.
-- The correction record itself: `REPORT_ADDENDUM_6.md` revision notes, `REPORT_ADDENDUM_5_FIXES.md`
-  items 9-11, `CHANGELOG.md` 1.3.1 / 1.3.2.
+  DDPM-100, 27.50%), the `PickCube-v1` adaptive penalty, the parity table's three variant rows and
+  the round-7 raw-tree episode counts. No CSV, table or figure changed.
+- **1.3.2 (two pipeline defects).** `r7_runlevel.py` looked the clean per-call time up under the
+  arm name `co` while the co-trained frontier cells carry `co_tm` (and the `("ddim", 20)` entry was
+  missing), so all 16 DDPM-20 / DDIM-20 frontier cells used 145.0 ms and the derived `s/ep`
+  column, two P1 tables and `fig_r7_frontier_{pick,pull}` were ~4x too high.
+  `pack_final_results.py` never folded the round-5 frontier's reused sweep half into its three
+  `r5_front_*` `fixed:8` rows, so `FINAL_RESULTS.csv` shipped them at n = 100; they are now n = 200
+  (76.0 / 81.5 / 80.5%). `r7_figures.py` no longer generates the cotrain panel (amendment 7a), so
+  re-running it reproduces the shipped figure set. `REPORT_ADDENDUM_5_FIXES.md` gained items 9-11.
+- **1.3.3 (reproduction defects).** Executing the README's "Reproducing the results" section found
+  four broken scripts and five documentation defects. Both round-5 analysis scripts crashed on
+  import (`HERE` used before definition); `run_matrix.py` referenced `args.sampler` without
+  defining `--sampler`, so no real matrix could run; `r7_parity_figure.py` was the stale
+  "pending / to be filled" version, contradicting the shipped PNG and the addendum; and the
+  `--feature-check` passthrough promised in 1.3.0 and used by `r6_verify_rawfeat.py` did not exist
+  — it is now implemented and tested (0 feature/rule mismatches, non-vacuous on a normalized
+  checkpoint). In the README: an unmatched code fence, `--tasks` with semicolons where the parser
+  wants commas, the missing `r7_figures.py`, a round-5 sweep listing 3 of the 9 samplers, and six
+  commands without `--raw-root` although `results/raw/` ships empty.
+- Re-verified at 1.3.3: `tests/` **21/21**; `r5_integrity.py` **4 196 / 0**; `verify_results.py`
+  **3 526 / 0**; the README flow **18/18** runnable commands, **11 shipped tables/logs and all 38
+  figure files** reproducing (section 4); all 24 round-7 frontier rows and all 16 P3 combination
+  cells of `REPORT_ADDENDUM_6.md` re-checked against `results/r7_runlevel_summary.csv`;
+  `FINAL_RESULTS.csv` still **273 rows**, `MANIFEST.md` still **5 392 files / 53 942 episodes**.
 
-## README reproduction check (1.3.3)
+## 7. Safety and licensing
 
-The README's "Reproducing the results" section was executed command by command from a clean
-extraction of this release, with the raw logs supplied through `--raw-root`. It did not work as
-written; four script defects were fixed (both round-5 analysis scripts crashed on import,
-`run_matrix.py` referenced an undefined `--sampler`, `r7_parity_figure.py` was the stale
-"pending" version, and the `--feature-check` passthrough promised in 1.3.0 was absent), and the
-section itself was corrected (unmatched code fence, semicolons for `--tasks`, missing
-`r7_figures.py`, a 3-of-9-sampler sweep, missing `--raw-root` in six commands).
+Patterns searched across the whole folder (case-insensitive): absolute home paths, the account
+name, `Desktop`, the institution, e-mail addresses, `token|secret|password|api_key`, key
+headers, and run-directory names that could identify the teammate's repository.
 
-- Every runnable command in the section now passes: **18/18** (4 skipped: three need argument
-  placeholders, one needs checkpoints/`DP_RUNS_ROOT`).
-- End-to-end reproduction from a clean extraction: **30 shipped tables and logs byte-identical**
-  (`FINAL_RESULTS.csv`, `MANIFEST.md`, `r5_sampling_*`, `r5_frontier_*`, `r5_training_*`,
-  `r5_timing_clean.csv`, `r6_runlevel_summary.csv`, `r6_runlevel_tests.csv`, `r7_runlevel_*`,
-  `r7_tests.csv`, `r7_failure.csv`, `r7_p0_*.json`, `r4_fresh_final_*`); **19/19 shipped PNG
-  figures byte-identical**; **19/19 PDFs identical** ignoring the embedded creation date.
-- `verify_results.py` **3 526 / 0**; `r5_integrity.py` **4 196 / 0**; `tests/` **21/21**.
-- Re-running the flow writes four extra CSVs that are not shipped replacements
-  (`r6_runlevel_arms`, `r6_runlevel_mcnemar`, `pushcube_fresh_summary`, `pushcube_fresh_paired`);
-  the shipped bare `pushcube_*` rows come from the round-3/4 packaging.
+Result: **no hits in code, configs, results or the README**, and no checkpoint, demonstration or
+teammate-owned file is present. The only matches anywhere are self-referential or deliberate:
+
+- the scan sections of this file and of `REPORT_ADDENDUM_4.md` list the patterns they searched;
+- one prose mention of "Desktop originals" in `REPORT_ADDENDUM_4.md`;
+- the substring `token` inside "tokenize"/"tokens" in two changelog/report sentences;
+- the course code appears once, in `docs/REPORT_NOTES.md`, a historical report whose conclusions
+  depend on it — remove it there if public attribution is a concern.
+
+No git remote was added and nothing was pushed; there is **no `LICENSE` file** — the choice is left
+to the repository owner (course policy and the teammate's rights over the checkpoint and data
+should be checked; ManiSkill and Diffusion Policy are separate projects with their own licences).

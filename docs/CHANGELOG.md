@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.3.4
+
+Documentation only; no code, data, table or figure changed.
+
+- `docs/RELEASE_CHECK.md` rewritten so it describes the package as shipped rather than the
+  round-4 state it had described since 1.0.0: a current-state table (version and commit chain,
+  archive size and per-area file counts, 21/21 tests, 4 196/0 integrity, 3 526/0 verification,
+  273 rows, 5 392 files / 53 942 episodes), an updated contents and exclusions inventory (raw
+  logs 245 MB / 5 432 chunk files with the 40 `AMBIGUOUS_provenance` files noted, `.git` not in
+  the zip, licence and remote status), and a "how to verify this release" section whose commands
+  were executed as written.
+- It also separates what the documented pipeline **does** regenerate from the raw logs —
+  11 shipped tables and logs byte-for-byte plus all 38 figure files (19 PNG byte-identical,
+  19 PDF identical ignoring the embedded creation date) — from what it **does not**
+  (`r5_frontier_*`, `r5_timing_clean.csv`, `r4_fresh_final_*`, `r6_rawfeat_check.json`,
+  `r7_failure.csv`, `r7_p0_*.json` and the rounds 1-4 per-task tables, which need a specific
+  invocation or an argument file). Previously the file implied the whole package was
+  reproducible from the folder alone.
+- The round-by-round verification numbers are kept as history under their own version labels, and
+  the 1.3.1-1.3.3 corrections are consolidated into one section.
+
 ## 1.3.3
 
 Third review pass: the README's "Reproducing the results" section was executed command by command.
