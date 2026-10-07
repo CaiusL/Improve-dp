@@ -198,3 +198,33 @@ with their own licences).
   quoted in `REPORT_ADDENDUM_5.md` §D and extend them to all 12 runs.
 - No checkpoints, demonstration data or teammate-owned files are included; nothing is pushed and
   no licence is chosen.
+
+## Round-7 corrections after review (1.3.1 / 1.3.2) verification
+
+Two external reviews of the round-7 report checked the released numbers against the raw logs and
+the packaged tables. Every correction below was applied to the shipped artefacts and re-verified;
+success rates are unchanged in all of them.
+
+- **1.3.1 (documentation only).** Stale interim values and unfinished wording in
+  `REPORT_ADDENDUM_6.md`: the `PullCubeTool-v1` V3 run values (30.5 / 22.5 / 26.0%, mean 26.3% —
+  the flag and the +14.7 pp difference were already correct and match the CSVs), the
+  `PullCubeTool-v1` frontier sampler paragraph, the P3 post-hoc best cell (V1 `fixed:8` at
+  DDPM-100, 27.50%), the `PickCube-v1` adaptive penalty, the parity table's three variant rows
+  and the round-7 raw-tree episode counts. No CSV, table or figure changed.
+- **1.3.2 (two pipeline defects).** `scripts/r7_runlevel.py` looked the clean per-call time up
+  under the arm name `co` while the co-trained frontier cells carry `co_tm` (and the
+  `("ddim", 20)` entry was missing), so all 16 DDPM-20 / DDIM-20 frontier cells used 145.0 ms and
+  the `derived s/ep` column, the two P1 tables and `fig_r7_frontier_{pick,pull}` were ~4x too
+  high; fixed and regenerated. `scripts/pack_final_results.py` never folded the round-5
+  frontier's reused sweep half into its three `r5_front_*` `fixed:8` rows, so `FINAL_RESULTS.csv`
+  shipped them at n = 100; they are now n = 200 (76.0 / 81.5 / 80.5%), matching the round-5
+  analysis. `scripts/r7_figures.py` no longer generates the cotrain panel (amendment 7a), so
+  re-running it reproduces the shipped figure set.
+- Re-verified at 1.3.2: `tests/` **21/21**; `scripts/r5_integrity.py` **4 196 chunk files, 0
+  problems**; `scripts/verify_results.py` **3 526 values, 0 mismatches, 0 problems** (it shares
+  the packer's collector, so it now also checks the merged round-5 rows); all 24 round-7 frontier
+  rows and all 16 P3 combination cells in `REPORT_ADDENDUM_6.md` re-checked against
+  `results/r7_runlevel_summary.csv`; `results/FINAL_RESULTS.csv` still holds **273 rows** and
+  `results/MANIFEST.md` **5 392 files / 53 942 episodes**.
+- The correction record itself: `REPORT_ADDENDUM_6.md` revision notes, `REPORT_ADDENDUM_5_FIXES.md`
+  items 9-11, `CHANGELOG.md` 1.3.1 / 1.3.2.

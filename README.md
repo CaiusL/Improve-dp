@@ -36,9 +36,13 @@ policy inference ~5× with no loss detected at n = 100 per cell, but that experi
 to exclude a modest loss; see the addendum for the interval on the largest compatible loss.
 
 Full detail: `docs/REPORT_NOTES.md`, `docs/REPORT_ADDENDUM.md`, `docs/REPORT_ADDENDUM_2.md`,
-`docs/REPORT_ADDENDUM_3.md`, and the verification report `docs/STAGE_REPORT_v2_CHECK.md`.
-Pre-registrations are in `configs/`; the internal working log (`NOTES.md`) and the earlier
-stage reports are not part of this release.
+`docs/REPORT_ADDENDUM_3.md`, `docs/REPORT_ADDENDUM_4.md` (sampler x horizon frontier, clean
+timing, training variants), `docs/REPORT_ADDENDUM_5.md` (run-level tests, adaptive transfer, the
+four-way combination) and `docs/REPORT_ADDENDUM_6.md` (round-7 parity on `PickCube-v1` and
+`PullCubeTool-v1`), with `docs/REPORT_ADDENDUM_5_FIXES.md`, the verification report
+`docs/STAGE_REPORT_v2_CHECK.md` and the change log `docs/CHANGELOG.md` — **this archive is
+release 1.3.2**. Pre-registrations are in `configs/`; the internal working log (`NOTES.md`) and
+the earlier stage reports are not part of this release.
 
 ## Policy and external dependencies
 
