@@ -1,4 +1,6 @@
-# REPORT_ADDENDUM_3.md
+# REPORT_ROUND_4.md
+
+Formerly `REPORT_ADDENDUM_3.md`.
 
 Fourth round: verification of `STAGE_REPORT_v2.md`, fresh-seed confirmation on `PushCube-v1`
 with a time-window search, reduced-diffusion-steps on fresh seeds with a clean sequential timing
@@ -14,14 +16,15 @@ Protocol unchanged (explicit `env.reset(seed=…)`, paired seeds, torch seed `10
 
 ## Task 0 — verification of `STAGE_REPORT_v2.md`
 
-Full item-by-item table: **`STAGE_REPORT_v2_CHECK.md`** (`verify_stage_report_v2.py`,
+Full item-by-item table (in the working archive, not redistributed):
+**`STAGE_REPORT_v2_CHECK.md`** (`verify_stage_report_v2.py`,
 129/135 checks OK). **No headline claim changes.** Corrections and reconciliations:
 
 1. **One substantive error:** §4.3's "adaptive worse than `fixed:8` … 8 vs **43** discordant
    seeds" — the discordant counts are **8 vs 29**; 43 is the *both-succeeded* column of
    `results/pickcube_test_final_paired.csv`, misread when the addendum was written. p = 0.0008
    and the verdict are unchanged. The same misread produced two wrong count pairs in
-   `REPORT_ADDENDUM_2.md` (vs random(2.89): **26 vs 27**; vs random(3.76): **28 vs 32**).
+   `REPORT_ROUND_3.md` (vs random(2.89): **26 vs 27**; vs random(3.76): **28 vs 32**).
 2. **`qpos0`-control calls reconciled:** the test table (95.6 calls, mean horizon 2.16) is right;
    the addendum's "≈78 calls" was `200 / 2.577` computed on the **validation** calibration seeds
    and then compared against the primary rule's **test** figure — a validation-vs-test mix-up.
@@ -34,7 +37,7 @@ Full item-by-item table: **`STAGE_REPORT_v2_CHECK.md`** (`verify_stage_report_v2
    controls are near-`fixed:2` in behaviour, and the honest reading is that the primary rule's
    edge comes from *where its rare long chunks go*.
 4. **`PickCube-v1` validation baselines:** `fixed:2` = **17/100 = 17.0%** (the "17.2%" in
-   `REPORT_ADDENDUM_2.md` came from 17/99 of a partial run), `fixed:4` = 30/100, `fixed:8`
+   `REPORT_ROUND_3.md` came from 17/99 of a partial run), `fixed:4` = 30/100, `fixed:8`
    = 49/100. v2's "about 17%" is correct.
 5. **`PickCube-v1` metric divergence confirmed:** test block 256/1600 = **16.00%** mid-only;
    earlier sanity sample 5/60 = 8.33%; all six per-schedule `success_at_end` rates reproduce;

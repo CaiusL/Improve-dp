@@ -1,4 +1,15 @@
-# REPORT_ADDENDUM_6.md — Round 7: parity for PickCube-v1 and PullCubeTool-v1
+# REPORT_ROUND_7.md — Round 7: parity for PickCube-v1 and PullCubeTool-v1
+
+Formerly `REPORT_ADDENDUM_6.md`; this file is version 2 of that report. The version-1 text is
+kept unedited in the working archive, which also holds the review record
+`REVIEW_ADDENDUM_6.md`.
+
+**Version 2 (2026-10-07).** The earlier round-7 report `REPORT_ADDENDUM_6.md` is kept unedited in
+the working archive, per the project convention; this is the version the release ships. All
+numbers were independently recomputed from the raw per-episode logs before this version was
+produced (0 numeric mismatches; the review record `REVIEW_ADDENDUM_6.md` is in the working
+archive); v2 changes wording and labels only, as listed in revision note (3). No result, verdict
+or test value changes.
 
 Brief: *parity for `PickCube-v1` and `PullCubeTool-v1`, plus the questions brief 6 opened.*
 Scope: Panda only. Nothing in an earlier report is edited by this file; the user merges. Every
@@ -24,6 +35,26 @@ Also in this revision: the P3 cell means were re-derived from the packaged table
 the half-up convention stated in the method (sub-0.05 pp drift; e.g. the PickCube DDIM-5 default
 cell is 63.13%, not 63.10%), the PullCubeTool V1 `fixed:8` range is [20.0-34.5], and the Task F
 V1 difference is -5.88 pp. Full list in `NOTES.md` (`CORRECTION`, round 7 post-release).
+(3) 2026-10-07, third external review (independent recomputation of every round-7 statistic from
+the raw logs — 0 numeric mismatches; `REVIEW_ADDENDUM_6.md`) — six text corrections, no numbers
+change: (i) P1(b) on `PickCube-v1` has **eight** paired sampler comparisons, not six (the sentence
+already listed eight losses); (ii) the same paragraph's "all p >= 0.20" becomes "all p >= 0.199"
+(the `fixed:2` DDPM-20 comparison has p = 0.1996); (iii) the parity table's PushCube adaptive
+citation "(round 4: +11.0 pp vs `fixed:8`, p = 0.00068)" belongs to **round 5** (round 4's
+fresh-block comparison was +14.5 pp, p = 0.000002 — both are now cited); (iv) P1(a) on
+`PickCube-v1` references **round 6's** Task F, not round 7's; (v) the V2b `PullCubeTool-v1`
+permutation difference is **+8.0 pp** under the stated rounding convention (exact +8.04; "+8.1"
+came from differencing rounded means), matching the variant-summary table; (vi) the method's
+"rounded half-up" claim is relaxed — values are rounded to the precision shown, and exact
+midpoints in binary floating point may round either way (e.g. the derived 3.625 s/ep prints as
+3.62). A note that P2 run lists are sorted ascending (not seed order) is added to P2.
+Found while preparing the final report (added to this v2): (vii) P1(b) on `PickCube-v1`
+stated "`fixed:8` DDIM-20 is 5.5 pp below DDPM-100 at end (11.5% vs 19.0%)" — the two
+verified rates differ by **7.5 pp**; the parenthetical was right and the derived difference
+was wrong. Related observation about an earlier round (not edited here): `REPORT_ROUND_5.md`
+§2.2's "None of these survive a Bonferroni across the 9 combinations" is inconsistent with
+its own p-values — the DDPM-100 adaptive-vs-`fixed:8` comparison (p = 0.00068) survives
+α = 0.05/9 = 0.0056; `FINAL_REPORT.md` states the corrected reading.
 
 Method (unchanged from brief 6, restated because several round-7 designs are smaller): the
 training run is the unit of analysis; exact two-sided permutation tests enumerate all
@@ -32,7 +63,8 @@ training run is the unit of analysis; exact two-sided permutation tests enumerat
 0.10). Within-model comparisons on identical seeds use exact McNemar on episodes. Policy seconds
 per episode are **derived** as (policy calls) x (clean ms per call) from the round-5 measurements:
 DDPM-100 145.0 ms (142.8 ms for normalized observations), DDPM-20 28.7 ms, DDIM-20 28.5 ms,
-DDIM-5 7.2 ms. Percentages and differences are rounded half-up to the precision shown; every
+DDIM-5 7.2 ms. Percentages and differences are rounded to the precision shown (nominal
+convention half-up; exact binary midpoints such as 3.625 may round either way); every
 test uses unrounded values.
 
 ---
@@ -96,19 +128,19 @@ loss bound <= 10 pp on either task (best `PickCube-v1` 22.0 pp at 50 steps, best
 This **replicates the earlier direction on a brand-new seed block**: on `PickCube-v1` the
 adaptive rule beats `fixed:2` clearly, is indistinguishable from `fixed:4`, and is significantly
 *worse* than `fixed:8` — the same ordering as round 3 (adaptive 25.5% vs `fixed:8` 36.0%,
-p = 0.0008) and round 7's Task F. Note the frontier is *degenerate* here: at DDPM-100 `fixed:8` has
+p = 0.0008) and round 6's Task F. Note the frontier is *degenerate* here: at DDPM-100 `fixed:8` has
 both the highest success **and** the lowest derived policy time (3.62 s vs the adaptive rule's
 8.75 s), so on this task there is no success-versus-cost trade-off to exploit — the rule spends
 2.4x the policy time to lose 12 points. (The DDPM-20/DDIM-20 cells are cheaper still — 0.72 s and
 0.71 s for `fixed:8`, 1.82 s and 1.74 s for adaptive — but the same ordering holds at every
 sampler, and the pre-registered comparison is at DDPM-100.)
 
-**(b) Do the cheaper samplers lose success?** No significant change in any of the six paired
-comparisons (all p >= 0.20), with point estimates between -4.5 and +4.0 pp. The largest losses
+**(b) Do the cheaper samplers lose success?** No significant change in any of the eight paired
+comparisons (all p >= 0.199), with point estimates between -4.5 and +4.0 pp. The largest losses
 compatible with the data: `fixed:2` DDPM-20 11.6 pp, `fixed:2` DDIM-20 4.3 pp, `fixed:4` DDPM-20
 6.9 pp, `fixed:4` DDIM-20 10.7 pp, `fixed:8` DDPM-20 6.2 pp, `fixed:8` DDIM-20 **13.6 pp**;
 adaptive DDPM-20 5.4 pp, adaptive DDIM-20 6.8 pp. Equivalence is not established for any cell.
-On the secondary metric, `fixed:8` DDIM-20 is 5.5 pp below DDPM-100 at end (11.5% vs 19.0%).
+On the secondary metric, `fixed:8` DDIM-20 is 7.5 pp below DDPM-100 at end (11.5% vs 19.0%).
 
 **(c) Success versus cost:** figure `results/fig_r7_frontier_pick.png/.pdf`.
 
@@ -157,6 +189,10 @@ flag** is "suggestive" iff the variant's mean run-level rate lies outside the ba
 range *and* all its runs are on the same side of the baseline mean; otherwise "within training
 noise". No hypothesis test is claimed: 3 vs 4 runs gives C(7,3) = 35 permutations, so the smallest
 attainable two-sided p is 2/35 = **0.057** and no variant can reach alpha = 0.05 by construction.
+Run values in the tables below are listed **ascending** (not in seed order); e.g. the
+`PullCubeTool-v1` B0 runs are seed 0 = 13.5, seed 1 = 15.0, seed 2 = 9.0, seed 3 = 9.0, and the
+V1 runs are seed 0 = 20.0, seed 1 = 34.5, seed 2 = 23.5, seed 3 = 32.0. The P5 median-run seed ids
+refer to these true seed orders.
 
 ### V2b — prediction horizon 32 — COMPLETE (3 runs per task)
 
@@ -171,7 +207,7 @@ attainable two-sided p is 2/35 = **0.057** and no variant can reach alpha = 0.05
 
 - **`PullCubeTool-v1`: suggestive.** V2b's mean (19.7%) is above the baseline's maximum (15.0%)
   and all three runs are above the baseline mean (11.6%) — the flag is met. The permutation
-  difference is +8.1 pp (p cannot fall below 0.057 at 3 vs 4 runs, and it does not), so this is a
+  difference is +8.0 pp (p cannot fall below 0.057 at 3 vs 4 runs, and it does not), so this is a
   flag, not an established improvement. `success_at_end` matches `success_once` for this task.
 - **`PickCube-v1`: within training noise.** V2b's mean (74.0%) is 13.6 pp above the baseline's
   (60.4%) and *below* the baseline's best single run (75.5%), so the mean does not lie outside the
@@ -401,12 +437,13 @@ pre-registered questions. Nothing was run for P7.
 
 ## P8 — consistency pass and synthesis
 
-### Consistency pass on `REPORT_ADDENDUM_5.md`
+### Consistency pass on the round-6 report
 
-`REPORT_ADDENDUM_5_FIXES.md` lists every stale statement with its corrected text (the file itself
-is not edited): the duplicated result block at the top of the file (a slice bug in an editing
-step), the co-training table and its §G.1 row still comparing a single baseline seed, §D's
-4-run adaptive rows and its "still being evaluated" note, §C's "PullCubeTool pending" heading and
+The corrections to that report are applied in place in this release and listed in its
+"Corrections applied when this file was packaged" section: the duplicated result block at the
+top of the file (a slice bug in an editing step), the co-training table and its §G.1 row still
+comparing a single baseline seed, §D's 4-run adaptive rows and its "still being evaluated" note,
+§C's "PullCubeTool pending" heading and
 its +15.82 pp / 27.44% figures (now +15.88 pp / 27.50%), §F (verified complete), and a defect in
 the shipped `r6_runlevel.py` that made DDIM comparisons compare cells with themselves.
 
@@ -418,7 +455,7 @@ rules of this brief and brief 6. "Best fixed vs adaptive" refers to the co-train
 
 | experiment | `PushCube-v1` | `PickCube-v1` | `PullCubeTool-v1` |
 |---|---|---|---|
-| best fixed vs adaptive (co-trained checkpoint) | **supported** (round 4: +11.0 pp vs `fixed:8`, p = 0.00068) | **contradicted** (fresh block: -12.0 pp vs `fixed:8`, p = 0.00027) | **not established** (fresh block: -1.5 pp, p = 0.581) |
+| best fixed vs adaptive (co-trained checkpoint) | **supported** (round 4: +14.5 pp vs `fixed:8`, p = 0.000002; round 5: +11.0 pp, p = 0.00068) | **contradicted** (fresh block: -12.0 pp vs `fixed:8`, p = 0.00027) | **not established** (fresh block: -1.5 pp, p = 0.581) |
 | sampler x horizon frontier | supported (round 5/6) | **complete**: `fixed:8` dominates on both success and cost; DDPM-20/DDIM-20 within +-4.5 pp, largest compatible losses 4.3-13.6 pp | **complete**: no sampler loss except DDIM-5 for normalized models later; `fixed:8` best |
 | observation normalization (V1 vs B0) | **supported** (+10.83 pp, p = 0.0043, 6v6) | **contradicted** (-20.25 pp, p = 0.057, and the "combination" is -26.0 pp at p = 0.0286) | **supported** (+15.88 pp, p = 0.0286; misses the two-task 0.025 threshold) |
 | V2a shorter prediction horizon (8) | not established (round 5) | **not established**; flag suggestive (negative), -39.9 pp, every run below the baseline's worst | **not established**; flag suggestive (negative), -6.3 pp, every run below the baseline's worst |
@@ -460,14 +497,14 @@ cells; the flag only names the direction.
   `fig_r7_combination_{pick,pull}` and `fig_r7_parity` (PNG + PDF). `pack_final_results.py` now
   discovers the `r6_*` **and** `r7_*` raw roots, and `r5_integrity.py` covers the round-7 roots.
 - Fixed while preparing this round (all shipped): the DDIM comparison in `r6_runlevel.py`
-  compared cells with themselves (see `REPORT_ADDENDUM_5_FIXES.md` item 8), and `r7_tests.py`
+  compared cells with themselves (see the corrections section of `REPORT_ROUND_6.md`, item 8), and `r7_tests.py`
   crashed on empty confidence bounds, which had silently left a stale results CSV.
 - Fixed after the external reviews (all shipped): `r7_runlevel.py`'s per-call-time lookup (the
   `co_tm` arm and the DDIM-20 entry) and `pack_final_results.py`'s missing merge of the round-5
   frontier's reused sweep half — see revision note (2) above; the affected table, figures and
   `FINAL_RESULTS.csv` rows were regenerated from the raw logs and re-verified.
 - Safety scan: the only matches for the searched patterns are the two documents that list the
-  patterns (`docs/RELEASE_CHECK.md`, `docs/REPORT_ADDENDUM_4.md`); no checkpoints, demonstration
+  patterns (`docs/RELEASE_CHECK.md`, `docs/REPORT_ROUND_5.md`); no checkpoints, demonstration
   data or teammate-owned files are included; nothing is pushed and no licence is chosen.
 
 ### What was not finished (or was cut)

@@ -1,9 +1,11 @@
-# REPORT_ADDENDUM.md
+# REPORT_ROUND_2.md
+
+Formerly `REPORT_ADDENDUM.md`.
 
 Round-2 work on the adaptive-execution-horizon project: (A) a confirmatory block on fresh seeds,
 (B) a competent-policy task (`PushCube-v1`), (C) a control rule, (D) fact-checks.
 
-This file is an addendum to `REPORT_NOTES.md`, which is left unedited. Round-one raw results were
+This file is an addendum to `REPORT_ROUND_1.md`, which is left unedited. Round-one raw results were
 never overwritten; all round-2 output lives in new `results/raw/<phase>/…` folders.
 
 Environment is unchanged from round one: Apple M5 Pro, macOS 26.6.2, CPU simulation
@@ -99,7 +101,7 @@ concentrated in the second half of the seed block**:
 
 So the round-one headline rests on seed heterogeneity, not on a consistent effect. That is exactly
 what Task A's fresh block was designed to test, and it means the n = 100 "opposite ranking" reported
-in `REPORT_NOTES.md` §1 was not a fluke of small samples alone — the effect genuinely varies by
+in `REPORT_ROUND_1.md` §1 was not a fluke of small samples alone — the effect genuinely varies by
 seed. Task A's result is reported against this background.
 
 ### D3. Sample size for 80% power to detect 9% vs 15.5%

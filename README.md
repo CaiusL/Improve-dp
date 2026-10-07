@@ -31,18 +31,15 @@ detectable success loss at n = 100 per cell (largest loss compatible with the da
 **Headline caveats.** (1) The `PickCube-v1` success condition requires the robot to be static, so
 `success_once` and `success_at_end` diverge on 16% of episodes; the adaptive rule loses under both.
 (2) The `PushCube-v1` gain was confirmed on a second, fresh block of 200 seeds (see
-`docs/REPORT_ADDENDUM_3.md` for both blocks). (3) Reduced DDPM sampling (100 → 20 steps) speeds up
+`docs/REPORT_ROUND_4.md` for both blocks). (3) Reduced DDPM sampling (100 → 20 steps) speeds up
 policy inference ~5× with no loss detected at n = 100 per cell, but that experiment is not powered
 to exclude a modest loss; see the addendum for the interval on the largest compatible loss.
 
-Full detail: `docs/REPORT_NOTES.md`, `docs/REPORT_ADDENDUM.md`, `docs/REPORT_ADDENDUM_2.md`,
-`docs/REPORT_ADDENDUM_3.md`, `docs/REPORT_ADDENDUM_4.md` (sampler x horizon frontier, clean
-timing, training variants), `docs/REPORT_ADDENDUM_5.md` (run-level tests, adaptive transfer, the
-four-way combination) and `docs/REPORT_ADDENDUM_6.md` (round-7 parity on `PickCube-v1` and
-`PullCubeTool-v1`), with `docs/REPORT_ADDENDUM_5_FIXES.md`, the verification report
-`docs/STAGE_REPORT_v2_CHECK.md` and the change log `docs/CHANGELOG.md` — **this archive is
-release 1.3.5**. Pre-registrations are in `configs/`; the internal working log (`NOTES.md`) and
-the earlier stage reports are not part of this release.
+Full detail: `docs/REPORT_ROUND_1.md` … `docs/REPORT_ROUND_7.md` — one report per round, named by
+round — with the change log `docs/CHANGELOG.md`, which also records what those reports were called
+before 1.3.6. **This archive is release 1.3.6.** Pre-registrations are in `configs/`; the internal
+working log (`NOTES.md`), the earlier stage reports and the documents that verify them are not
+part of this release.
 
 ## What a "round" is, and what each round did
 
@@ -56,20 +53,22 @@ holds every round side by side.
 
 | round | what it tried or tested | outcome | report | pre-registered in |
 |---|---|---|---|---|
-| 1 | Does a state-dependent execution horizon beat fixed and randomized horizons? First test, on `PullCubeTool-v1`: 8 schedules × 200 held-out seeds. | Partially supported. The aggressive rule (`adaptive_dist` d=0.30) was best at 15.5%, beating cost-matched `fixed:4` (p = 0.041) and a mean-matched random schedule (p = 0.0066), but not `fixed:8` (p = 0.078). | `REPORT_NOTES.md` | `round1_pullcubetool_test.json` |
-| 2 | Confirmatory block on fresh seeds, a competent-policy task (`PushCube-v1`), a negative control rule keyed on an unrelated feature, and fact-checks. | Not confirmed. On fresh seeds P1 (adaptive vs `fixed:4`) gave p = 0.265, so the pre-registered overall rule failed; P2 (no significant loss vs `fixed:8`) held at p = 0.688. The unrelated-feature control was statistically indistinguishable from the adaptive rule (p ≥ 0.05), as a negative control should be. | `REPORT_ADDENDUM.md` | `round2_pullcubetool_confirm.json` |
-| 3 | Full `PickCube-v1` study, `PushCube-v1` control experiments, cross-task analysis, first reduced-sampling-step measurements. | The decision reverses by task: on `PickCube-v1` the rule is significantly worse than `fixed:8` (25.5% vs 36.0%, p = 0.0008) at more than twice the cost; the inverted-rule control shows that *which* states get short chunks matters. | `REPORT_ADDENDUM_2.md` | `round3_pickcube_test.json`, `round3_pushcube_test.json` |
-| 4 | Fresh-seed confirmation on `PushCube-v1` with a time-window search, reduced sampling steps with a clean sequential timing benchmark, exploratory `PickCube-v1` stillness check. | Confirmed. Adaptive 89.0% vs 80.0% for the best fixed (both p < 0.002), and a well-placed time window is indistinguishable from the geometric rule (p = 0.25 / 0.50); 20 steps is 4.9× faster with no loss detected (losses up to ~8–12 pp are not excluded). | `REPORT_ADDENDUM_3.md` | `round4_*.json` |
-| 5 | The course question "Improving DP" beyond the execution horizon: a training-speed benchmark, a diffusion-sampling sweep including DDIM, training-time variants (prediction horizon, encoder size, observation normalization) on `PushCube-v1`, an execution-horizon × sampler frontier, clean timing. | Observation normalization (V1) is the best-supported change (mean 88.67% → 96.75%), though the pre-registered magnitude rule was not met; DDPM 100 → 20 steps is ~4.9× faster. | `REPORT_ADDENDUM_4.md` | `round5_*.json`, `model_v*.json` |
-| 6 | Run-level statistics (the **training run**, not the episode, as the unit of analysis) for observation normalization and adaptive replanning; the normalization × adaptive × 5-step-DDIM combination; a descriptive co-training comparison. | Normalization as a training-time change is not supported on `PickCube-v1` (−20.25 pp, p = 0.057) and supported on `PullCubeTool-v1` (+15.82 pp, p = 0.0286). | `REPORT_ADDENDUM_5.md`, `REPORT_ADDENDUM_5_FIXES.md` | `round6_*.json` |
-| 7 | Parity for `PickCube-v1` and `PullCubeTool-v1`: sampler × horizon frontiers on the co-trained checkpoint with fresh seed blocks, encoder/prediction-horizon variants on the other two tasks, the completed four-way combination, our own co-trained models against single-task runs, failure analysis, and a consistency pass over round 6. | Establishes the per-task best combinations — `PushCube-v1` V1 + `fixed:8` + DDIM-5 (96.83% / 91.25%), `PickCube-v1` B0 + `fixed:8` + DDIM-5 (63.13% / 44.25% at 0.18 s), `PullCubeTool-v1` V1 + `fixed:8` + DDPM-100 (27.50% / 27.38%). | `REPORT_ADDENDUM_6.md` | `round7_*.json` |
+| 1 | Does a state-dependent execution horizon beat fixed and randomized horizons? First test, on `PullCubeTool-v1`: 8 schedules × 200 held-out seeds. | Partially supported. The aggressive rule (`adaptive_dist` d=0.30) was best at 15.5%, beating cost-matched `fixed:4` (p = 0.041) and a mean-matched random schedule (p = 0.0066), but not `fixed:8` (p = 0.078). | `REPORT_ROUND_1.md` | `round1_pullcubetool_test.json` |
+| 2 | Confirmatory block on fresh seeds, a competent-policy task (`PushCube-v1`), a negative control rule keyed on an unrelated feature, and fact-checks. | Not confirmed. On fresh seeds P1 (adaptive vs `fixed:4`) gave p = 0.265, so the pre-registered overall rule failed; P2 (no significant loss vs `fixed:8`) held at p = 0.688. The unrelated-feature control was statistically indistinguishable from the adaptive rule (p ≥ 0.05), as a negative control should be. | `REPORT_ROUND_2.md` | `round2_pullcubetool_confirm.json` |
+| 3 | Full `PickCube-v1` study, `PushCube-v1` control experiments, cross-task analysis, first reduced-sampling-step measurements. | The decision reverses by task: on `PickCube-v1` the rule is significantly worse than `fixed:8` (25.5% vs 36.0%, p = 0.0008) at more than twice the cost; the inverted-rule control shows that *which* states get short chunks matters. | `REPORT_ROUND_3.md` | `round3_pickcube_test.json`, `round3_pushcube_test.json` |
+| 4 | Fresh-seed confirmation on `PushCube-v1` with a time-window search, reduced sampling steps with a clean sequential timing benchmark, exploratory `PickCube-v1` stillness check. | Confirmed. Adaptive 89.0% vs 80.0% for the best fixed (both p < 0.002), and a well-placed time window is indistinguishable from the geometric rule (p = 0.25 / 0.50); 20 steps is 4.9× faster with no loss detected (losses up to ~8–12 pp are not excluded). | `REPORT_ROUND_4.md` | `round4_*.json` |
+| 5 | The course question "Improving DP" beyond the execution horizon: a training-speed benchmark, a diffusion-sampling sweep including DDIM, training-time variants (prediction horizon, encoder size, observation normalization) on `PushCube-v1`, an execution-horizon × sampler frontier, clean timing. | Observation normalization (V1) is the best-supported change (mean 88.67% → 96.75%), though the pre-registered magnitude rule was not met; DDPM 100 → 20 steps is ~4.9× faster. | `REPORT_ROUND_5.md` | `round5_*.json`, `model_v*.json` |
+| 6 | Run-level statistics (the **training run**, not the episode, as the unit of analysis) for observation normalization and adaptive replanning; the normalization × adaptive × 5-step-DDIM combination; a descriptive co-training comparison. | Normalization as a training-time change is not supported on `PickCube-v1` (−20.25 pp, p = 0.057) and supported on `PullCubeTool-v1` (+15.88 pp, p = 0.0286). | `REPORT_ROUND_6.md` | `round6_*.json` |
+| 7 | Parity for `PickCube-v1` and `PullCubeTool-v1`: sampler × horizon frontiers on the co-trained checkpoint with fresh seed blocks, encoder/prediction-horizon variants on the other two tasks, the completed four-way combination, our own co-trained models against single-task runs, failure analysis, and a consistency pass over round 6. | Establishes the per-task best combinations — `PushCube-v1` V1 + `fixed:8` + DDIM-5 (96.83% / 91.25%), `PickCube-v1` B0 + `fixed:8` + DDIM-5 (63.13% / 44.25% at 0.18 s), `PullCubeTool-v1` V1 + `fixed:8` + DDPM-100 (27.50% / 27.38%). | `REPORT_ROUND_7.md` | `round7_*.json` |
 
-Three numbering conventions are worth knowing, because they make the archive look more
+Four naming conventions are worth knowing, because they make the archive look more
 round-5-to-7-centric than it is:
 
-- **Addendum numbers are offset from round numbers.** `docs/REPORT_NOTES.md` is round 1, then
-  `REPORT_ADDENDUM.md` is round 2, `_2` is round 3, and so on to `_6` for round 7 — addendum *N*
-  reports round *N + 1*.
+- **Reports are named by round in this release; the working archive names them by addendum
+  number.** This archive ships `REPORT_ROUND_1.md` … `REPORT_ROUND_7.md`, one per round. The
+  working archive keeps the original names — `REPORT_NOTES.md` for round 1, then
+  `REPORT_ADDENDUM.md` (round 2) through `REPORT_ADDENDUM_6.md` (round 7), so addendum *N* is
+  round *N + 1* — and `RENAME_MAP.md` in that folder carries the full mapping.
 - **`rN_` marks the code a round introduced, not the data it used.** `scripts/r5_*` … `scripts/r7_*`
   and `results/r5_*` … `results/r7_*` exist because those rounds needed a new method (sampler-sweep
   analysis, run-level exact tests, parity and failure classification). Rounds 1–4 needed no such
@@ -79,10 +78,14 @@ round-5-to-7-centric than it is:
   packaging time (see `CHANGELOG.md` 1.0.0). Hence there are no `r1_*`–`r4_*` scripts, and a
   round's data can predate the scripts named after its number.
 - **Rounds group into releases.** Rounds 1–4 shipped together as 1.0.0, round 5 as 1.1.0, round 6 as
-  1.2.0 and round 7 as 1.3.0; 1.3.1–1.3.5 are documentation and correction patches on round-7
+  1.2.0 and round 7 as 1.3.0; 1.3.1–1.3.6 are documentation and correction patches on round-7
   content. The round-1–4 rows live in `results/FINAL_RESULTS.csv` next to the later rounds' (59 of
   its 273 rows) rather than in separate `rN_*` tables; `docs/RELEASE_CHECK.md` §5 keeps each
   round's verification numbers as they stood when that round shipped.
+- **Corrections live inside the round they correct.** The separate `REPORT_ADDENDUM_5_FIXES.md`
+  corrections file was merged into `REPORT_ROUND_6.md` in this release, and
+  `STAGE_REPORT_v2_CHECK.md` was dropped because it verifies `STAGE_REPORT_v2.md`, which this
+  archive does not contain.
 
 ## Policy and external dependencies
 

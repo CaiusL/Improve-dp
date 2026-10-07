@@ -1,28 +1,8 @@
-**RESULT (complete, 4 + 4 runs per task).** `fixed:8`, DDPM-100, n = 200 per run:
+# REPORT_ROUND_6.md — Round 6: run-level tests, adaptive transfer, combination, co-training
 
-| task | arm | runs (seeds 0-3) | mean | sd | mean `success_at_end` | difference | p |
-|---|---|---|---|---|---|---|---|
-| `PickCube-v1` | B0 | 75.5, 63.0, 57.0, 46.0 | 60.38% | 12.30 | 40.13% | — | — |
-| `PickCube-v1` | V1 | 42.0, 49.5, 29.5, 39.5 | 40.12% | 8.26 | 19.25% | **-20.25 pp** [-32.87, -7.88] | 0.057143 |
-| `PullCubeTool-v1` | B0 | 9.0, 9.0, 13.5, 15.0 | 11.62% | 3.09 | 11.62% | — | — |
-| `PullCubeTool-v1` | V1 | (all four above every B0 run) | **27.44%** | 6.82 | 27.44% | **+15.82 pp** [+9.57, +22.07] | **0.028571** |
-
-- **`PickCube-v1`**: normalization is **not supported** (the rule requires p < 0.05 *and* a
-  positive difference) and the direction is strongly harmful — a 20-point drop, bootstrap
-  interval excluding zero, `success_at_end` dropping in parallel (40.1% -> 19.3%).
-- **`PullCubeTool-v1`**: normalization **is supported** at α = 0.05 (+15.82 pp, exact permutation
-  p = 0.028571 = 2/70, the smallest attainable two-sided p for 4 vs 4 — the two arms separate
-  completely). It does **not** survive the two-task α = 0.025 threshold (0.0286 > 0.025), which
-  is stated wherever this result is quoted. It more than doubles the task's success rate
-  (11.6% -> 27.4%), the largest relative change measured anywhere in this project.
-- **Across the three tasks**: `PushCube-v1` +10.83 pp (p = 0.0043), `PullCubeTool-v1` +15.82 pp
-  (p = 0.0286), `PickCube-v1` -20.25 pp (p = 0.057). Normalization is therefore
-  **task-dependent in both directions**, and any global "normalization improves DP" claim — the
-  reading round 5 invited with a `PushCube-v1`-only test — is not supported by this evidence.
-  It also does not reliably reduce variance: sd falls on `PushCube-v1` (3.01 vs 4.97) and
-  `PickCube-v1` (8.26 vs 12.30) but rises on `PullCubeTool-v1` (6.82 vs 3.09).
-
-# REPORT_ADDENDUM_5.md — Round 6: run-level tests, adaptive transfer, combination, co-training
+Formerly `REPORT_ADDENDUM_5.md`. The corrections that used to live in a separate
+`REPORT_ADDENDUM_5_FIXES.md` are applied in the body below; what changed is listed in
+"Corrections applied when this file was packaged" at the end.
 
 Brief: *make the training-time claim testable, add adaptive replanning to the trained models,
 and compare co-training.* Scope: Panda only; `PushCube-v1`, `PickCube-v1`, `PullCubeTool-v1`.
@@ -130,11 +110,11 @@ record: `results/r6_rawfeat_check.json`; the corresponding unit test ships in th
 
 | arm | per-run differences (seeds 0-5) | mean | sign-flip p | runs significantly worse | runs significantly better |
 |---|---|---|---|---|---|
-| B0 | +5.0, -11.0, -6.5, -5.5, +1.1, -0.5 pp | **-1.83 pp** [-6.17, +2.42] | **0.5625** | B0s1 (p = 0.00031), B0s2 (p = 0.047) | none |
-| V1 | -1.5, -5.0, -1.5, -1.0, -0.5, +1.0 pp | **-0.92 pp** [-4.08, +2.17] | **0.5000** | V1s1 (p = 0.031) | none |
+| B0 | +5.0, -11.0, -6.5, -5.5, +3.5, +3.5 pp | **-1.83 pp** [-6.17, +2.42] | **0.5625** | B0s1 (p = 0.00031), B0s2 (p = 0.047) | none |
+| V1 | -1.5, -5.0, -1.5, -1.0, +3.0, +0.5 pp | **-0.92 pp** [-4.08, +2.17] | **0.5000** | V1s1 (p = 0.031) | none |
 
 - **B1 (within B0):** adaptive is **not** better than `fixed:8` — mean difference -1.83 pp,
-  p = 0.5625, with two of six runs *significantly worse*. The round-4 result (+11.0 pp,
+  p = 0.5625, with two of six runs *significantly worse*. The round-5 result (+11.0 pp,
   p = 0.00068) does not reproduce on models trained by our single-task pipeline.
 - **B2 (within V1):** the same, -0.92 pp, p = 0.5000, one run significantly worse.
 - **B3 (stacking):** V1-adaptive vs B0-`fixed:8` (the default DP baseline) = **+9.92 pp**
@@ -165,19 +145,19 @@ this gives eight cells: {B0, V1} × {`fixed:8`, adaptive} × {DDPM-100, DDIM-5}.
 - **Also:** whether DDIM-5 costs success on these single-task models — per-run paired McNemar
   against the same arm and schedule at DDPM-100 (`results/r6_runlevel_mcnemar.csv`).
 
-**RESULT (complete, 24/24 cells).** Run-level means over the available runs (adaptive cells for
-the three round-6 B0 runs and the two round-6 V1 runs are still being evaluated; the headline
-test below uses only cells that are complete for all six runs):
+**RESULT (complete, 24/24 cells).** Run-level means over all available runs. All 24 combination
+cells and all 12 adaptive cells are complete; the headline test below uses the complete 6-vs-6
+cells.
 
 | arm | schedule | sampler | runs | mean | min | max | calls | derived s/ep |
 |---|---|---|---|---|---|---|---|---|
 | B0 | `fixed:8` | DDPM-100 | 6 | 85.2% | 79.5 | 92.5 | 25.0 | 3.62 |
 | B0 | `fixed:8` | DDIM-5 | 6 | 86.3% | 81.0 | 96.5 | 25.0 | 0.18 |
-| B0 | adaptive | DDPM-100 | 4 | 82.2% | 75.5 | 89.0 | 89.0 | 12.90 |
+| B0 | adaptive | DDPM-100 | 6 | 83.42% | 79.5 | 89.0 | 89.0 | 12.90 |
 | B0 | adaptive | DDIM-5 | 6 | 80.9% | 77.5 | 84.5 | 89.2 | 0.64 |
 | V1 | `fixed:8` | DDPM-100 | 6 | 96.1% | 91.5 | 99.5 | 25.0 | 3.57 |
 | V1 | `fixed:8` | DDIM-5 | 6 | **96.8%** | 92.5 | 100.0 | 25.0 | 0.18 |
-| V1 | adaptive | DDPM-100 | 4 | 94.5% | 90.5 | 98.0 | 87.5 | 12.50 |
+| V1 | adaptive | DDPM-100 | 6 | 95.17% | 90.5 | 98.0 | 87.5 | 12.50 |
 | V1 | adaptive | DDIM-5 | 6 | 95.0% | 91.5 | 99.5 | 86.7 | 0.62 |
 
 **Headline (pre-registered, complete):** default DP (B0, `fixed:8`, DDPM-100) = 85.2% at
@@ -189,10 +169,11 @@ success level.
 
 **Does DDIM-5 cost success on these single-task models?** Per-run paired McNemar against the
 same arm and schedule at DDPM-100 (`results/r6_runlevel_mcnemar.csv`), `fixed:8` cells:
-B0s0 +1.0 pp (p = 0.87), B0s1 +4.0 pp (p = 0.096), B0s2 **-8.5 pp (p = 0.0137)**, V1s0 +1.5 pp
-(p = 0.25); at the cell-mean level DDIM-5 is 1.1 pp *above* DDPM-100 for B0 (86.3 vs 85.2) and
-0.7 pp above for V1 (96.8 vs 96.1). So on average it is cost-free, but it is **not uniformly
-cost-free per run**: one of six B0 runs loses 8.5 pp significantly. Round 5's stronger
+B0: +1.0 (p = 0.87), +4.0 (0.096), **-8.5 (0.0137)**, +2.5 (0.52), +5.0 (0.17), +2.5 (0.53);
+V1: +1.5 (0.25), +1.0 (0.73), -2.0 (0.22), +1.0 (0.84), +1.5 (0.58), +1.5 (0.51). So 11 of 12
+runs are within ±5 pp and **1 of 12 loses success significantly** (B0s2), while the cell means
+are +1.1 pp (B0: 86.3 vs 85.2) and +0.8 pp (V1: 96.8 vs 96.1). On average it is cost-free, but
+it is **not uniformly cost-free per run**. Round 5's stronger
 "no detectable loss" statement, made on the co-trained checkpoint, therefore does not transfer
 unchanged to the retrained models.
 
@@ -221,14 +202,13 @@ embedded config, our configs and the trainer source:
 | runs | 1 (seed 0) | 6 per arm (seeds 0-5) |
 | in-training evaluation | every 5 000 updates, 8 episodes × 4 envs | final only, 20 episodes × 1 env (does not affect final weights) |
 
-**RESULT (co-trained side complete; single-task side partly pending).** Co-trained
-`panda3_shared_a0`, `fixed:8`, DDPM-100, n = 200 per task:
+**RESULT (complete).** Co-trained `panda3_shared_a0`, `fixed:8`, DDPM-100, n = 200 per task:
 
-| task | co-trained | single-task B0 runs (mean) | single-task B0 runs |
+| task | co-trained | single-task B0 (mean) | B0 range |
 |---|---|---|---|
 | `PushCube-v1` | 77.0% | 85.25% (6 runs) | 79.5-92.5% |
-| `PickCube-v1` | 42.5% | pending (Task C) | — |
-| `PullCubeTool-v1` | 7.5% | pending (Task C) | — |
+| `PickCube-v1` | 42.5% | 60.38% (4 runs) | 46.0-75.5% |
+| `PullCubeTool-v1` | 7.5% | 11.62% (4 runs) | 9.0-15.0% |
 
 Sanity against earlier rounds on different seed blocks: the co-trained checkpoint scored 76.0%
 on `PushCube-v1` `fixed:8` in round 5 (seeds 400000-400199) and 36.0% on `PickCube-v1` in
@@ -265,8 +245,9 @@ entries record exactly these dims and horizons.
 **Cut order (pre-registered):** reduce `PullCubeTool-v1` to 3+3 runs (descriptive only, stated
 as such), then drop `PullCubeTool-v1`; keep `PickCube-v1` at 4+4 if at all possible.
 
-**RESULT — `PickCube-v1` complete (4 + 4 runs); `PullCubeTool-v1` pending.**
-`fixed:8`, DDPM-100, n = 200 per run:
+**RESULT (complete, 4 + 4 runs per task).** `fixed:8`, DDPM-100, n = 200 per run.
+
+`PickCube-v1`:
 
 | arm | runs (seeds 0-3) | mean | sd | range | mean `success_at_end` |
 |---|---|---|---|---|---|
@@ -281,11 +262,26 @@ zero and `success_at_end` showing the same drop (40.1% -> 19.3%). It also misses
 α = 0.025 threshold. V1 again reduces the spread (sd 8.26 vs 12.30), but around a much lower
 mean.
 
+`PullCubeTool-v1`:
+
+| arm | runs (seeds 0-3) | mean | sd | range | mean `success_at_end` |
+|---|---|---|---|---|---|
+| B0 | 13.5, 15.0, 9.0, 9.0 | 11.62% | 3.09 | 6.0 pp | 11.62% |
+| V1 | 20.0, 34.5, 23.5, 32.0 | **27.50%** | 6.87 | 14.5 pp | 27.38% |
+
+Exact permutation test (4 vs 4, 70 assignments): **difference +15.88 pp**
+(95% bootstrap [+9.63, +22.13]), **p = 0.028571** (2/70, the smallest attainable two-sided p —
+the two arms separate completely). Normalization **is supported on `PullCubeTool-v1`** at
+α = 0.05 and more than doubles the task's success rate (11.6% -> 27.5%); it does **not** survive
+the two-task α = 0.025 threshold (0.0286 > 0.025), which is stated wherever this result is
+quoted. `success_at_end` follows `success_once` almost exactly (27.38%).
+
 **This is a task-dependent reversal of the round-5 conclusion.** Round 5 found normalization to
 be the one promising training-time change (on `PushCube-v1` only); round 6 confirms it on
 `PushCube-v1` (+10.83 pp, p = 0.0043) and finds it *harmful* on `PickCube-v1`. The honest
-statement is per-task: normalization helps `PushCube-v1`, hurts `PickCube-v1`, and (pending)
-has whatever effect `PullCubeTool-v1` shows. Any claim that it is a general improvement to DP is
+statement is per-task: normalization helps `PushCube-v1`, hurts `PickCube-v1`, and on `PullCubeTool-v1` it
+*doubles* success, +15.88 pp at p = 0.0286 (which does not survive the two-task
+α = 0.025). Any claim that it is a general improvement to DP is
 not supported by this evidence.
 
 ---
@@ -304,7 +300,7 @@ do the round-3 negative result on `PickCube-v1` and the round-1 null result on
 | task | arm | runs | mean difference (adaptive - `fixed:8`) | 95% bootstrap | sign-flip p |
 |---|---|---|---|---|---|
 | `PickCube-v1` | B0 | 4 | **-14.75 pp** | [-29.38, +1.75] | 0.125 |
-| `PickCube-v1` | V1 | 4 | **-5.87 pp** | [-15.50, +3.62] | 0.125 |
+| `PickCube-v1` | V1 | 4 | **-5.88 pp** | [-15.50, +3.62] | 0.125 |
 | `PullCubeTool-v1` | B0 | 4 | -0.13 pp | [-4.00, +4.25] | 1.000 |
 | `PullCubeTool-v1` | V1 | 4 | **-7.62 pp** | [-14.00, -1.12] | 0.125 |
 
@@ -329,20 +325,20 @@ run-level rule (p < 0.05 and a positive mean difference) was met.
 | change | round-6 evidence (run-level) | verdict | versus round 5 |
 |---|---|---|---|
 | **observation normalization, `PushCube-v1`** | 6 vs 6 runs: 96.08% vs 85.25%, **+10.83 pp** [+6.50, +14.92], **p = 0.0043**; sd 3.01 vs 4.97 | **SUPPORTED** | round 5 called it "best-supported, not certifiable" (+8.1 pp, 3-4 runs). Now certified, and it also *reduces* seed variance, which round 5 could not show. **Stronger.** |
-| **observation normalization, `PickCube-v1` / `PullCubeTool-v1`** | `PickCube-v1` 4v4: 40.12% vs 60.38%, **-20.25 pp** [-32.87, -7.88], p = 0.057 (not supported; harmful); `PullCubeTool-v1` 4v4: **+15.82 pp** [+9.57, +22.07], **p = 0.0286** (supported at α = 0.05; misses α = 0.025) | **task-dependent in both directions** | round 5 tested `PushCube-v1` only and called normalization the best-supported change; the three-task evidence **contradicts a global reading** (+10.8, +15.8, -20.3 pp on PushCube, PullCubeTool, PickCube). |
-| **adaptive replanning on the trained models (transfer)** | B1 (B0, 6v6): **-1.83 pp**, p = 0.5625, 2 of 6 runs significantly *worse*; B2 (V1, 6v6): **-0.92 pp**, p = 0.5000, 1 of 6 worse | **NOT SUPPORTED — no transfer** | round 4/5 claimed +11.0 pp vs `fixed:8` (p = 0.00068) and "composable". That gain is **specific to the co-trained checkpoint**; on our single-task models it is neutral-to-harmful. **Reversed for the general claim.** |
+| **observation normalization, `PickCube-v1` / `PullCubeTool-v1`** | `PickCube-v1` 4v4: 40.12% vs 60.38%, **-20.25 pp** [-32.87, -7.88], p = 0.057 (not supported; harmful); `PullCubeTool-v1` 4v4: **+15.88 pp** [+9.63, +22.13], **p = 0.0286** (supported at α = 0.05; misses α = 0.025) | **task-dependent in both directions** | round 5 tested `PushCube-v1` only and called normalization the best-supported change; the three-task evidence **contradicts a global reading** (+10.8, +15.8, -20.3 pp on PushCube, PullCubeTool, PickCube). |
+| **adaptive replanning on the trained models (transfer)** | B1 (B0, 6v6): **-1.83 pp**, p = 0.5625, 2 of 6 runs significantly *worse*; B2 (V1, 6v6): **-0.92 pp**, p = 0.5000, 1 of 6 worse | **NOT SUPPORTED — no transfer** | round 5 claimed +11.0 pp vs `fixed:8` (p = 0.00068) and "composable". That gain is **specific to the co-trained checkpoint**; on our single-task models it is neutral-to-harmful. **Reversed for the general claim.** |
 | **stacking (normalization + adaptive)** | V1-adaptive vs default DP (B0, `fixed:8`): +9.92 pp, p = 0.0065; interaction (does the adaptive gain differ between arms?) +0.92 pp, **p = 0.773** | the combination is better than default DP, but **the adaptive rule adds nothing**; the gain is normalization | round 5 predicted the two axes compose. They compose in *cost*, not in *value*. |
 | **DDIM-5 sampling on single-task models** | cell means: B0 `fixed:8` 86.3% vs 85.2% (DDPM-100); V1 `fixed:8` 96.8% vs 96.1%; but per run: +1.0 (p = 0.87), +4.0 (p = 0.096), **-8.5 (p = 0.0137)**, +1.5 (p = 0.25) | cost-free **on average** (5.8x less policy time), **not uniformly** per run | round 5's "no detectable loss" was measured on the co-trained checkpoint; here one of six runs loses 8.5 pp significantly. **Weaker.** |
 | **best combination vs default DP** | V1 + adaptive + DDIM-5 = 95.0% at 0.62 s/episode vs B0 + `fixed:8` + DDPM-100 = 85.2% at 3.62 s: **+9.75 pp** [+5.50, +13.83], **p = 0.0065**, **5.8x less policy time** | **SUPPORTED** (driven by normalization; sampling supplies the speed) | round 5 had 88.0% at 0.65 s for the co-trained model; the pattern holds, with a different driver. |
 | encoder width 128 -> 256 (round 5) | not re-tested | no benefit, widest seed spread (12.5 pp) | unchanged |
 | prediction horizon 16 -> 32 / 16 -> 8 (round 5) | not re-tested | V2b (32) suggestive but not significant; V2a (8) no benefit and +16% calls | unchanged |
-| **co-training vs single-task** | `fixed:8`, DDPM-100: co-trained 77.0% (`PushCube-v1`, vs single-task B0 mean 85.25%) and 42.5% (`PickCube-v1`, vs single-task 75.5% for B0s0); `PullCubeTool-v1` 7.5% | **DESCRIPTIVE only** — one checkpoint, one training seed, different batch composition and device (all confounds listed in §E); no causal claim | not previously tested |
+| **co-training vs single-task** | `fixed:8`, DDPM-100: co-trained 77.0% (`PushCube-v1`, vs single-task B0 mean 85.25% over 6 runs), 42.5% (`PickCube-v1`, vs 60.38% over 4 runs) and 7.5% (`PullCubeTool-v1`, vs 11.62% over 4 runs) — single-task is ahead on all three tasks | **DESCRIPTIVE only** — one checkpoint, one training seed, different batch composition and device (all confounds listed in §E); no causal claim | not previously tested |
 | action representation | not tested | outside the light-code-change bound (needs regenerated demonstrations, a different control mode and a different output head) | unchanged |
 
-### G.2 What changes in `REPORT_ADDENDUM_4.md` and `PROJECT_MEMO.md`
+### G.2 What changes in `REPORT_ROUND_5.md` and `PROJECT_MEMO.md`
 
 1. **`PROJECT_MEMO.md` §3, `PushCube-v1` row ("baseline 78.0%, adaptive 91.0%, better p < 0.0001").**
-   The adaptive gain is real *for the teammate's co-trained checkpoint* (round 4: +11.0 pp vs
+   The adaptive gain is real *for the teammate's co-trained checkpoint* (round 5: +11.0 pp vs
    `fixed:8`, p = 0.00068; the co-trained checkpoint scores 74.5-78.0% at `fixed:8` on three
    different seed blocks). It does **not** hold for the models our own pipeline trains: there the
    same rule is -1.83 pp (B0, p = 0.56) and -0.92 pp (V1, p = 0.50), with 3 of 12 runs
@@ -352,16 +348,16 @@ run-level rule (p < 0.05 and a positive mean difference) was met.
    need retraining").** No longer true: rounds 5-6 tested prediction horizon 8/32 (no benefit /
    suggestive only), encoder width 256 (no benefit) and observation normalization (a genuine,
    now-certified improvement of about +11 pp on `PushCube-v1`).
-3. **`REPORT_ADDENDUM_4.md` Task 3 verdict ("no training-time change is certifiable; V1 is the
+3. **`REPORT_ROUND_5.md` Task 3 verdict ("no training-time change is certifiable; V1 is the
    best-supported but not established").** Superseded: under the run-level test V1 satisfies the
    pre-registered rule on `PushCube-v1` (+10.83 pp, p = 0.0043, 6 vs 6 runs). Round 5's failure to
    certify came from a decision rule whose threshold (101.0%) was unreachable, not from a lack of
    effect.
-4. **`REPORT_ADDENDUM_4.md` Task 2 ("cutting sampling steps is effectively free on
+4. **`REPORT_ROUND_5.md` Task 2 ("cutting sampling steps is effectively free on
    `PushCube-v1`")**. True on average for the retrained models as well (cell means 86.3 vs 85.2
    and 96.8 vs 96.1), but not uniformly: one of six B0 runs loses 8.5 pp significantly
    (p = 0.0137). The "free" statement should carry that per-run caveat.
-5. **`REPORT_ADDENDUM_4.md` synthesis ("the two axes are composable: adaptive + DDIM-5 = 88.0%
+5. **`REPORT_ROUND_5.md` synthesis ("the two axes are composable: adaptive + DDIM-5 = 88.0%
    at 0.65 s")**. Composition in cost is confirmed (5.8x less policy time at equal or better
    success), but the *value* of the composition comes from normalization, not from the adaptive
    rule, and the interaction test finds no differential adaptive gain (p = 0.773).
@@ -400,7 +396,7 @@ run-level rule (p < 0.05 and a positive mean difference) was met.
   `configs/round6_*.json`, all comment-free and free of absolute paths; `pack_final_results.py`
   discovers the `r6_*` roots; README, CHANGELOG and RELEASE_CHECK updated. Safety scan: the only
   matches for the searched patterns are the two self-referential documents that *list* the
-  patterns (`docs/RELEASE_CHECK.md`, `docs/REPORT_ADDENDUM_4.md`); no checkpoints, no
+  patterns (`docs/RELEASE_CHECK.md`, `docs/REPORT_ROUND_5.md`); no checkpoints, no
   demonstration data and no teammate-owned files are included; nothing is pushed and no licence
   is chosen.
 
@@ -413,3 +409,42 @@ run-level rule (p < 0.05 and a positive mean difference) was met.
   are derived from the round-5 clean per-call measurements.
 - The Task C `PullCubeTool-v1` result (p = 0.0286) does not survive the two-task α = 0.025
   threshold; both readings are stated wherever it appears.
+
+---
+
+## Corrections applied when this file was packaged
+
+These corrections previously lived in a separate `REPORT_ADDENDUM_5_FIXES.md`; they are applied in
+the body above and listed here for the record (release 1.3.6). No success rate, verdict or test
+value changed except where a stated number was itself the error.
+
+1. The duplicated result block that a slice bug had inserted at the top of the file (before the
+   title) was removed; its content is now §C, with corrected `PullCubeTool-v1` numbers.
+2. §E: the two `pending (Task C)` rows were filled in, and the single-task comparison no longer
+   quotes one baseline seed (`B0s0` 75.5%) as if it were the arm mean.
+3. §G.1: the same single-seed comparison in the co-training row was replaced by arm means.
+4. §D: the two DDPM-100 adaptive rows were completed from 4 to 6 runs (B0 82.2% -> 83.42%,
+   V1 94.5% -> 95.17%) and the "still being evaluated" note was removed; all 24 combination cells
+   and all 12 adaptive cells are complete.
+5. §C: the heading no longer says `PullCubeTool-v1` is pending, and that task's table is present
+   with the corrected mean (27.50%, not 27.44%), sd (6.87, not 6.82) and difference
+   (+15.88 pp, not +15.82 pp; CI [+9.63, +22.13], not [+9.57, +22.07]). The permutation p is
+   unchanged: 2/70 = 0.028571.
+6. §D: the DDIM-5 per-run cost paragraph lists all 12 runs (previously 4), so "11 of 12 runs
+   within ±5 pp and 1 of 12 significantly worse" is stated rather than implied.
+7. §F: checked and complete; no change needed.
+8. A round-6 script defect (the DDIM baseline was matched by sampler and step count, so those
+   cells were compared with themselves) was found and fixed in release 1.3.0; the corrected rows
+   are in `results/r6_runlevel_mcnemar.csv`.
+9. §B: the last two per-run differences in each row were stale and did not reproduce the row's own
+   mean. B0 is now +5.0, -11.0, -6.5, -5.5, +3.5, +3.5 pp and V1 -1.5, -5.0, -1.5, -1.0, +3.0,
+   +0.5 pp; means, sign-flip p-values and the significantly-worse runs are unchanged.
+10. §F: the `PickCube-v1` V1 mean difference is -5.88 pp, not -5.87 pp.
+11. Two round-7 pipeline defects found later (`r7_runlevel.py` looked the clean per-call time up
+    under the wrong arm name; `pack_final_results.py` did not fold the reused round-5 sweep half
+    into its `r5_front_*` rows) are fixed in release 1.3.2 and described in `REPORT_ROUND_7.md`
+    revision note (2).
+12. The adaptive-vs-`fixed:8` figure +11.0 pp (p = 0.00068) is a **round-5** measurement
+    (`REPORT_ROUND_5.md` §2.2 frontier, seeds 400000-400199), not a round-4 one; three references
+    to "round 4" were corrected. Round 4's own fresh-block comparison was +14.5 pp, p = 0.000002
+    (`REPORT_ROUND_4.md` §B.2).

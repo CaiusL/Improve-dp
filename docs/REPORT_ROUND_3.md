@@ -1,10 +1,12 @@
-# REPORT_ADDENDUM_2.md
+# REPORT_ROUND_3.md
+
+Formerly `REPORT_ADDENDUM_2.md`.
 
 Third round of work on the adaptive-execution-horizon project: verification of `STAGE_REPORT.md`,
 a full `PickCube-v1` study, control experiments on `PushCube-v1`, cross-task analysis, and (partial)
 reduced-diffusion-step measurements.
 
-`REPORT_NOTES.md`, `REPORT_ADDENDUM.md` and `STAGE_REPORT.md` are **not edited**. All new output is
+`REPORT_ROUND_1.md`, `REPORT_ROUND_2.md` and `STAGE_REPORT.md` are **not edited**. All new output is
 in new `results/raw/<phase>/` folders. Environment unchanged: Apple M5 Pro, macOS 26.6.2, CPU
 simulation (`physx_cpu`, `obs_mode="state"`, `render_mode=None`, `num_envs=1`), Python 3.14.6,
 torch 2.14.1, ManiSkill 3.0.1, policy `runs/panda3_shared_a0/checkpoints/final.pt` (`ema_agent`),

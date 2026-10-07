@@ -1,4 +1,6 @@
-# REPORT_ADDENDUM_4 — Round 5: "Improving DP" beyond the execution horizon
+# REPORT_ROUND_5.md — Round 5: "Improving DP" beyond the execution horizon
+
+Formerly `REPORT_ADDENDUM_4.md`.
 
 Started 2026-10-05 17:50; experiment-launch cutoff 2026-10-07 18:00; report due 2026-10-08.
 Framing: the course question asks which of *observation encoder, prediction horizon, action
@@ -328,7 +330,7 @@ Added
   `model_v3_enc256.json`.
 - `results/r5_sampling_{summary,paired}.csv`, `r5_frontier_{summary,paired}.csv`,
   `r5_timing_clean.csv`, `r5_training_{summary,paired}.csv`, the three round-5 figure families
-  (PNG + PDF), and `docs/REPORT_ADDENDUM_4.md`.
+  (PNG + PDF), and `docs/REPORT_ROUND_5.md`.
 
 Changed
 - `src/adaptive_replan/envs.py` + `rollout.py` and `scripts/run_rollout.py` + `run_matrix.py`

@@ -1,5 +1,48 @@
 # Changelog
 
+## 1.3.6
+
+Documentation only; no code, data, table or figure changed. The round reports are now named by the
+round they document, and two files a reader of this archive could not check were removed
+(128 files, down from 130).
+
+### Changed
+
+- **Round reports renamed**, each with a `Formerly …` line under its title: `REPORT_NOTES.md` →
+  `REPORT_ROUND_1.md`, `REPORT_ADDENDUM.md` → `REPORT_ROUND_2.md`, `REPORT_ADDENDUM_2.md` →
+  `REPORT_ROUND_3.md`, `REPORT_ADDENDUM_3.md` → `REPORT_ROUND_4.md`, `REPORT_ADDENDUM_4.md` →
+  `REPORT_ROUND_5.md`, `REPORT_ADDENDUM_5.md` → `REPORT_ROUND_6.md` and `REPORT_ADDENDUM_6.md` →
+  `REPORT_ROUND_7.md`. Every cross-reference in the README, this file and the reports was
+  rewritten. The working archive keeps the original names; its `RENAME_MAP.md` and README carry
+  the mapping.
+- `REPORT_ADDENDUM_5_FIXES.md` was **merged into `REPORT_ROUND_6.md`** instead of shipping
+  alongside it: its corrections are applied in that report's body and the list survives as the
+  report's closing "Corrections applied when this file was packaged" section.
+- `REPORT_ADDENDUM_6.md` was replaced by its version 2 (`REPORT_ADDENDUM_6_v2.md`), which the
+  working archive and `FINAL_REPORT.md` both record as superseding it. It adds the third review's
+  six text corrections and changes no number.
+- `STAGE_REPORT_v2_CHECK.md` was **dropped**: it verifies `STAGE_REPORT_v2.md`, which the archive
+  does not contain, and the script that produced it is not shipped either.
+- `README.md`: the round table's report column, the "Full detail" paragraph and the naming
+  conventions use the new names; the round-6 row's `PullCubeTool-v1` difference was corrected from
+  +15.82 pp to +15.88 pp, and a fourth convention bullet records the merge and the dropped check.
+
+### Fixed
+
+- `REPORT_ROUND_6.md` §C: the `PullCubeTool-v1` result table was rebuilt from
+  `results/r7_runlevel_arms.csv` (mean 27.50%, sd 6.87, `success_at_end` 27.38%) when the
+  duplicated block holding the stale copy was deleted; the stale row read 27.44%, sd 6.82,
+  +15.82 pp.
+- Three references in that report that called the +11.0 pp (p = 0.00068)
+  adaptive-vs-`fixed:8` figure a round-4 result now say round 5 (`REPORT_ROUND_5.md` §2.2 is where
+  it was measured).
+
+### Verified
+
+- `tests/` **21/21**; `verify_results.py` **3 526 / 0**; `r5_integrity.py` **4 196 / 0**;
+  `FINAL_RESULTS.csv` **273 rows**; `MANIFEST.md` **5 392 files / 53 942 episodes**; safety scan
+  clean.
+
 ## 1.3.5
 
 Documentation only; no code, data, table or figure changed.
@@ -12,9 +55,10 @@ Documentation only; no code, data, table or figure changed.
     round pre-registers its settings before its first rollout or training run and reports the
     outcome whether or not it supports the change (round 3's `PickCube-v1` study is a negative
     result);
-  - **addendum numbers are offset from round numbers** — `REPORT_NOTES.md` is round 1, then
-    `REPORT_ADDENDUM.md` is round 2 through `REPORT_ADDENDUM_6.md` for round 7, so addendum *N*
-    reports round *N + 1*;
+  - **the reports were named by addendum number, offset from the round number** —
+    `REPORT_NOTES.md` was round 1, then `REPORT_ADDENDUM.md` was round 2 through
+    `REPORT_ADDENDUM_6.md` for round 7, so addendum *N* reported round *N + 1* (1.3.6 renamed
+    them to `REPORT_ROUND_1.md` … `REPORT_ROUND_7.md`, so this archive names rounds directly);
   - **`rN_*` marks the code a round introduced, not the data it used** — rounds 1-4 were answered
     with the generic toolkit, so there are no `r1_*`-`r4_*` scripts, and rounds 1-4 ship as 59 rows
     inside `FINAL_RESULTS.csv` rather than as separate tables. Rounds also group into releases
@@ -120,11 +164,11 @@ merge and rounding were wrong.
 
 ### Changed
 
-- `docs/REPORT_ADDENDUM_6.md`: the two P1 frontier tables carry the corrected `derived s/ep`
+- `docs/REPORT_ROUND_7.md`: the two P1 frontier tables carry the corrected `derived s/ep`
   values; the P3 cell means were re-derived from the packaged table and now follow a stated
   half-up rounding convention (PickCube DDIM-5 default cell 63.13%, not 63.10%; PullCubeTool V1
   `fixed:8` range [20.0-34.5]; Task F V1 difference -5.88 pp); revision note (2) records all of it.
-- `docs/REPORT_ADDENDUM_5_FIXES.md`: two statements this pass had missed — §B's last two per-run
+- `docs/REPORT_ROUND_6.md` corrections list: two statements this pass had missed — §B's last two per-run
   differences per row were stale (they contradicted the row's own mean), and §F's PickCube V1
   difference is -5.88 pp, not -5.87.
 - Re-verified after the fixes: `r5_integrity.py` 4 196 chunk files / 0 problems,
@@ -135,7 +179,7 @@ merge and rounding were wrong.
 
 Documentation correction only; no code, data, table or figure changed.
 
-- `docs/REPORT_ADDENDUM_6.md`: an external review found stale interim numbers and unfinished
+- `docs/REPORT_ROUND_7.md`: an external review found stale interim numbers and unfinished
   wording left in the round-7 report. Corrected: the `PullCubeTool-v1` V3 run values
   (30.5 / 22.5 / 26.0, mean 26.3% — the flag and the +14.7 pp difference are unchanged and match
   the shipped CSVs); the `PullCubeTool-v1` sampler paragraph (final eight paired comparisons and
@@ -184,7 +228,7 @@ over round 6's report.
 - Fixed a round-6 defect in the DDIM comparison pairing: the DDPM-100 baseline was matched by
   sampler and step count, so DDIM cells were compared with themselves (all differences 0.0 pp).
   The baseline is now always the same run's DDPM-100 cell; the corrected rows reproduce the
-  values quoted in `REPORT_ADDENDUM_5.md` and extend them to all 12 runs.
+  values quoted in `REPORT_ROUND_6.md` and extend them to all 12 runs.
 
 ### Notes
 
@@ -270,7 +314,7 @@ observation encoder / prediction horizon on `PushCube-v1`.
 - `MANIFEST.md` now inventories every raw log under the raw root (previously only
   top-level phases) and its reported total matches the number of listed rows. The 40
   `AMBIGUOUS_provenance` files stay excluded everywhere.
-- `docs/REPORT_ADDENDUM_4.md` added.
+- `docs/REPORT_ROUND_5.md` added.
 
 ## 1.0.0
 
