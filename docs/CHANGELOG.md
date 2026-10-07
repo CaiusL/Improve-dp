@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.3.5
+
+Documentation only; no code, data, table or figure changed.
+
+- `README.md` gained **"What a 'round' is, and what each round did"**: a per-round table — what each
+  round tried or tested, its outcome in one line, the report that carries it and its
+  pre-registrations in `configs/` — plus the three numbering conventions that otherwise make the
+  archive look as though it covers only rounds 5-7:
+  - a **round is one improvement attempt or one test**, not a release and not a batch of runs; each
+    round pre-registers its settings before its first rollout or training run and reports the
+    outcome whether or not it supports the change (round 3's `PickCube-v1` study is a negative
+    result);
+  - **addendum numbers are offset from round numbers** — `REPORT_NOTES.md` is round 1, then
+    `REPORT_ADDENDUM.md` is round 2 through `REPORT_ADDENDUM_6.md` for round 7, so addendum *N*
+    reports round *N + 1*;
+  - **`rN_*` marks the code a round introduced, not the data it used** — rounds 1-4 were answered
+    with the generic toolkit, so there are no `r1_*`-`r4_*` scripts, and rounds 1-4 ship as 59 rows
+    inside `FINAL_RESULTS.csv` rather than as separate tables. Rounds also group into releases
+    (1-4 → 1.0.0, 5 → 1.1.0, 6 → 1.2.0, 7 → 1.3.0; the 1.3.x patches are corrections on round-7
+    content).
+- The README also carried a stale "this archive is release 1.3.2" sentence; it is corrected.
+- `docs/RELEASE_CHECK.md` sections 2 and 4 claimed the archive ships the rounds 1-4 per-block
+  tables. It ships their **rows** and, from that era's tables, only `r4_fresh_final_*.csv`; the
+  others — `pushcube_test100_*`, `pickcube_val_*`, `confirm_summary_*`, `partial_test_*`,
+  `final_*` and the `r3_*` cross-task analyses — are not in this release, and no shipped script
+  regenerates the `r3_*` ones. Both sentences now say so, and the section 6 heading covers
+  1.3.1-1.3.5.
+
 ## 1.3.4
 
 Documentation only; no code, data, table or figure changed.
@@ -16,7 +44,8 @@ Documentation only; no code, data, table or figure changed.
   19 PDF identical ignoring the embedded creation date) — from what it **does not**
   (`r5_frontier_*`, `r5_timing_clean.csv`, `r4_fresh_final_*`, `r6_rawfeat_check.json`,
   `r7_failure.csv`, `r7_p0_*.json` and the rounds 1-4 per-task tables, which need a specific
-  invocation or an argument file). Previously the file implied the whole package was
+  invocation or an argument file). That last clause overstated the inventory and is corrected in
+  1.3.5. Previously the file implied the whole package was
   reproducible from the folder alone.
 - The round-by-round verification numbers are kept as history under their own version labels, and
   the 1.3.1-1.3.3 corrections are consolidated into one section.
