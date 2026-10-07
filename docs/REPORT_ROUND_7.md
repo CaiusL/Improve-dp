@@ -1,15 +1,10 @@
 # REPORT_ROUND_7.md — Round 7: parity for PickCube-v1 and PullCubeTool-v1
 
-Formerly `REPORT_ADDENDUM_6.md`; this file is version 2 of that report. The version-1 text is
-kept unedited in the working archive, which also holds the review record
-`REVIEW_ADDENDUM_6.md`.
-
-**Version 2 (2026-10-07).** The earlier round-7 report `REPORT_ADDENDUM_6.md` is kept unedited in
-the working archive, per the project convention; this is the version the release ships. All
-numbers were independently recomputed from the raw per-episode logs before this version was
-produced (0 numeric mismatches; the review record `REVIEW_ADDENDUM_6.md` is in the working
-archive); v2 changes wording and labels only, as listed in revision note (3). No result, verdict
-or test value changes.
+**Version 2 (2026-10-07).** This is version 2 of the round-7 report: version 1 is kept unedited in
+the working archive, per the project convention. All numbers were independently recomputed from
+the raw per-episode logs before this version was produced (0 numeric mismatches; the independent
+review record is in the working archive); v2 changes wording and labels only, as listed in
+revision note (3). No result, verdict or test value changes.
 
 Brief: *parity for `PickCube-v1` and `PullCubeTool-v1`, plus the questions brief 6 opened.*
 Scope: Panda only. Nothing in an earlier report is edited by this file; the user merges. Every
@@ -36,7 +31,7 @@ the half-up convention stated in the method (sub-0.05 pp drift; e.g. the PickCub
 cell is 63.13%, not 63.10%), the PullCubeTool V1 `fixed:8` range is [20.0-34.5], and the Task F
 V1 difference is -5.88 pp. Full list in `NOTES.md` (`CORRECTION`, round 7 post-release).
 (3) 2026-10-07, third external review (independent recomputation of every round-7 statistic from
-the raw logs — 0 numeric mismatches; `REVIEW_ADDENDUM_6.md`) — six text corrections, no numbers
+the raw logs — 0 numeric mismatches) — six text corrections, no numbers
 change: (i) P1(b) on `PickCube-v1` has **eight** paired sampler comparisons, not six (the sentence
 already listed eight losses); (ii) the same paragraph's "all p >= 0.20" becomes "all p >= 0.199"
 (the `fixed:2` DDPM-20 comparison has p = 0.1996); (iii) the parity table's PushCube adaptive

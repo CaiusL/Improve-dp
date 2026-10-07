@@ -1,7 +1,5 @@
 # REPORT_ROUND_2.md
 
-Formerly `REPORT_ADDENDUM.md`.
-
 Round-2 work on the adaptive-execution-horizon project: (A) a confirmatory block on fresh seeds,
 (B) a competent-policy task (`PushCube-v1`), (C) a control rule, (D) fact-checks.
 

@@ -1,7 +1,5 @@
 # REPORT_ROUND_1.md
 
-Formerly `REPORT_NOTES.md`.
-
 **Adaptive replanning for Diffusion Policy (ManiSkill)** — DASC7606C Track 3
 State-dependent execution horizon vs. fixed and randomized execution horizons.
 

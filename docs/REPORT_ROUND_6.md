@@ -1,8 +1,7 @@
 # REPORT_ROUND_6.md — Round 6: run-level tests, adaptive transfer, combination, co-training
 
-Formerly `REPORT_ADDENDUM_5.md`. The corrections that used to live in a separate
-`REPORT_ADDENDUM_5_FIXES.md` are applied in the body below; what changed is listed in
-"Corrections applied when this file was packaged" at the end.
+The corrections that earlier releases shipped as a separate file are applied in the body below;
+what changed is listed in "Corrections applied when this file was packaged" at the end.
 
 Brief: *make the training-time claim testable, add adaptive replanning to the trained models,
 and compare co-training.* Scope: Panda only; `PushCube-v1`, `PickCube-v1`, `PullCubeTool-v1`.
@@ -414,8 +413,8 @@ run-level rule (p < 0.05 and a positive mean difference) was met.
 
 ## Corrections applied when this file was packaged
 
-These corrections previously lived in a separate `REPORT_ADDENDUM_5_FIXES.md`; they are applied in
-the body above and listed here for the record (release 1.3.6). No success rate, verdict or test
+These corrections were shipped as a separate file in earlier releases; they are applied in the
+body above and listed here for the record (release 1.3.6). No success rate, verdict or test
 value changed except where a stated number was itself the error.
 
 1. The duplicated result block that a slice bug had inserted at the top of the file (before the

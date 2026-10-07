@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.7
+
+Documentation only; no code, data, table or figure changed.
+
+- Removed the `Formerly …` provenance lines from the round reports, and reworded the two headers
+  that repeated an earlier filename, so no report's own text names its pre-1.3.6 file. The mapping
+  is unchanged where a reader looks for it: the README's naming conventions, this changelog,
+  `docs/RELEASE_CHECK.md` section 6, and `RENAME_MAP.md` in the working archive.
+- `REPORT_ROUND_7.md`: the version note now says only that version 1 is kept unedited in the
+  working archive, without naming it or the review record. `REPORT_ROUND_6.md`: the closing section
+  says those corrections "were shipped as a separate file in earlier releases" instead of naming
+  it.
+
 ## 1.3.6
 
 Documentation only; no code, data, table or figure changed. The round reports are now named by the
@@ -8,7 +21,8 @@ round they document, and two files a reader of this archive could not check were
 
 ### Changed
 
-- **Round reports renamed**, each with a `Formerly …` line under its title: `REPORT_NOTES.md` →
+- **Round reports renamed** (the `Formerly …` lines this entry mentions were removed again
+  in 1.3.7): `REPORT_NOTES.md` →
   `REPORT_ROUND_1.md`, `REPORT_ADDENDUM.md` → `REPORT_ROUND_2.md`, `REPORT_ADDENDUM_2.md` →
   `REPORT_ROUND_3.md`, `REPORT_ADDENDUM_3.md` → `REPORT_ROUND_4.md`, `REPORT_ADDENDUM_4.md` →
   `REPORT_ROUND_5.md`, `REPORT_ADDENDUM_5.md` → `REPORT_ROUND_6.md` and `REPORT_ADDENDUM_6.md` →

@@ -1,6 +1,6 @@
 # Release check
 
-Release **1.3.6** (round-7 content; 1.3.1-1.3.6 are documentation and correction patches on it),
+Release **1.3.7** (round-7 content; 1.3.1-1.3.7 are documentation and correction patches on it),
 packaged 2026-10-07. This file states what the shipped archive contains, what it deliberately
 leaves out, and how each claim was checked. Section 1 is the current state of the package;
 section 5 keeps the round-by-round verification history with the numbers **as they stood at that
@@ -10,8 +10,8 @@ round**; section 6 records the corrections made after review.
 
 | Item | Value |
 |---|---|
-| Version / commits | 1.3.6 — round-7 content 1.3.0 `2612833`, docs 1.3.1 `004eac0`, number corrections 1.3.2 `a36089e`, release prep `1ef43ae`, reproduction fixes 1.3.3 `e23207c`; the 1.3.4-1.3.6 docs commits are the ones carrying this file |
-| Archive | `dp-replan-release-v1.3.6.zip`, **1.9 MB, 128 files** (git history is not in the zip) |
+| Version / commits | 1.3.7 — round-7 content 1.3.0 `2612833`, docs 1.3.1 `004eac0`, number corrections 1.3.2 `a36089e`, release prep `1ef43ae`, reproduction fixes 1.3.3 `e23207c`; the 1.3.4-1.3.7 docs commits are the ones carrying this file |
+| Archive | `dp-replan-release-v1.3.7.zip`, **1.9 MB, 128 files** (git history is not in the zip) |
 | Unpacked size | ≈3.4 MB — `results` 2.7 MB, `docs` 268 KB, `scripts` 200 KB, `configs` 108 KB, `src` 100 KB, `tests` 16 KB |
 | Unit tests | **21/21** (`tests/test_core.py` 15 + `tests/test_runlevel.py` 6) |
 | Raw-log integrity | **4 196 chunk files, 0 problems** (`scripts/r5_integrity.py`) |
@@ -198,10 +198,10 @@ from a clean extraction was verified as follows (**1.3.3**):
   `results/r6_runlevel_mcnemar.csv` reproduces the values quoted in `REPORT_ROUND_6.md` §D and
   extends them to all 12 runs.
 
-## 6. Corrections after review (1.3.1 → 1.3.6)
+## 6. Corrections after review (1.3.1 → 1.3.7)
 
 Three review passes checked the released numbers and commands against the raw logs and the packaged
-tables; 1.3.4-1.3.6 are documentation and renaming passes. Every correction was applied to the shipped
+tables; 1.3.4-1.3.7 are documentation and renaming passes. Every correction was applied to the shipped
 artefacts and re-verified; no success rate changed in any of them.
 
 - **1.3.1 (documentation).** Stale interim values and unfinished wording in
@@ -259,7 +259,7 @@ artefacts and re-verified; no success rate changed in any of them.
 - **1.3.6 (documentation and renaming).** The round reports are now named by the round they
   document, and two files that a reader of this archive could not check were removed. No code,
   data, table or figure changed; the archive holds 128 files rather than 130.
-  - Renamed, each with a `Formerly …` line under its title: `REPORT_NOTES.md` →
+  - Renamed: `REPORT_NOTES.md` →
     `REPORT_ROUND_1.md`, `REPORT_ADDENDUM.md` → `REPORT_ROUND_2.md`, `REPORT_ADDENDUM_2.md` →
     `REPORT_ROUND_3.md`, `REPORT_ADDENDUM_3.md` → `REPORT_ROUND_4.md`, `REPORT_ADDENDUM_4.md` →
     `REPORT_ROUND_5.md`, `REPORT_ADDENDUM_5.md` → `REPORT_ROUND_6.md` and `REPORT_ADDENDUM_6.md` →
@@ -279,12 +279,19 @@ artefacts and re-verified; no success rate changed in any of them.
     1.0.0-1.3.5 carried revision notes (1)-(2) only; v2 adds the third review's six text
     corrections, with no number changing (for example "p >= 0.20" → "p >= 0.199", "six paired
     sampler comparisons" → "eight", and the PushCube adaptive citation moved from round 4 to
-    round 5). v2's pointer to the review record `REVIEW_ADDENDUM_6.md` is marked
-    working-archive-only.
+    round 5). The archive ships version 2 under the round-7 name; the independent review it
+    cites is in the working archive.
   - `STAGE_REPORT_v2_CHECK.md` was **dropped**. It verifies `STAGE_REPORT_v2.md`, which this
     archive does not contain, and `verify_stage_report_v2.py`, which produced it, is not shipped
     either, so a reader could neither read the checked document nor reproduce the check. Its
     findings are reported in `REPORT_ROUND_4.md` §Task 0, which now points at the working archive.
+
+- **1.3.7 (documentation).** The `Formerly …` lines added in 1.3.6 were removed from the round
+  reports, along with the other places a report repeated its earlier filename (the round-6 header
+  and closing note, and the round-7 version note). A report's own text no longer names its
+  pre-1.3.6 file; the mapping stays where a reader looks for it — the README's naming conventions,
+  section 6 here, the changelog, and the working archive's `RENAME_MAP.md`. No code, data, table or
+  figure changed.
 
 ## 7. Safety and licensing
 

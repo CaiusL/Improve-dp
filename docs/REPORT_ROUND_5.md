@@ -1,7 +1,5 @@
 # REPORT_ROUND_5.md — Round 5: "Improving DP" beyond the execution horizon
 
-Formerly `REPORT_ADDENDUM_4.md`.
-
 Started 2026-10-05 17:50; experiment-launch cutoff 2026-10-07 18:00; report due 2026-10-08.
 Framing: the course question asks which of *observation encoder, prediction horizon, action
 representation, diffusion sampling* improve success or inference speed. Adaptive replanning

@@ -1,7 +1,5 @@
 # REPORT_ROUND_3.md
 
-Formerly `REPORT_ADDENDUM_2.md`.
-
 Third round of work on the adaptive-execution-horizon project: verification of `STAGE_REPORT.md`,
 a full `PickCube-v1` study, control experiments on `PushCube-v1`, cross-task analysis, and (partial)
 reduced-diffusion-step measurements.

@@ -1,7 +1,5 @@
 # REPORT_ROUND_4.md
 
-Formerly `REPORT_ADDENDUM_3.md`.
-
 Fourth round: verification of `STAGE_REPORT_v2.md`, fresh-seed confirmation on `PushCube-v1`
 with a time-window search, reduced-diffusion-steps on fresh seeds with a clean sequential timing
 benchmark, and an exploratory `PickCube-v1` stillness check. First written as a battery-safe
