@@ -41,6 +41,10 @@ def main(argv=None):
     ap.add_argument("--trace", action="store_true", help="store per-step feature traces")
     ap.add_argument("--trace-every", type=int, default=10)
     ap.add_argument("--decision-log", action="store_true", help="store one row per decision")
+    ap.add_argument("--feature-check", action="store_true",
+                    help="with --decision-log, also store the raw observation row and the "
+                         "rule features recomputed from the normalized vector (round-6 "
+                         "raw-feature audit)")
     ap.add_argument("--diffusion-steps", type=int, default=None,
                     help="override sampling steps via scheduler.set_timesteps(N)")
     ap.add_argument("--sampler", choices=("ddpm", "ddim"), default="ddpm",
@@ -104,7 +108,7 @@ def main(argv=None):
             hp.rng = __import__("numpy").random.default_rng(12345 + seed)
             rec = run_episode(env, agent, task, task_id, hp, seed, max_steps,
                               trace=args.trace, trace_every=args.trace_every,
-                              decide_log=args.decision_log)
+                              decide_log=args.decision_log, feature_check=args.feature_check)
             rec.update(run=args.run, ckpt=args.ckpt, mode=meta["mode"],
                        pred_horizon=settings["pred_horizon"], act_horizon=max_h)
             fh.write(json.dumps(rec) + "\n")

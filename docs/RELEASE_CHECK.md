@@ -228,3 +228,25 @@ success rates are unchanged in all of them.
   `results/MANIFEST.md` **5 392 files / 53 942 episodes**.
 - The correction record itself: `REPORT_ADDENDUM_6.md` revision notes, `REPORT_ADDENDUM_5_FIXES.md`
   items 9-11, `CHANGELOG.md` 1.3.1 / 1.3.2.
+
+## README reproduction check (1.3.3)
+
+The README's "Reproducing the results" section was executed command by command from a clean
+extraction of this release, with the raw logs supplied through `--raw-root`. It did not work as
+written; four script defects were fixed (both round-5 analysis scripts crashed on import,
+`run_matrix.py` referenced an undefined `--sampler`, `r7_parity_figure.py` was the stale
+"pending" version, and the `--feature-check` passthrough promised in 1.3.0 was absent), and the
+section itself was corrected (unmatched code fence, semicolons for `--tasks`, missing
+`r7_figures.py`, a 3-of-9-sampler sweep, missing `--raw-root` in six commands).
+
+- Every runnable command in the section now passes: **18/18** (4 skipped: three need argument
+  placeholders, one needs checkpoints/`DP_RUNS_ROOT`).
+- End-to-end reproduction from a clean extraction: **30 shipped tables and logs byte-identical**
+  (`FINAL_RESULTS.csv`, `MANIFEST.md`, `r5_sampling_*`, `r5_frontier_*`, `r5_training_*`,
+  `r5_timing_clean.csv`, `r6_runlevel_summary.csv`, `r6_runlevel_tests.csv`, `r7_runlevel_*`,
+  `r7_tests.csv`, `r7_failure.csv`, `r7_p0_*.json`, `r4_fresh_final_*`); **19/19 shipped PNG
+  figures byte-identical**; **19/19 PDFs identical** ignoring the embedded creation date.
+- `verify_results.py` **3 526 / 0**; `r5_integrity.py` **4 196 / 0**; `tests/` **21/21**.
+- Re-running the flow writes four extra CSVs that are not shipped replacements
+  (`r6_runlevel_arms`, `r6_runlevel_mcnemar`, `pushcube_fresh_summary`, `pushcube_fresh_paired`);
+  the shipped bare `pushcube_*` rows come from the round-3/4 packaging.

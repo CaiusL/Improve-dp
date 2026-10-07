@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.3.3
+
+Third review pass: the README's "Reproducing the results" section was executed command by command.
+It did not work as written, and the check exposed four defects in the shipped scripts.
+
+### Fixed
+
+- `scripts/r5_sampling_analysis.py`, `scripts/r5_training_analysis.py`: both called `HERE`
+  before defining it (`NameError` on import), so the two documented round-5 analyses could not run
+  at all. The path setup is ordered correctly now; both run and reproduce their shipped tables.
+- `scripts/run_matrix.py`: used `args.sampler` without ever defining `--sampler`, so every real
+  (non-dry-run) matrix crashed with `AttributeError`. The flag is added and forwarded to
+  `run_rollout.py`.
+- `scripts/r7_parity_figure.py`: the shipped copy was the pre-completion version, which still
+  marked six rows "pending / to be filled" — running it produced a parity figure contradicting
+  both the shipped PNG and the addendum. The final version (the one that drew the shipped figure)
+  is now in the release, and re-running it reproduces that PNG byte-for-byte.
+- `scripts/run_rollout.py`, `scripts/run_matrix.py`, `src/adaptive_replan/rollout.py`: the
+  `--feature-check` passthrough promised by the 1.3.0 changelog and the README did not exist in
+  the release, so `r6_verify_rawfeat.py` had nothing to read. `--decision-log --feature-check` now
+  records the raw observation row plus the features recomputed from the normalized vector; it was
+  tested end to end (0 feature and rule mismatches, non-vacuous on a normalized checkpoint).
+
+### Changed
+
+- `README.md` "Reproducing the results": the shell block had an unmatched code fence (five
+  commands rendered as prose), `--tasks` used semicolons where the parser wants commas, the
+  round-7 figure script was missing, the round-5 sweep analysed 3 of the 9 samplers, and six
+  commands omitted `--raw-root` although this archive ships `results/raw/` empty. The section now
+  defines `RAW` once, is a single fenced block, and lists the full nine-sampler sweep.
+
+### Verified
+
+- Every runnable command in the section was executed against the raw logs: **18/18 pass**
+  (4 skipped: three need argument placeholders, one needs checkpoints).
+- The flow was then run end to end from a clean extraction of this release: **30 shipped tables
+  and logs reproduce byte-for-byte** (`FINAL_RESULTS.csv`, `MANIFEST.md`, all `r5_*`,
+  `r6_runlevel_*`, `r7_*`, `r4_fresh_final_*`), **all 19 shipped PNG figures are byte-identical**,
+  and **all 19 PDFs are identical once the embedded creation date is ignored**. Four further CSVs
+  the flow writes (`r6_runlevel_arms`, `r6_runlevel_mcnemar`, `pushcube_fresh_summary`,
+  `pushcube_fresh_paired`) are new outputs, not replacements of shipped files.
+- `verify_results.py` 3 526 values / 0 mismatches; `r5_integrity.py` 4 196 chunk files /
+  0 problems; `tests/` 21/21.
+
 ## 1.3.2
 
 Two analysis/packaging defects found by a second external review of the round-7 numbers, plus the

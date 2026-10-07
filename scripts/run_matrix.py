@@ -47,7 +47,13 @@ def main(argv=None):
     ap.add_argument("--max-steps", type=int, default=None)
     ap.add_argument("--trace", action="store_true")
     ap.add_argument("--decision-log", action="store_true")
+    ap.add_argument("--feature-check", action="store_true",
+                    help="pass --feature-check through to run_rollout.py (implies "
+                         "--decision-log rows; round-6 raw-feature audit)")
     ap.add_argument("--diffusion-steps", type=int, default=None)
+    ap.add_argument("--sampler", choices=("ddpm", "ddim"), default="ddpm",
+                    help="sampling algorithm passed through to run_rollout.py; ddim rebuilds a "
+                         "deterministic scheduler from the checkpoint's trained betas")
     ap.add_argument("--runs-root", default=None)
     ap.add_argument("--teammate-code", default=None)
     ap.add_argument("--raw-root", default=str(DEFAULT_RAW))
@@ -100,6 +106,10 @@ def main(argv=None):
             cmd += ["--trace", "--trace-every", "10"]
         if args.decision_log:
             cmd += ["--decision-log"]
+        if args.feature_check:
+            if not args.decision_log:
+                cmd += ["--decision-log"]
+            cmd += ["--feature-check"]
         if args.diffusion_steps:
             cmd += ["--diffusion-steps", str(args.diffusion_steps)]
         if args.sampler != "ddpm":

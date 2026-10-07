@@ -102,38 +102,44 @@ Every table and figure is rebuilt from the per-episode logs. **The raw logs (~24
 exceed the size the repository is meant to carry. `results/MANIFEST.md` lists every raw file with its episode count,
 seed range and SHA-256 checksum, so a complete copy can be verified file by file; the summary
 CSVs in `results/` are shipped in their place. Point `--raw-root` at a directory holding the
-raw logs to reproduce everything below. The pre-registered settings for each phase are in
-`configs/`.
+raw logs to reproduce everything below. Set `RAW` to that directory before running anything (a
+full checkout keeps them in `results/raw`); in `run_matrix.py` the same flag names the directory
+new logs are **written** to, so the generation examples below write under `$RAW`, which is where
+the analyses then read from. The pre-registered settings for each phase are in `configs/`.
 
 ```bash
+RAW=/path/to/raw_logs        # per-episode logs; a full checkout keeps them in results/raw
+
 # final per-setting table and manifest
-python scripts/pack_final_results.py --with-manifest
+python scripts/pack_final_results.py --raw-root "$RAW" --with-manifest
 
 # round 5: sampler x steps sweep (DDIM is rebuilt from the checkpoint's trained betas)
-python scripts/run_matrix.py --phase ddpm20 --tasks "PushCube-v1;PickCube-v1;PullCubeTool-v1" \
+python scripts/run_matrix.py --phase ddpm20 --tasks "PushCube-v1,PickCube-v1,PullCubeTool-v1" \
     --schedules "fixed:8" --seeds 400000-400099 --chunk 10 --jobs 8 \
-    --diffusion-steps 20 --raw-root results/raw/sampling_sweep
-python scripts/run_matrix.py --phase ddim5 --tasks "PushCube-v1;PickCube-v1;PullCubeTool-v1" \
+    --diffusion-steps 20 --raw-root "$RAW/sampling_sweep"
+python scripts/run_matrix.py --phase ddim5 --tasks "PushCube-v1,PickCube-v1,PullCubeTool-v1" \
     --schedules "fixed:8" --seeds 400000-400099 --chunk 10 --jobs 8 \
-    --sampler ddim --diffusion-steps 5 --raw-root results/raw/sampling_sweep
-python scripts/r5_sampling_analysis.py --phases ddpm100,ddpm20,ddim5 --schedule "fixed(k=8)" \
-    --out results/r5_sampling
+    --sampler ddim --diffusion-steps 5 --raw-root "$RAW/sampling_sweep"
+python scripts/r5_sampling_analysis.py \
+    --phases ddpm100,ddpm50,ddpm20,ddpm10,ddpm5,ddim50,ddim20,ddim10,ddim5 \
+    --schedule "fixed(k=8)" --raw-root "$RAW" --out results/r5_sampling
 
 # round 5: clean inference timing (single worker, otherwise idle machine)
 python scripts/run_rollout.py --task PushCube-v1 --schedule fixed:8 --seeds 400000-400009 \
     --sampler ddim --diffusion-steps 5 --out results/timing_r5/ddim5_fixed8.jsonl
 
 # round 5: raw-log integrity guard before analysing
-python scripts/r5_integrity.py --raw-root results/raw
+python scripts/r5_integrity.py --raw-root "$RAW"
 
 # round 5: training-variant evaluation analysis and figures
-python scripts/r5_training_analysis.py --raw-root results/raw
+python scripts/r5_training_analysis.py --raw-root "$RAW"
 python scripts/r5_figures.py
 
 # round 7: parity across the three tasks (frontiers on the co-trained checkpoint, variants on
 # the other two tasks, the completed combination, our own co-trained models, failure analysis)
-python scripts/r7_runlevel.py --raw-root results/raw
-python scripts/r7_tests.py --raw-root results/raw
+python scripts/r7_runlevel.py --raw-root "$RAW"
+python scripts/r7_tests.py --raw-root "$RAW"
+python scripts/r7_figures.py
 python scripts/r7_parity_figure.py
 
 # round 7 diagnostic: per-dimension statistics of the training observations V1 normalizes
@@ -144,38 +150,38 @@ python scripts/r7_failure_classify.py --spec <list of {root, task, label}>.json
 
 # round 6: run-level tests of observation normalization, adaptive replanning and the
 # normalization x adaptive x 5-step-DDIM combination (the training run is the unit of analysis)
-python scripts/r6_runlevel.py --raw-root results/raw
+python scripts/r6_runlevel.py --raw-root "$RAW"
 python scripts/r6_figures.py
 
-# round 6: verify that the adaptive rule read the raw observation (needs one logged episode
-# per schedule with --feature-check, see scripts/run_rollout.py --feature-check)
+# round 6: verify that the adaptive rule read the raw observation (log one episode per schedule
+# on a normalized checkpoint with --decision-log --feature-check, then:)
 python scripts/r6_verify_rawfeat.py --fixed-jsonl <fixed_episode.jsonl> \
     --adaptive-jsonl <adaptive_episode.jsonl>
-```
 
 # per-task summary plus paired adaptive-vs-baseline tests
 # (--include-adaptive-pairs also pairs the adaptive/time-window rules against each other)
 python scripts/analyze_results.py --phases pushcube_fresh --task PushCube-v1 \
-    --seeds 300000-300199 --out results/pushcube_fresh --include-adaptive-pairs
+    --seeds 300000-300199 --raw-root "$RAW" --out results/pushcube_fresh --include-adaptive-pairs
 
 # figures (per task and combined three-panel)
-python scripts/make_figures.py
+python scripts/make_figures.py --raw-root "$RAW"
 
 # recompute the summary CSV from the raw logs and check every value
-python scripts/verify_results.py
+python scripts/verify_results.py --raw-root "$RAW"
 
 # a specific experiment block (example: the fresh confirmation block)
 python scripts/run_matrix.py --phase pushcube_fresh --tasks PushCube-v1 \
     --schedules "fixed:2;fixed:4;fixed:8;random:mean=2.25,lo=2,hi=8;adaptive_push:d_tcp=0.08,d_goal=0.10;adaptive_push:d_tcp=0.05,d_goal=0;adaptive_time:start=10,length=170;adaptive_time:start=30,length=170" \
-    --seeds 300000-300199 --chunk 10 --jobs 8
+    --seeds 300000-300199 --chunk 10 --jobs 8 --raw-root "$RAW"
 
 # reduced DDPM sampling steps
 python scripts/run_matrix.py --phase pushcube_steps_fresh_20 --tasks PushCube-v1 \
     --schedules "fixed:2;fixed:4;fixed:8;adaptive_push:d_tcp=0.08,d_goal=0.10" \
-    --seeds 300000-300099 --chunk 10 --jobs 8 --diffusion-steps 20
+    --seeds 300000-300099 --chunk 10 --jobs 8 --diffusion-steps 20 --raw-root "$RAW"
 ```
 
-`python <script> --help` lists all arguments for each script.
+`python <script> --help` lists all arguments for each script; `--tasks` is comma-separated and
+`--schedules` is semicolon-separated.
 
 
 ### Run-level statistics (round 6)

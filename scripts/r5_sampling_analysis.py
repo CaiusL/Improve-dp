@@ -18,11 +18,11 @@ from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, str(HERE.parent / "src"))
-from adaptive_replan import mcnemar_exact, newcombe_paired_diff, wilson_interval  # noqa: E402
-
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+sys.path.insert(0, str(ROOT / "src"))
+from adaptive_replan import mcnemar_exact, newcombe_paired_diff, wilson_interval  # noqa: E402
+
 RAW = ROOT / "results" / "raw" / "sampling_sweep"
 
 

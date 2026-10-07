@@ -34,7 +34,8 @@ def _round(v, nd=4):
 
 
 def run_episode(env, agent, task, task_id, horizon_policy, seed, max_steps,
-                trace=False, trace_every=1, decide_log=False, metric_key="success_once"):
+                trace=False, trace_every=1, decide_log=False, feature_check=False,
+                metric_key="success_once"):
     """Run one episode and return a per-episode record.
 
     ``success_once`` is the running OR of the task's instantaneous success flag;
@@ -61,6 +62,18 @@ def run_episode(env, agent, task, task_id, horizon_policy, seed, max_steps,
 
         k = horizon_policy(feats, n_inf)
         horizons.append(k)
+        fc = None
+        if feature_check:
+            _norm = getattr(agent, "obs_norm", None)
+            fc = {"raw_row": [float(x) for x in last],
+                  "obs_norm_present": _norm is not None}
+            if _norm is not None:
+                _m, _s = _norm
+                _ln = ((torch.as_tensor(last).float() - _m.detach().cpu())
+                       / _s.detach().cpu()).numpy()
+                _fn = extract_features(task, _ln)
+                fc["d_tcp_norm"] = _round(_fn.get("d_tcp_obj"))
+                fc["d_goal_norm"] = _round(_fn.get("d_obj_goal_xy"))
         if decide_log:
             decisions.append({
                 "step": n_steps, "decision": n_inf, "k": int(k),
@@ -77,6 +90,7 @@ def run_episode(env, agent, task, task_id, horizon_policy, seed, max_steps,
                 "cube_r": _round(feats.get("cube_r")),
                 "qpos0": _round(feats.get("qpos0")),
                 "gripper_q": _round(feats.get("gripper_q")),
+                **({"feature_check": fc} if fc is not None else {}),
             })
 
         t_inf = time.time()
