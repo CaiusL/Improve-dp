@@ -1,4 +1,4 @@
-# Adaptive Replanning for Diffusion Policies on ManiSkill
+# Improve Diffusion Policies on ManiSkill
 
 **Question.** At similar inference cost, does a *state-dependent execution horizon* — how many
 predicted actions are executed before the policy is queried again — improve Diffusion Policy (DP)
